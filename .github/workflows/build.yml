@@ -33,6 +33,8 @@ jobs:
           gradle-version: '8.10.2'
 
       - name: Build
+        env:
+          BUILD_GROUP: g8
         run: |
           for proj in \
             fabric-1215 fabric-1216 fabric-1217 fabric-1218 \
@@ -79,6 +81,8 @@ jobs:
           gradle-version: '9.4.0'
 
       - name: Build
+        env:
+          BUILD_GROUP: g9
         run: |
           for proj in \
             fabric-1219 fabric-12110 fabric-12111 \
@@ -125,6 +129,8 @@ jobs:
           gradle-version: '9.4.0'
 
       - name: Build
+        env:
+          BUILD_GROUP: g26
         run: |
           for proj in \
             fabric-2610 fabric-2611 fabric-2612 \
