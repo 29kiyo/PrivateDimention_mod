@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "privatedimension",
+  "version": "${version}",
+  "name": "PrivateDimension",
+  "description": "Dimension in a Bottle - プライベート次元Mod",
+  "authors": ["Keiragi"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["dev.keiragi.privatedimension.fabric.PrivateDimensionFabric"]
+  },
+  "depends": {
+    "fabricloader": ">=${fabric_loader}",
+    "fabric-api": "*",
+    "minecraft": "~${mc_version}"
+  }
+}

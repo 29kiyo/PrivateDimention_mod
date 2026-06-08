@@ -1,0 +1,25 @@
+modLoader   = "javafml"
+loaderVersion = "[4,)"
+license       = "MIT"
+
+[[mods]]
+modId       = "privatedimension"
+version     = "${version}"
+displayName = "PrivateDimension"
+description = '''
+Dimension in a Bottle - プライベート次元Mod
+'''
+
+[[dependencies.privatedimension]]
+modId         = "neoforge"
+type          = "required"
+versionRange  = "[${neoforge_version},)"
+ordering      = "NONE"
+side          = "SERVER"
+
+[[dependencies.privatedimension]]
+modId         = "minecraft"
+type          = "required"
+versionRange  = "[${mc_version},)"
+ordering      = "NONE"
+side          = "BOTH"

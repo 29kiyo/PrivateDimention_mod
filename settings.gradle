@@ -1,0 +1,36 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven { url = uri("https://maven.fabricmc.net/") }
+        maven { url = uri("https://maven.neoforged.net/releases/") }
+        maven { url = uri("https://maven.neoforged.net/snapshots/") }
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
+}
+
+rootProject.name = "PrivateDimension"
+
+include("common")
+include("fabric-1215")
+include("fabric-1216")
+include("fabric-1217")
+include("fabric-1218")
+include("fabric-1219")
+include("fabric-12110")
+include("fabric-12111")
+include("fabric-2610")
+include("fabric-2611")
+include("fabric-2612")
+include("neoforge-1215")
+include("neoforge-1216")
+include("neoforge-1217")
+include("neoforge-1218")
+include("neoforge-1219")
+include("neoforge-12110")
+include("neoforge-12111")
+include("neoforge-2610")
+include("neoforge-2611")
+include("neoforge-2612")

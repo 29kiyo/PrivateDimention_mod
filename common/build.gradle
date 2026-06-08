@@ -1,0 +1,9 @@
+// common/build.gradle
+// common は独立してビルドしない。
+// fabric-* / neoforge-* が srcDirs で直接ソースを取り込む。
+// このファイルは Gradle のマルチプロジェクト構成に必要なだけ。
+
+// java plugin のみ（Loom/MDG 不要）
+configurations.all {
+    // common 単体のコンパイルは行わないため依存解決をスキップ
+}

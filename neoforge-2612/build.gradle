@@ -1,0 +1,50 @@
+// neoforge-2612/build.gradle
+plugins {
+    id 'net.neoforged.moddev' version "${mdg_version}"
+}
+
+base {
+    archivesBaseName = "PrivateDimension-neoforge-${mc_2612}"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(java_2612.toInteger())
+    }
+}
+
+sourceSets {
+    main {
+        java      { srcDirs 'src/main/java',      '../../common/src/main/java' }
+        resources { srcDirs 'src/main/resources', '../../common/src/main/resources' }
+    }
+}
+
+neoForge {
+    version = neoforge_2612
+    runs {
+        server { server() }
+    }
+    mods {
+        privatedimension {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+processResources {
+    inputs.property 'version',          project.version
+    inputs.property 'mc_version',       mc_2612
+    inputs.property 'neoforge_version', neoforge_2612
+    filesMatching('META-INF/neoforge.mods.toml') {
+        expand(version: project.version, mc_version: mc_2612, neoforge_version: neoforge_2612)
+    }
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes 'Implementation-Title': 'privatedimension',
+                   'Implementation-Version': project.version
+    }
+}

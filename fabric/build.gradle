@@ -1,0 +1,57 @@
+// fabric/build.gradle
+// Minecraft 1.21.5 + Fabric API
+
+plugins {
+    id 'fabric-loom' version "${fabric_loom_version}"
+}
+
+base {
+    archivesBaseName = "PrivateDimension-fabric-${mc_version_1215}"
+}
+
+loom {
+    runs {
+        server {
+            server()
+            vmArg "-Xmx2G"
+        }
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${mc_version_1215}"
+    mappings  "net.fabricmc:yarn:${yarn_1215}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_1215}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_1215}"
+
+    // common モジュール
+    implementation project(':common')
+    // common のソースも loom に認識させる
+    compileOnly project(':common')
+}
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'mc_version', mc_version_1215
+    inputs.property 'fabric_loader', fabric_loader_1215
+    inputs.property 'fabric_api', fabric_api_1215
+
+    filesMatching('fabric.mod.json') {
+        expand([
+            version       : project.version,
+            mc_version    : mc_version_1215,
+            fabric_loader : fabric_loader_1215,
+            fabric_api    : fabric_api_1215,
+        ])
+    }
+}
+
+jar {
+    // common クラスを fat jar にまとめる
+    from project(':common').sourceSets.main.output
+    from { project(':common').configurations.runtimeClasspath.collect {
+        it.isDirectory() ? it : zipTree(it)
+    }}
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    archiveClassifier = ''
+}

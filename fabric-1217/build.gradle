@@ -1,0 +1,49 @@
+// fabric-1217/build.gradle
+plugins {
+    id 'net.fabricmc.fabric-loom' version "${fabric_loom_1217}"
+}
+
+base {
+    archivesBaseName = "PrivateDimension-fabric-${mc_1217}"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(java_1217.toInteger())
+    }
+}
+
+sourceSets {
+    main {
+        java      { srcDirs 'src/main/java',      '../../common/src/main/java' }
+        resources { srcDirs 'src/main/resources', '../../common/src/main/resources' }
+    }
+}
+
+loom {
+    runs {
+        server { server() }
+    }
+}
+
+dependencies {
+    minecraft         "com.mojang:minecraft:${mc_1217}"
+    mappings          "net.fabricmc:yarn:${yarn_1217}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_1217}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_1217}"
+}
+
+processResources {
+    inputs.property 'version',       project.version
+    inputs.property 'mc_version',    mc_1217
+    inputs.property 'fabric_loader', fabric_loader_1217
+    inputs.property 'fabric_api',    fabric_api_1217
+    filesMatching('fabric.mod.json') {
+        expand(version: project.version, mc_version: mc_1217,
+               fabric_loader: fabric_loader_1217, fabric_api: fabric_api_1217)
+    }
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

@@ -1,0 +1,67 @@
+// forge/build.gradle
+// Minecraft 1.21.5 + NeoForge
+// NeoForge は 21.5.x 系 (= MC 1.21.5)
+
+plugins {
+    id 'net.neoforged.gradle.userdev' version "${neogradle_version}"
+}
+
+base {
+    archivesBaseName = "PrivateDimension-neoforge-${mc_version_1215}"
+}
+
+minecraft {
+    accessTransformers {
+        // 必要なら AT を追加
+    }
+}
+
+runs {
+    configureEach {
+        modSource project.sourceSets.main
+    }
+    server {
+        // サーバーのみ
+    }
+}
+
+dependencies {
+    implementation "net.neoforged:neoforge:${neoforge_1215}"
+
+    // common モジュール
+    implementation project(':common')
+    compileOnly project(':common')
+}
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'mc_version', mc_version_1215
+    inputs.property 'neoforge_version', neoforge_1215
+
+    filesMatching('META-INF/neoforge.mods.toml') {
+        expand([
+            version          : project.version,
+            mc_version       : mc_version_1215,
+            neoforge_version : neoforge_1215,
+        ])
+    }
+}
+
+jar {
+    from project(':common').sourceSets.main.output
+    from { project(':common').configurations.runtimeClasspath.collect {
+        it.isDirectory() ? it : zipTree(it)
+    }}
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes([
+            'Specification-Title'     : 'privatedimension',
+            'Specification-Vendor'    : 'Keiragi',
+            'Specification-Version'   : '1',
+            'Implementation-Title'    : project.name,
+            'Implementation-Version'  : project.version,
+            'Implementation-Vendor'   : 'Keiragi',
+        ])
+    }
+}

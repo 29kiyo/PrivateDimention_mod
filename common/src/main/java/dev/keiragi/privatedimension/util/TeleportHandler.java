@@ -1,0 +1,184 @@
+package dev.keiragi.privatedimension.util;
+
+import dev.keiragi.privatedimension.PrivateDimensionMod;
+import dev.keiragi.privatedimension.manager.PlayerDataManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.DustColorTransitionOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
+
+import java.util.*;
+
+public class TeleportHandler {
+
+    private final PrivateDimensionMod mod;
+    private final Set<UUID> teleporting = Collections.synchronizedSet(new HashSet<>());
+
+    public TeleportHandler(PrivateDimensionMod mod) { this.mod = mod; }
+
+    public boolean isTeleporting(UUID uid) { return teleporting.contains(uid); }
+
+    public void handleUse(ServerPlayer player) {
+        if (!teleporting.add(player.getUUID())) return;
+        ServerLevel pd = mod.getDimensionManager().getPrivateDimension();
+        if (pd == null) {
+            release(player.getUUID());
+            player.sendSystemMessage(net.minecraft.network.chat.Component.literal(
+                "§c[PrivateDimension] 次元ワールドが準備できていません。"));
+            return;
+        }
+        try {
+            if (mod.getDimensionManager().isPrivateDimension(player.serverLevel()))
+                gotoBaseWorld(player);
+            else
+                gotoPrivate(player, collectBringEntities(player));
+        } catch (Exception e) {
+            release(player.getUUID());
+            PrivateDimensionMod.LOGGER.error("handleUse 例外: {}", e.getMessage());
+        }
+    }
+
+    private void gotoPrivate(ServerPlayer player, List<Entity> bring) {
+        PlayerDataManager pdm = mod.getPlayerDataManager();
+        UUID uid = player.getUUID();
+        pdm.setReturnLocation(uid, player.serverLevel(), player.position(), player.getYRot(), player.getXRot());
+        playVfx(player.serverLevel(), player.position());
+        addBlindness(player);
+
+        if (pdm.hasPlot(uid)) gotoMyPlot(player, bring);
+        else                   claimPlot(player, bring);
+    }
+
+    private void gotoMyPlot(ServerPlayer player, List<Entity> bring) {
+        PlayerDataManager pdm = mod.getPlayerDataManager();
+        UUID uid = player.getUUID();
+        ServerLevel pd = mod.getDimensionManager().getPrivateDimension();
+        int plotId = pdm.getPlotId(uid);
+
+        // 構造物が未配置の場合（初回claimPlot中クラッシュ等）は再配置する
+        BlockPos structOrigin = mod.getPlotManager().getPlotStructureOrigin(plotId);
+        pd.getChunk(structOrigin);
+        boolean needsStructure = pd.isEmptyBlock(structOrigin.above(5));
+        if (needsStructure) {
+            PrivateDimensionMod.LOGGER.warn("プロット{}の構造物が見つかりません。再配置します。", plotId);
+            pd.getChunk(BlockPos.containing(mod.getPlotManager().getPlotSpawn(plotId)));
+            mod.getDimensionManager().placeStructure(pd, structOrigin);
+        }
+
+        double[] saved = pdm.getPlotPos(uid);
+        Vec3 dest = saved != null
+            ? new Vec3(saved[0], saved[1], saved[2])
+            : mod.getPlotManager().getPlotSpawn(plotId);
+
+        teleportTo(player, pd, dest);
+        pullEntities(pd, dest, bring);
+        playVfx(pd, dest);
+        release(uid);
+    }
+
+    private void claimPlot(ServerPlayer player, List<Entity> bring) {
+        PlayerDataManager pdm = mod.getPlayerDataManager();
+        UUID uid = player.getUUID();
+        int plotId = pdm.getNextPlotId();
+        pdm.setPlotId(uid, plotId);
+
+        ServerLevel pd = mod.getDimensionManager().getPrivateDimension();
+        BlockPos origin = mod.getPlotManager().getPlotStructureOrigin(plotId);
+        Vec3 spawn = mod.getPlotManager().getPlotSpawn(plotId);
+
+        pd.getChunk(BlockPos.containing(spawn));
+        pd.getChunk(origin);
+        mod.getDimensionManager().placeStructure(pd, origin);
+
+        addSlowFalling(player);
+        teleportTo(player, pd, spawn);
+        pdm.setPlotPosFromVec3(uid, spawn);
+        pullEntities(pd, spawn, bring);
+        playVfx(pd, spawn);
+        release(uid);
+    }
+
+    public void gotoBaseWorld(ServerPlayer player) {
+        UUID uid = player.getUUID();
+        teleporting.add(uid);
+
+        List<Entity> bring = collectBringEntities(player);
+        Vec3 cur = player.position();
+        mod.getPlayerDataManager().setPlotPos(uid, cur.x, cur.y, cur.z);
+
+        PlayerDataManager.ReturnPos rp = mod.getPlayerDataManager().getReturnLocation(uid);
+        ServerLevel dest = (rp != null) ? rp.resolveLevel(player.server) : player.server.overworld();
+        Vec3 destPos = (rp != null) ? rp.toVec3() : Vec3.atCenterOf(dest.getSharedSpawnPos());
+
+        playVfx(player.serverLevel(), cur);
+        addBlindness(player);
+        teleportTo(player, dest, destPos);
+        pullEntities(dest, destPos, bring);
+        mod.getPlayerDataManager().clearReturnLocation(uid);
+        playVfx(dest, destPos);
+        release(uid);
+    }
+
+    private void teleportTo(ServerPlayer p, ServerLevel level, Vec3 pos) {
+        p.teleportTo(level, pos.x, pos.y, pos.z, p.getYRot(), p.getXRot());
+    }
+
+    private List<Entity> collectBringEntities(ServerPlayer player) {
+        if (!player.isShiftKeyDown()) return Collections.emptyList();
+        double r = mod.getConfig().pullEntityRadius;
+        int lim = mod.getConfig().pullEntityLimit;
+        List<Entity> res = new ArrayList<>();
+        AABB box = player.getBoundingBox().inflate(r);
+        for (Entity e : player.serverLevel().getEntitiesOfClass(Entity.class, box)) {
+            if (e instanceof Monster || e instanceof Player
+             || e instanceof net.minecraft.world.entity.item.ItemEntity
+             || e instanceof net.minecraft.world.entity.decoration.ArmorStand) continue;
+            res.add(e);
+            if (res.size() >= lim) break;
+        }
+        return res;
+    }
+
+    private void pullEntities(ServerLevel dest, Vec3 pos, List<Entity> entities) {
+        for (Entity e : entities) {
+            if (e instanceof ServerPlayer sp)
+                sp.teleportTo(dest, pos.x, pos.y, pos.z, sp.getYRot(), sp.getXRot());
+            else
+                e.teleportTo(pos.x, pos.y, pos.z);
+        }
+    }
+
+    private void addBlindness(ServerPlayer p) {
+        p.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 40, 0, true, false));
+    }
+
+    private void addSlowFalling(ServerPlayer p) {
+        p.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20, 0, true, false));
+    }
+
+    public void playVfx(ServerLevel level, Vec3 pos) {
+        Vec3 c = pos.add(0, 1, 0);
+        level.sendParticles(ParticleTypes.GLOW, c.x, c.y, c.z, 50, 0.2, 0.5, 0.2, 1.0);
+        level.sendParticles(
+            new DustColorTransitionOptions(
+                new Vector3f(0x00/255f, 0xB2/255f, 0xFF/255f),
+                new Vector3f(0x99/255f, 0xFF/255f, 0xFF/255f), 1.0f),
+            c.x, c.y, c.z, 100, 0.2, 0.5, 0.2, 1.0);
+        level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 2f, 0.8f);
+        level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.ALLAY_ITEM_TAKEN,   SoundSource.PLAYERS, 2f, 0.8f);
+        level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.AMETHYST_CLUSTER_BREAK, SoundSource.BLOCKS, 2f, 1.2f);
+    }
+
+    private void release(UUID uid) { teleporting.remove(uid); }
+}
