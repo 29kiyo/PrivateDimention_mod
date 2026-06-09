@@ -59,7 +59,7 @@ public class CommonEventHandler {
         PlayerDataManager pdm = mod.getPlayerDataManager();
         PlayerDataManager.ReturnPos rp = pdm.getReturnLocation(uid);
         ServerLevel dest = rp != null ? rp.resolveLevel(player.level().getServer()) : player.level().getServer().overworld();
-        Vec3 destPos = rp != null ? rp.toVec3() : new Vec3(dest.getLevelData().getXSpawn(), dest.getLevelData().getYSpawn(), dest.getLevelData().getZSpawn());
+        Vec3 destPos = rp != null ? rp.toVec3() : Vec3.atCenterOf(dest.getSpawnPos());
         pdm.clearReturnLocation(uid);
         if (pdm.hasPlot(uid))
             pdm.setPlotPosFromVec3(uid, mod.getPlotManager().getPlotSpawn(pdm.getPlotId(uid)));

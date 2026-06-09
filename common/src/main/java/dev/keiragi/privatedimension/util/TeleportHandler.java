@@ -103,7 +103,7 @@ public class TeleportHandler {
         mod.getPlayerDataManager().setPlotPos(uid, cur.x, cur.y, cur.z);
         PlayerDataManager.ReturnPos rp = mod.getPlayerDataManager().getReturnLocation(uid);
         ServerLevel dest = (rp != null) ? rp.resolveLevel(player.level().getServer()) : player.level().getServer().overworld();
-        Vec3 destPos = (rp != null) ? rp.toVec3() : new Vec3(dest.getLevelData().getXSpawn(), dest.getLevelData().getYSpawn(), dest.getLevelData().getZSpawn());
+        Vec3 destPos = (rp != null) ? rp.toVec3() : Vec3.atCenterOf(dest.getSpawnPos());
         playVfx((ServerLevel) player.level(), cur);
         addBlindness(player);
         teleportTo(player, dest, destPos);
