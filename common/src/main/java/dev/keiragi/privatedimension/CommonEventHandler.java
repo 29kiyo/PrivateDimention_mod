@@ -58,8 +58,8 @@ public class CommonEventHandler {
         if (!diedInDimension.remove(uid)) return null;
         PlayerDataManager pdm = mod.getPlayerDataManager();
         PlayerDataManager.ReturnPos rp = pdm.getReturnLocation(uid);
-        ServerLevel dest = rp != null ? rp.resolveLevel(net.minecraft.server.MinecraftServer.getServer()) : net.minecraft.server.MinecraftServer.getServer().overworld();
-        Vec3 destPos = rp != null ? rp.toVec3() : new Vec3(dest.getLevelData().getXSpawn(), dest.getLevelData().getYSpawn(), dest.getLevelData().getZSpawn());
+        ServerLevel dest = rp != null ? rp.resolveLevel(player.level().getServer()) : player.level().getServer().overworld();
+        Vec3 destPos = rp != null ? rp.toVec3() : new Vec3(dest.getSharedSpawnPos().getX(), dest.getSharedSpawnPos().getY(), dest.getSharedSpawnPos().getZ());
         pdm.clearReturnLocation(uid);
         if (pdm.hasPlot(uid))
             pdm.setPlotPosFromVec3(uid, mod.getPlotManager().getPlotSpawn(pdm.getPlotId(uid)));

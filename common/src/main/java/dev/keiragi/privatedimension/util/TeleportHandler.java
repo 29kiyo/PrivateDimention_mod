@@ -103,8 +103,8 @@ public class TeleportHandler {
         Vec3 cur = player.position();
         mod.getPlayerDataManager().setPlotPos(uid, cur.x, cur.y, cur.z);
         PlayerDataManager.ReturnPos rp = mod.getPlayerDataManager().getReturnLocation(uid);
-        ServerLevel dest = (rp != null) ? rp.resolveLevel(net.minecraft.server.MinecraftServer.getServer()) : net.minecraft.server.MinecraftServer.getServer().overworld();
-        Vec3 destPos = (rp != null) ? rp.toVec3() : new Vec3(dest.getLevelData().getXSpawn(), dest.getLevelData().getYSpawn(), dest.getLevelData().getZSpawn());
+        ServerLevel dest = (rp != null) ? rp.resolveLevel(player.level().getServer()) : player.level().getServer().overworld();
+        Vec3 destPos = (rp != null) ? rp.toVec3() : new Vec3(dest.getSharedSpawnPos().getX(), dest.getSharedSpawnPos().getY(), dest.getSharedSpawnPos().getZ());
         playVfx((ServerLevel) player.level(), cur);
         addBlindness(player);
         teleportTo(player, dest, destPos);
@@ -156,7 +156,7 @@ public class TeleportHandler {
         level.sendParticles(ParticleTypes.GLOW, c.x, c.y, c.z, 50, 0.2, 0.5, 0.2, 1.0);
         level.sendParticles(
             new DustColorTransitionOptions(
-                new Vector3f(0.0f, (float)0xB2 / 255f, (float)0xFF / 255f),
+                new Vector3f(new float[]{0.0f, (float)0xB2 / 255f, (float)0xFF / 255f}),
                 new Vector3f(0x99 / 255.0f, 0xFF / 255f, 0xFF / 255f), 1.0f),
             c.x, c.y, c.z, 100, 0.2, 0.5, 0.2, 1.0);
         level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 2f, 0.8f);
