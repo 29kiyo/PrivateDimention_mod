@@ -1,6 +1,6 @@
 // fabric-2611/build.gradle
 plugins {
-    id 'net.fabricmc.fabric-loom' version "${fabric_loom_2611}"
+    id 'fabric-loom' version "${fabric_loom_2611}"
 }
 
 base {
