@@ -33,6 +33,7 @@ neoForge {
 }
 
 processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     inputs.property 'version',          project.version
     inputs.property 'mc_version',       mc_12110
     inputs.property 'neoforge_version', neoforge_12110

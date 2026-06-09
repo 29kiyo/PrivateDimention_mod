@@ -26,6 +26,7 @@ dependencies {
     implementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_2611}"
 }
 processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     inputs.property 'version',       project.version
     inputs.property 'mc_version',    mc_2611
     inputs.property 'fabric_loader', fabric_loader_2611

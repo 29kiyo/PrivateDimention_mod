@@ -34,6 +34,7 @@ dependencies {
 }
 
 processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     inputs.property 'version',       project.version
     inputs.property 'mc_version',    mc_2610
     inputs.property 'fabric_loader', fabric_loader_2610

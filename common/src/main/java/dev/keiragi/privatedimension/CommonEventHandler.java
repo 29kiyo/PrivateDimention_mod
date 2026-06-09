@@ -32,7 +32,7 @@ public class CommonEventHandler {
 
     public void onPlayerMove(ServerPlayer player, Vec3 newPos) {
         if (!mod.getDimensionManager().isPrivateDimension((ServerLevel) player.level())) return;
-        if (player.hasPermissions(4)) return;
+        if (player.canUseGameMasterBlocks()) return;
         UUID uid = player.getUUID();
         if (!mod.getPlayerDataManager().hasPlot(uid)) return;
         if (teleportHandler.isTeleporting(uid)) return;
@@ -59,7 +59,7 @@ public class CommonEventHandler {
         PlayerDataManager pdm = mod.getPlayerDataManager();
         PlayerDataManager.ReturnPos rp = pdm.getReturnLocation(uid);
         ServerLevel dest = rp != null ? rp.resolveLevel(player.level().getServer()) : player.level().getServer().overworld();
-        Vec3 destPos = rp != null ? rp.toVec3() : new Vec3(((net.minecraft.world.level.ServerLevelAccessor)dest).getLevel().getSharedSpawnPos().getX(), dest.getSharedSpawnPos().getY(), dest.getSharedSpawnPos().getZ());
+        Vec3 destPos = rp != null ? rp.toVec3() : new Vec3(dest.getLevelData().getXSpawn(), dest.getLevelData().getYSpawn(), dest.getLevelData().getZSpawn());
         pdm.clearReturnLocation(uid);
         if (pdm.hasPlot(uid))
             pdm.setPlotPosFromVec3(uid, mod.getPlotManager().getPlotSpawn(pdm.getPlotId(uid)));
