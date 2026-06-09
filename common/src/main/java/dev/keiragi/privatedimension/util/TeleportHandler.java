@@ -103,7 +103,7 @@ public class TeleportHandler {
         Vec3 cur = player.position();
         mod.getPlayerDataManager().setPlotPos(uid, cur.x, cur.y, cur.z);
         PlayerDataManager.ReturnPos rp = mod.getPlayerDataManager().getReturnLocation(uid);
-        ServerLevel dest = (rp != null) ? rp.resolveLevel(player.getServer()) : player.getServer().overworld();
+        ServerLevel dest = (rp != null) ? rp.resolveLevel(player.server) : player.server.overworld();
         Vec3 destPos = (rp != null) ? rp.toVec3() : Vec3.atCenterOf(dest.getSharedSpawnPos());
         playVfx((ServerLevel) player.level(), cur);
         addBlindness(player);
@@ -156,8 +156,8 @@ public class TeleportHandler {
         level.sendParticles(ParticleTypes.GLOW, c.x, c.y, c.z, 50, 0.2, 0.5, 0.2, 1.0);
         level.sendParticles(
             new DustColorTransitionOptions(
-                new Vector3f(0x00 / 255f, 0xB2 / 255f, 0xFF / 255f),
-                new Vector3f(0x99 / 255f, 0xFF / 255f, 0xFF / 255f), 1.0f),
+                new Vector3f(0.0f / 255f, 0xB2 / 255f, 0xFF / 255f),
+                new Vector3f((float)0x99 / 255f, 0xFF / 255f, 0xFF / 255f), 1.0f),
             c.x, c.y, c.z, 100, 0.2, 0.5, 0.2, 1.0);
         level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 2f, 0.8f);
         level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.ALLAY_ITEM_TAKEN, SoundSource.PLAYERS, 2f, 0.8f);

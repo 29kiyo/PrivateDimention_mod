@@ -13,7 +13,8 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionResultHolder;
+import net.fabricmc.fabric.api.util.TriState;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.phys.Vec3;
@@ -50,13 +51,13 @@ public class PrivateDimensionFabric implements ModInitializer {
 
         UseItemCallback.EVENT.register((player, world, hand) -> {
             if (world.isClientSide() || !(player instanceof ServerPlayer sp))
-                return InteractionResultHolder.pass(player.getItemInHand(hand));
+                return net.minecraft.world.InteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             ItemStack stack = player.getItemInHand(hand);
             if (DimensionBottleItem.isDimensionBottle(stack)) {
                 eventHandler.onItemUse(sp, stack);
-                return InteractionResultHolder.success(stack);
+                return net.minecraft.world.InteractionResult.SUCCESS;
             }
-            return InteractionResultHolder.pass(stack);
+            return net.minecraft.world.InteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         });
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {

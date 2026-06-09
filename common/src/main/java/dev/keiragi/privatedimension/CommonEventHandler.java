@@ -58,7 +58,7 @@ public class CommonEventHandler {
         if (!diedInDimension.remove(uid)) return null;
         PlayerDataManager pdm = mod.getPlayerDataManager();
         PlayerDataManager.ReturnPos rp = pdm.getReturnLocation(uid);
-        ServerLevel dest = rp != null ? rp.resolveLevel(player.getServer()) : player.getServer().overworld();
+        ServerLevel dest = rp != null ? rp.resolveLevel(player.server) : player.server.overworld();
         Vec3 destPos = rp != null ? rp.toVec3() : Vec3.atCenterOf(dest.getSharedSpawnPos());
         pdm.clearReturnLocation(uid);
         if (pdm.hasPlot(uid))
