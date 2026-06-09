@@ -133,8 +133,6 @@ jobs:
           BUILD_GROUP: g26
         run: |
           for proj in \
-            fabric-2610 fabric-2611 fabric-2612 \
-            neoforge-2610 neoforge-2611 neoforge-2612; do
             echo "::group::Build :$proj"
             gradle :${proj}:build --no-daemon -Pversion=${{ github.sha }}
             echo "::endgroup::"
@@ -144,8 +142,6 @@ jobs:
         run: |
           mkdir -p dist
           for proj in \
-            fabric-2610 fabric-2611 fabric-2612 \
-            neoforge-2610 neoforge-2611 neoforge-2612; do
             find ${proj}/build/libs -name "*.jar" \
               ! -name "*-sources*" ! -name "*-dev*" \
               -exec cp {} dist/ \; 2>/dev/null || true

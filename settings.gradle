@@ -38,10 +38,8 @@ if (group == "g9" || group == "all") {
 }
 
 if (group == "g26" || group == "all") {
-    include("fabric-2610")
     include("fabric-2611")
     include("fabric-2612")
-    include("neoforge-2610")
     include("neoforge-2611")
     include("neoforge-2612")
 }
