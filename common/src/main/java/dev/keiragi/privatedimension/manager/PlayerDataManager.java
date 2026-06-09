@@ -126,7 +126,7 @@ public class PlayerDataManager {
 
     public void setReturnLocation(UUID uuid, ServerLevel level, Vec3 pos, float yaw, float pitch) {
         returnLocCache.put(uuid, new ReturnPos(
-            level.dimension().location().toString(), pos.x, pos.y, pos.z, yaw, pitch));
+            level.dimension().registry().toString(), pos.x, pos.y, pos.z, yaw, pitch));
     }
 
     public void clearReturnLocation(UUID uuid) { returnLocCache.remove(uuid); }
@@ -147,7 +147,7 @@ public class PlayerDataManager {
             try {
                 ResourceLocation rl = ResourceLocation.parse(worldKey);
                 for (ServerLevel level : server.getAllLevels())
-                    if (level.dimension().location().equals(rl)) return level;
+                    if (level.dimension().registry().equals(rl)) return level;
             } catch (Exception ignored) {}
             return server.overworld();
         }
