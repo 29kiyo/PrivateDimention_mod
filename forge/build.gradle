@@ -66,3 +66,7 @@ jar {
         ])
     }
 }
+
+sourcesJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

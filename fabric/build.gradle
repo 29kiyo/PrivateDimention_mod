@@ -56,3 +56,7 @@ jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     archiveClassifier = ''
 }
+
+sourcesJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

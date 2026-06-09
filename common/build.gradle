@@ -7,3 +7,7 @@
 configurations.all {
     // common 単体のコンパイルは行わないため依存解決をスキップ
 }
+
+sourcesJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

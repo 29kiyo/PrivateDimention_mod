@@ -49,3 +49,7 @@ jar {
                    'Implementation-Version': project.version
     }
 }
+
+sourcesJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
