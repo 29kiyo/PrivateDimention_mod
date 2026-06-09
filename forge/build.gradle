@@ -7,7 +7,7 @@ plugins {
 }
 
 base {
-    archivesBaseName = "PrivateDimension-neoforge-${mc_version_1215}"
+    archivesName = "PrivateDimension-neoforge-${mc_version_1215}"
 }
 
 minecraft {

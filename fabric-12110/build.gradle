@@ -4,7 +4,7 @@ plugins {
 }
 
 base {
-    archivesBaseName = "PrivateDimension-fabric-${mc_12110}"
+    archivesName = "PrivateDimension-fabric-${mc_12110}"
 }
 
 java {

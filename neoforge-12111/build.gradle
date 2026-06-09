@@ -4,7 +4,7 @@ plugins {
 }
 
 base {
-    archivesBaseName = "PrivateDimension-neoforge-${mc_12111}"
+    archivesName = "PrivateDimension-neoforge-${mc_12111}"
 }
 
 java {

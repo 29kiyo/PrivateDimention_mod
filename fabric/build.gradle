@@ -6,7 +6,7 @@ plugins {
 }
 
 base {
-    archivesBaseName = "PrivateDimension-fabric-${mc_version_1215}"
+    archivesName = "PrivateDimension-fabric-${mc_version_1215}"
 }
 
 loom {
