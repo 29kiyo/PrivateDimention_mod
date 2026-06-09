@@ -51,13 +51,13 @@ public class PrivateDimensionFabric implements ModInitializer {
 
         UseItemCallback.EVENT.register((player, world, hand) -> {
             if (world.isClientSide() || !(player instanceof ServerPlayer sp))
-                return TypedActionResult.pass(player.getItemInHand(hand));
+                // replaced below
             ItemStack stack = player.getItemInHand(hand);
             if (DimensionBottleItem.isDimensionBottle(stack)) {
                 eventHandler.onItemUse(sp, stack);
-                return TypedActionResult.success(stack);
+                // replaced below
             }
-            return TypedActionResult.pass(stack);
+            // replaced below
         });
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {
