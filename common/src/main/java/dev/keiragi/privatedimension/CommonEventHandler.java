@@ -8,14 +8,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-
 import java.util.*;
 
 public class CommonEventHandler {
-
     private final PrivateDimensionMod mod;
     private final TeleportHandler teleportHandler;
-
     private final Set<UUID> diedInDimension = Collections.synchronizedSet(new HashSet<>());
     private static final long BORDER_COOLDOWN_MS = 2000;
     private final Map<UUID, Long> borderCooldown = new HashMap<>();
@@ -27,7 +24,6 @@ public class CommonEventHandler {
 
     public TeleportHandler getTeleportHandler() { return teleportHandler; }
 
-    /** @return true ならイベントキャンセル */
     public boolean onItemUse(ServerPlayer player, ItemStack stack) {
         if (!DimensionBottleItem.isDimensionBottle(stack)) return false;
         teleportHandler.handleUse(player);
@@ -35,44 +31,38 @@ public class CommonEventHandler {
     }
 
     public void onPlayerMove(ServerPlayer player, Vec3 newPos) {
-        if (!mod.getDimensionManager().isPrivateDimension(player.serverLevel())) return;
+        if (!mod.getDimensionManager().isPrivateDimension((ServerLevel) player.level())) return;
         if (player.hasPermissions(4)) return;
         UUID uid = player.getUUID();
         if (!mod.getPlayerDataManager().hasPlot(uid)) return;
         if (teleportHandler.isTeleporting(uid)) return;
-
         int plotId = mod.getPlayerDataManager().getPlotId(uid);
         if (mod.getPlotManager().isInsidePlot(plotId, newPos.x, newPos.y, newPos.z)) return;
         if (!mod.getConfig().borderEnforcement) return;
-
         long now = System.currentTimeMillis();
         Long last = borderCooldown.get(uid);
         if (last != null && now - last < BORDER_COOLDOWN_MS) return;
         borderCooldown.put(uid, now);
-
         player.sendSystemMessage(Component.literal("§c" + mod.getConfig().msgBorderForced));
-        teleportHandler.playVfx(player.serverLevel(), player.position());
+        teleportHandler.playVfx((ServerLevel) player.level(), player.position());
         teleportHandler.gotoBaseWorld(player);
     }
 
     public void onPlayerDeath(ServerPlayer player) {
-        if (mod.getDimensionManager().isPrivateDimension(player.serverLevel()))
+        if (mod.getDimensionManager().isPrivateDimension((ServerLevel) player.level()))
             diedInDimension.add(player.getUUID());
     }
 
     public RespawnInfo onPlayerRespawn(ServerPlayer player) {
         UUID uid = player.getUUID();
         if (!diedInDimension.remove(uid)) return null;
-
         PlayerDataManager pdm = mod.getPlayerDataManager();
         PlayerDataManager.ReturnPos rp = pdm.getReturnLocation(uid);
-        ServerLevel dest = rp != null ? rp.resolveLevel(player.server) : player.server.overworld();
+        ServerLevel dest = rp != null ? rp.resolveLevel(player.getServer()) : player.getServer().overworld();
         Vec3 destPos = rp != null ? rp.toVec3() : Vec3.atCenterOf(dest.getSharedSpawnPos());
         pdm.clearReturnLocation(uid);
-
         if (pdm.hasPlot(uid))
             pdm.setPlotPosFromVec3(uid, mod.getPlotManager().getPlotSpawn(pdm.getPlotId(uid)));
-
         return new RespawnInfo(dest, destPos);
     }
 

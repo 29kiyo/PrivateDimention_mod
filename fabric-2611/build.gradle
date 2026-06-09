@@ -22,8 +22,8 @@ loom {
 }
 dependencies {
     minecraft         "com.mojang:minecraft:${mc_2611}"
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_2611}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_2611}"
+    implementation "net.fabricmc:fabric-loader:${fabric_loader_2611}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_2611}"
 }
 processResources {
     inputs.property 'version',       project.version
