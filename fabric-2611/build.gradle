@@ -1,5 +1,5 @@
 plugins {
-    id 'net.fabricmc.fabric-loom' version "${fabric_loom_2611}"
+    id 'fabric-loom' version "${fabric_loom_2611}"
 }
 base {
     archivesName = "PrivateDimension-fabric-${mc_2611}"
@@ -22,7 +22,7 @@ loom {
 }
 dependencies {
     minecraft         "com.mojang:minecraft:${mc_2611}"
-    mappings          loom.officialMojangMappings()
+    mappings          loom.layered { }
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_2611}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_2611}"
 }
