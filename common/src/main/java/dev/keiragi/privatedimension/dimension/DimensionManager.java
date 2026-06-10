@@ -24,7 +24,7 @@ import java.util.Optional;
 public class DimensionManager {
 
     public static final ResourceLocation DIMENSION_ID =
-        ResourceLocation.fromNamespaceAndPath(PrivateDimensionMod.MOD_ID, "private_dimension");
+        ResourceLocation.of(PrivateDimensionMod.MOD_ID + ":" + "private_dimension");
 
     public static final ResourceKey<Level> DIMENSION_KEY =
         ResourceKey.create(Registries.DIMENSION, DIMENSION_ID);
@@ -56,7 +56,7 @@ public class DimensionManager {
         try {
             ensureNbtExtracted(level);
             StructureTemplateManager stm = level.getServer().getStructureManager();
-            ResourceLocation structId = ResourceLocation.fromNamespaceAndPath(PrivateDimensionMod.MOD_ID, "plot48x48");
+            ResourceLocation structId = ResourceLocation.of(PrivateDimensionMod.MOD_ID + ":" + "plot48x48");
             Optional<StructureTemplate> opt = stm.get(structId);
             if (opt.isEmpty()) {
                 PrivateDimensionMod.LOGGER.error("構造物 {} が見つかりません！", structId);

@@ -103,7 +103,7 @@ public class PrivateDimensionNeoForge {
         if (!(event.getEntity() instanceof ServerPlayer sp)) return;
         CommonEventHandler.RespawnInfo info = eventHandler.onPlayerRespawn(sp);
         if (info != null)
-            sp.teleportTo(info.level, info.pos.x, info.pos.y, info.pos.z, sp.getYRot(), sp.getXRot());
+            sp.teleportTo(info.level, info.pos.x, info.pos.y, info.pos.z, java.util.Set.of(), sp.getYRot(), sp.getXRot(), false);
     }
 
     @SubscribeEvent
