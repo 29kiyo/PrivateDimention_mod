@@ -16,12 +16,17 @@ sourceSets {
     }
 }
 loom {
+    mods {
+        "privatedimension" {
+            sourceSet sourceSets.main
+        }
+    }
     runs {
         server { server() }
     }
 }
 dependencies {
-    compileOnly "com.mojang:minecraft:${mc_2611}"
+    minecraft         "com.mojang:minecraft:${mc_2611}"
     implementation "net.fabricmc:fabric-loader:${fabric_loader_2611}"
     implementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_2611}"
 }
@@ -39,7 +44,6 @@ processResources {
 jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
-
 sourcesJar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
