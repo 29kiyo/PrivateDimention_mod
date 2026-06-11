@@ -145,7 +145,7 @@ public class PlayerDataManager {
 
         public ServerLevel resolveLevel(MinecraftServer server) {
             try {
-                ResourceLocation rl = ResourceLocation.parse(worldKey);
+                String[] _parts = worldKey.split(":", 2); ResourceLocation rl = ResourceLocation.fromNamespaceAndPath(_parts[0], _parts[1]);
                 for (ServerLevel level : server.getAllLevels())
                     if (level.dimension().registry().equals(rl)) return level;
             } catch (Exception ignored) {}
