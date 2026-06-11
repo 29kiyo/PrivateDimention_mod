@@ -28,6 +28,7 @@ loom {
 
 dependencies {
     minecraft         "com.mojang:minecraft:${mc_12110}"
+    mappings          loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_12110}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_12110}"
 }
