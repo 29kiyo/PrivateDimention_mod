@@ -20,12 +20,12 @@ public class FabricCommandHandler {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(Commands.literal("pd")
                 .then(Commands.literal("give")
-                    .requires(src -> src.hasPermission(2))
+                    .requires(src -> src.hasPermission(Commands.LEVEL_GAMEMASTERS))
                     .executes(ctx -> giveSelf(ctx, mod))
                     .then(Commands.argument("player", StringArgumentType.word())
                         .executes(ctx -> givePlayer(ctx, mod))))
                 .then(Commands.literal("reload")
-                    .requires(src -> src.hasPermission(2))
+                    .requires(src -> src.hasPermission(Commands.LEVEL_GAMEMASTERS))
                     .executes(ctx -> reload(ctx, mod)))
                 .then(Commands.literal("info")
                     .executes(ctx -> info(ctx, mod))));
