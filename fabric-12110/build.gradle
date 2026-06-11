@@ -21,11 +21,6 @@ sourceSets {
 }
 
 loom {
-    mods {
-        "privatedimension" {
-            sourceSet sourceSets.main
-        }
-    }
     runs {
         server { server() }
     }
