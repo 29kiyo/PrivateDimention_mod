@@ -1,9 +1,9 @@
 package dev.keiragi.privatedimension.dimension;
 
 import dev.keiragi.privatedimension.PrivateDimensionMod;
+import dev.keiragi.privatedimension.util.IdUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -23,11 +23,12 @@ import java.util.Optional;
 
 public class DimensionManager {
 
-    public static final Identifier DIMENSION_ID =
-        Identifier.fromNamespaceAndPath(PrivateDimensionMod.MOD_ID, "private_dimension");
+    public static final Object DIMENSION_ID =
+        IdUtils.createId(PrivateDimensionMod.MOD_ID, "private_dimension");
 
-    public static final ResourceKey<Level> DIMENSION_KEY =
-        ResourceKey.create(Registries.DIMENSION, DIMENSION_ID);
+    @SuppressWarnings("rawtypes")
+    public static final Object DIMENSION_KEY =
+        IdUtils.createResourceKey(Registries.DIMENSION, DIMENSION_ID);
 
     private final PrivateDimensionMod mod;
     private MinecraftServer server;
@@ -45,7 +46,7 @@ public class DimensionManager {
     }
 
     public ServerLevel getPrivateDimension() {
-        return server == null ? null : server.getLevel(DIMENSION_KEY);
+        return server == null ? null : server.getLevel((ResourceKey<Level>) DIMENSION_KEY);
     }
 
     public boolean isPrivateDimension(ServerLevel level) {
@@ -56,17 +57,33 @@ public class DimensionManager {
         try {
             ensureNbtExtracted(level);
             StructureTemplateManager stm = level.getServer().getStructureManager();
-            Identifier structId = Identifier.fromNamespaceAndPath(PrivateDimensionMod.MOD_ID, "plot48x48");
-            Optional<StructureTemplate> opt = stm.get(structId);
+            Object structId = IdUtils.createId(PrivateDimensionMod.MOD_ID, "plot48x48");
+            Optional<Object> opt = IdUtils.getStructureTemplate(stm, structId);
             if (opt.isEmpty()) {
                 PrivateDimensionMod.LOGGER.error("構造物 {} が見つかりません！", structId);
                 return;
             }
+            StructureTemplate template = (StructureTemplate) opt.get();
             StructurePlaceSettings settings = new StructurePlaceSettings();
-            opt.get().placeInWorld(level, origin, origin, settings, level.getRandom(), 2);
+            template.placeInWorld(level, origin, origin, settings, level.getRandom(), 2);
             PrivateDimensionMod.LOGGER.info("構造物配置完了: {}", origin);
         } catch (Exception e) {
             PrivateDimensionMod.LOGGER.error("構造物配置失敗: {}", e.getMessage());
+        }
+    }
+
+    private static Object createId(String namespace, String path) {
+        try {
+            Class<?> idClass;
+            try {
+                idClass = Class.forName("net.minecraft.resources.Identifier");
+            } catch (ClassNotFoundException e) {
+                idClass = Class.forName("net.minecraft.resources.ResourceLocation");
+            }
+            return idClass.getMethod("fromNamespaceAndPath", String.class, String.class)
+                .invoke(null, namespace, path);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
         }
     }
 

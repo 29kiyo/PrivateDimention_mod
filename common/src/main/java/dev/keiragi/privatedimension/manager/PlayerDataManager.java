@@ -2,7 +2,7 @@ package dev.keiragi.privatedimension.manager;
 
 import com.google.gson.*;
 import dev.keiragi.privatedimension.PrivateDimensionMod;
-import net.minecraft.resources.Identifier;
+import dev.keiragi.privatedimension.util.IdUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
@@ -145,7 +145,8 @@ public class PlayerDataManager {
 
         public ServerLevel resolveLevel(MinecraftServer server) {
             try {
-                String[] _parts = worldKey.split(":", 2); Identifier rl = Identifier.fromNamespaceAndPath(_parts[0], _parts[1]);
+                String[] _parts = worldKey.split(":", 2);
+                Object rl = IdUtils.createId(_parts[0], _parts[1]);
                 for (ServerLevel level : server.getAllLevels())
                     if (level.dimension().registry().equals(rl)) return level;
             } catch (Exception ignored) {}

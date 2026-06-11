@@ -8,6 +8,18 @@ configurations.all {
     // common 単体のコンパイルは行わないため依存解決をスキップ
 }
 
-sourcesJar {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+tasks.withType(JavaCompile).configureEach {
+    enabled = false
+}
+
+tasks.withType(Jar).configureEach {
+    enabled = false
+}
+
+tasks.named('sourcesJar') {
+    enabled = false
+}
+
+tasks.named('build') {
+    enabled = false
 }
