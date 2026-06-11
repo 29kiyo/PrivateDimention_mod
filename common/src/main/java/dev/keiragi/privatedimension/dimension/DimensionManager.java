@@ -3,8 +3,8 @@ package dev.keiragi.privatedimension.dimension;
 import dev.keiragi.privatedimension.PrivateDimensionMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -23,8 +23,8 @@ import java.util.Optional;
 
 public class DimensionManager {
 
-    public static final ResourceLocation DIMENSION_ID =
-        ResourceLocation.fromNamespaceAndPath(PrivateDimensionMod.MOD_ID, "private_dimension");
+    public static final Identifier DIMENSION_ID =
+        Identifier.fromNamespaceAndPath(PrivateDimensionMod.MOD_ID, "private_dimension");
 
     public static final ResourceKey<Level> DIMENSION_KEY =
         ResourceKey.create(Registries.DIMENSION, DIMENSION_ID);
@@ -56,7 +56,7 @@ public class DimensionManager {
         try {
             ensureNbtExtracted(level);
             StructureTemplateManager stm = level.getServer().getStructureManager();
-            ResourceLocation structId = ResourceLocation.fromNamespaceAndPath(PrivateDimensionMod.MOD_ID, "plot48x48");
+            Identifier structId = Identifier.fromNamespaceAndPath(PrivateDimensionMod.MOD_ID, "plot48x48");
             Optional<StructureTemplate> opt = stm.get(structId);
             if (opt.isEmpty()) {
                 PrivateDimensionMod.LOGGER.error("構造物 {} が見つかりません！", structId);

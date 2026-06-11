@@ -1,0 +1,9 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "./gradlew": true,
+        "diff": true,
+        "true": true,
+        "jar": true,
+        "done": true
+    }
+}
