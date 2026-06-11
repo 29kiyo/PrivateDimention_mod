@@ -22,8 +22,9 @@ loom {
 }
 dependencies {
     minecraft         "com.mojang:minecraft:${mc_2612}"
-    implementation "net.fabricmc:fabric-loader:${fabric_loader_2612}"
-    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_2612}"
+    mappings          loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_2612}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_2612}"
 }
 processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
