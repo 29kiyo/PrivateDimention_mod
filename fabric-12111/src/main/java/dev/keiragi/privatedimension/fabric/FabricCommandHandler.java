@@ -20,12 +20,12 @@ public class FabricCommandHandler {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(Commands.literal("pd")
                 .then(Commands.literal("give")
-                    .requires(src -> src.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                    .requires(src -> src.getServer().getPlayerList().getOps().isEmpty() || (src.getEntity() instanceof net.minecraft.server.level.ServerPlayer sp && src.getServer().getPlayerList().isOp(sp.getGameProfile()))) || src.hasPermission(2))
                     .executes(ctx -> giveSelf(ctx, mod))
                     .then(Commands.argument("player", StringArgumentType.word())
                         .executes(ctx -> givePlayer(ctx, mod))))
                 .then(Commands.literal("reload")
-                    .requires(src -> src.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                    .requires(src -> src.getServer().getPlayerList().getOps().isEmpty() || (src.getEntity() instanceof net.minecraft.server.level.ServerPlayer sp && src.getServer().getPlayerList().isOp(sp.getGameProfile()))) || src.hasPermission(2))
                     .executes(ctx -> reload(ctx, mod)))
                 .then(Commands.literal("info")
                     .executes(ctx -> info(ctx, mod))));
