@@ -85,8 +85,8 @@ jobs:
           BUILD_GROUP: g9
         run: |
           for proj in \
-            neoforge-1219 neoforge-12110 neoforge-12111 \
-            fabric-1219 fabric-12110 fabric-12111; do
+            neoforge-12111 neoforge-12110 neoforge-1219 \
+            fabric-12111 fabric-12110 fabric-1219; do
             echo "::group::Build :$proj"
             gradle :${proj}:build --no-daemon --info -Pversion=${{ github.sha }}
             echo "::endgroup::"
@@ -96,8 +96,8 @@ jobs:
         run: |
           mkdir -p dist
           for proj in \
-            neoforge-1219 neoforge-12110 neoforge-12111 \
-            fabric-1219 fabric-12110 fabric-12111; do
+            neoforge-12111 neoforge-12110 neoforge-1219 \
+            fabric-12111 fabric-12110 fabric-1219; do
             find ${proj}/build/libs -name "*.jar" \
               ! -name "*-sources*" ! -name "*-dev*" \
               -exec cp {} dist/ \; 2>/dev/null || true
