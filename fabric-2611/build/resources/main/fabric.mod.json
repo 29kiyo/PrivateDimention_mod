@@ -8,7 +8,7 @@
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
-    "main": ["dev.keiragi.privatedimension.fabric.PrivateDimensionFabric"]
+    "main": ["dev.29kiyo.privatedimension.fabric.PrivateDimensionFabric"]
   },
   "depends": {
     "fabricloader": ">=0.18.4",
