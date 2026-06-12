@@ -72,7 +72,7 @@ public class PrivateDimensionNeoForge {
 
     @SubscribeEvent
     public void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
-        if (event.getEntity().level().isClientSide) return;
+        if (event.getEntity().level().isClientSide()()) return;
         if (!(event.getEntity() instanceof ServerPlayer sp)) return;
         ItemStack stack = event.getItemStack();
         if (DimensionBottleItem.isDimensionBottle(stack)) {
