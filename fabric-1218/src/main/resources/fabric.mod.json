@@ -9,7 +9,7 @@
   "environment": "*",
   "icon": "icon.png",
   "entrypoints": {
-    "main": ["dev.29kiyo.privatedimension.fabric.PrivateDimensionFabric"]
+    "main": ["dev.keiragi.privatedimension.fabric.PrivateDimensionFabric"]
   },
   "depends": {
     "fabricloader": ">=${fabric_loader}",

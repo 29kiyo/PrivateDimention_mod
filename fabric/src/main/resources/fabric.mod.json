@@ -10,7 +10,7 @@
   "icon": "icon.png",
   "entrypoints": {
     "main": [
-      "dev.29kiyo.privatedimension.fabric.PrivateDimensionFabric"
+      "dev.keiragi.privatedimension.fabric.PrivateDimensionFabric"
     ]
   },
   "depends": {
