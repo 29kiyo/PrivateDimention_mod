@@ -69,9 +69,11 @@ A derivative work of "Private_Dimension" by Chuzume.<br>
 
 | コマンド | 説明 | 権限 |
 |---------|------|------|
-| `/pd give [player]` | アイテムを付与 | OP (レベル2) |
+| `/pd give [player]` | アイテムを付与 | OP (レベル2以上) |
 | `/pd info` | 自分のプロット情報表示 | 全員 |
-| `/pd reload` | 設定をリロード | OP (レベル2) |
+| `/pd reload` | 設定をリロード | OP (レベル2以上) |
+
+> 通常プレイヤーは **Dimension in a Bottle をクラフトして右クリックで使用**できます。コマンドは `/pd info` のみ利用可能です。
 
 ## 設定 (config.json)
 
