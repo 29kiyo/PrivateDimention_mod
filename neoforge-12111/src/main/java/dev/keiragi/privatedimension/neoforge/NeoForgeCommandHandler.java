@@ -20,12 +20,12 @@ public class NeoForgeCommandHandler {
                          CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("pd")
             .then(Commands.literal("give")
-                .requires(src -> src.permissionLevel() >= 2)
+                .requires(src -> src.hasPermission(2))
                 .executes(ctx -> giveSelf(ctx, mod))
                 .then(Commands.argument("player", StringArgumentType.word())
                     .executes(ctx -> givePlayer(ctx, mod))))
             .then(Commands.literal("reload")
-                .requires(src -> src.permissionLevel() >= 2)
+                .requires(src -> src.hasPermission(2))
                 .executes(ctx -> reload(ctx, mod)))
             .then(Commands.literal("info")
                 .executes(ctx -> info(ctx, mod))));
