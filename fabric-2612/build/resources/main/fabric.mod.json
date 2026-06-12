@@ -5,7 +5,7 @@
   "name": "PrivateDimension",
   "description": "Dimension in a Bottle - プライベート次元Mod",
   "authors": ["Keiragi"],
-  "license": "MIT",
+  "license": "CC-BY-SA-4.0",
   "environment": "*",
   "entrypoints": {
     "main": ["dev.29kiyo.privatedimension.fabric.PrivateDimensionFabric"]
