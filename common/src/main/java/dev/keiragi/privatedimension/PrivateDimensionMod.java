@@ -14,13 +14,12 @@ public class PrivateDimensionMod {
     private DimensionManager dimensionManager;
     private PlotManager plotManager;
     private PlayerDataManager playerDataManager;
-    private ModConfig config;
+    private ModConfig config = new ModConfig();
 
     public static PrivateDimensionMod getInstance() { return instance; }
 
     public void init() {
         instance = this;
-        config = new ModConfig();
         playerDataManager = new PlayerDataManager(this);
         dimensionManager  = new DimensionManager(this);
         plotManager       = new PlotManager(this);
