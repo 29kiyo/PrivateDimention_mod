@@ -13,7 +13,7 @@ modId        = "neoforge"
 type         = "mandatory"
 versionRange = "[${neoforge_version},)"
 ordering     = "NONE"
-side         = "SERVER"
+side         = "BOTH"
 
 [[dependencies.privatedimension]]
 modId        = "minecraft"
