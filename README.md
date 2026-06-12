@@ -90,7 +90,4 @@ git push origin v1.0.0
 
 ---
 
-## ライセンス
 
-MIT  
-元データパックの著作権は [Chuzume](https://github.com/Chuzume) 様に帰属します。
