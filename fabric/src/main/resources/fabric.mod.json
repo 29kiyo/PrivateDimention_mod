@@ -4,7 +4,7 @@
   "version": "${version}",
   "name": "PrivateDimension",
   "description": "Dimension in a Bottle - プライベート次元Mod",
-  "authors": ["Keiragi"],
+  "authors": ["29kiyo"],
   "license": "CC-BY-SA-4.0",
   "environment": "*",
   "icon": "icon.png",
