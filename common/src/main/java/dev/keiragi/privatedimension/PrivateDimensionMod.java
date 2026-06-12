@@ -21,7 +21,6 @@ public class PrivateDimensionMod {
     public void init() {
         instance = this;
         config = new ModConfig();
-        config.load();
         playerDataManager = new PlayerDataManager(this);
         dimensionManager  = new DimensionManager(this);
         plotManager       = new PlotManager(this);

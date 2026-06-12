@@ -34,11 +34,12 @@ public class PrivateDimensionFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         mod = new PrivateDimensionMod();
+        mod.init();
 
-        // 設定ファイルパスをセット
+        // 設定ファイルパスをセット（init()後にセット→再ロード）
         Path configDir = FabricLoader.getInstance().getConfigDir().resolve(PrivateDimensionMod.MOD_ID);
         mod.getConfig().setConfigPath(configDir.resolve("config.json"));
-        mod.init();
+        mod.getConfig().load();
 
         // playerdata.json パス
         mod.getPlayerDataManager().setDataPath(
