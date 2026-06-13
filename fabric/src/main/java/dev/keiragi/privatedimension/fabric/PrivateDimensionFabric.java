@@ -9,13 +9,14 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.player.ItemEvents;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -71,18 +72,18 @@ public class PrivateDimensionFabric implements ModInitializer {
         });
 
         // アイテム使用
-        ItemEvents.USE.register((world, player, hand) -> {
-            PrivateDimensionMod.LOGGER.info("ItemEvents.USE fired: isClientSide={}, player={}", world.isClientSide(), player.getName().getString());
+        UseItemCallback.EVENT.register((player, world, hand) -> {
+            PrivateDimensionMod.LOGGER.info("UseItemCallback fired: isClientSide={}", world.isClientSide());
             if (world.isClientSide() || !(player instanceof ServerPlayer sp)) {
-                return net.minecraft.world.InteractionResult.PASS;
+                return net.minecraft.world.InteractionResultHolder.pass(player.getItemInHand(hand));
             }
             ItemStack stack = player.getItemInHand(hand);
-            PrivateDimensionMod.LOGGER.info("Item used: {}, isDimensionBottle={}", stack.getItem(), DimensionBottleItem.isDimensionBottle(stack));
+            PrivateDimensionMod.LOGGER.info("isDimensionBottle={}", DimensionBottleItem.isDimensionBottle(stack));
             if (DimensionBottleItem.isDimensionBottle(stack)) {
                 eventHandler.onItemUse(sp, stack);
-                return net.minecraft.world.InteractionResult.SUCCESS;
+                return net.minecraft.world.InteractionResultHolder.success(stack);
             }
-            return net.minecraft.world.InteractionResult.PASS;
+            return net.minecraft.world.InteractionResultHolder.pass(stack);
         });
 
         // プレイヤー移動チェック (毎tick)
