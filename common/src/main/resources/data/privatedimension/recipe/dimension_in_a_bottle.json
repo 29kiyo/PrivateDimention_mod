@@ -8,7 +8,6 @@
     "L": "minecraft:lodestone"
   },
   "result": {
-  "id": "privatedimension:dimension_bottle",
-  "count": 1
+    "item": "privatedimension:dimension_bottle"
   }
 }
