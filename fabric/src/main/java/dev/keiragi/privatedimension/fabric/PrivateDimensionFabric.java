@@ -8,10 +8,11 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.player.ItemEvents;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
+import dev.keiragi.privatedimension.network.UseBottlePayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
@@ -23,6 +24,7 @@ public class PrivateDimensionFabric implements ModInitializer {
     private PrivateDimensionMod mod;
     private CommonEventHandler eventHandler;
     private final Map<UUID, Vec3> lastPos = new HashMap<>();
+    private final Map<UUID, Boolean> cooldownActive = new HashMap<>();
     @Override
     public void onInitialize() {
         mod = new PrivateDimensionMod();
@@ -38,6 +40,16 @@ public class PrivateDimensionFabric implements ModInitializer {
                 .resolve("privatedimension_playerdata.json"));
 
         eventHandler = new CommonEventHandler(mod);
+
+        // パケット登録
+        PayloadTypeRegistry.playC2S().register(UseBottlePayload.TYPE, UseBottlePayload.CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(UseBottlePayload.TYPE, (payload, context) -> {
+            context.server().execute(() -> {
+                ServerPlayer sp = context.player();
+                PrivateDimensionMod.LOGGER.info("UseBottle packet received from {}", sp.getName().getString());
+                eventHandler.onItemUse(sp, sp.getMainHandItem());
+            });
+        });
 
         registerEvents();
         FabricCommandHandler.register(mod, eventHandler);
@@ -107,6 +119,19 @@ public class PrivateDimensionFabric implements ModInitializer {
                 if (prev == null || !prev.equals(current)) {
                     eventHandler.onPlayerMove(player, current);
                     lastPos.put(uid, current);
+                }
+
+                // アイテムクールダウン監視で右クリック検知
+                ItemStack mainHand = player.getMainHandItem();
+                if (DimensionBottleItem.isDimensionBottle(mainHand)) {
+                    float cd = player.getCooldowns().getCooldownPercent(mainHand, 0f);
+                    Boolean hadCooldown = cooldownActive.get(uid);
+                    boolean hasCooldown = cd > 0f;
+                    if (hadCooldown != null && !hadCooldown && hasCooldown) {
+                        PrivateDimensionMod.LOGGER.info("Bottle cooldown detected for {}", player.getName().getString());
+                        eventHandler.onItemUse(player, mainHand);
+                    }
+                    cooldownActive.put(uid, hasCooldown);
                 }
 
 

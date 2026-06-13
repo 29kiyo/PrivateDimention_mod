@@ -13,6 +13,9 @@
   "entrypoints": {
     "main": [
       "dev.keiragi.privatedimension.fabric.PrivateDimensionFabric"
+    ],
+    "client": [
+      "dev.keiragi.privatedimension.fabric.PrivateDimensionFabricClient"
     ]
   },
   "depends": {
