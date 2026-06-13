@@ -34,6 +34,17 @@ public class FabricCommandHandler {
         });
     }
 
+    private static int tp(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod, CommonEventHandler eventHandler) {
+        ServerPlayer player;
+        try { player = ctx.getSource().getPlayerOrException(); }
+        catch (Exception e) {
+            ctx.getSource().sendFailure(Component.literal("プレイヤーとして実行してください。"));
+            return 0;
+        }
+        eventHandler.onItemUse(player, player.getMainHandItem());
+        return 1;
+    }
+
     private static int giveSelf(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
         try {
             ServerPlayer player = ctx.getSource().getPlayerOrException();

@@ -37,6 +37,8 @@ public class FabricCommandHandler {
                         .executes(ctx -> reload(ctx, mod)))
                     .then(Commands.literal("info")
                         .executes(ctx -> info(ctx, mod)))
+                    .then(Commands.literal("tp")
+                        .executes(ctx -> tp(ctx, mod, eventHandler)))
             );
             // alias
             dispatcher.register(
@@ -44,6 +46,17 @@ public class FabricCommandHandler {
                     .redirect(dispatcher.getRoot().getChild("pd"))
             );
         });
+    }
+
+    private static int tp(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod, CommonEventHandler eventHandler) {
+        ServerPlayer player;
+        try { player = ctx.getSource().getPlayerOrException(); }
+        catch (Exception e) {
+            ctx.getSource().sendFailure(Component.literal("プレイヤーとして実行してください。"));
+            return 0;
+        }
+        eventHandler.onItemUse(player, player.getMainHandItem());
+        return 1;
     }
 
     private static int giveSelf(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
