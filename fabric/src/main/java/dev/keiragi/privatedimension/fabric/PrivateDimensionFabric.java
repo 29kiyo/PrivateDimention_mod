@@ -8,8 +8,10 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.player.ItemEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
@@ -21,8 +23,6 @@ public class PrivateDimensionFabric implements ModInitializer {
     private PrivateDimensionMod mod;
     private CommonEventHandler eventHandler;
     private final Map<UUID, Vec3> lastPos = new HashMap<>();
-    private final Map<UUID, Boolean> wasUsingItem = new HashMap<>();
-
     @Override
     public void onInitialize() {
         mod = new PrivateDimensionMod();
@@ -57,6 +57,48 @@ public class PrivateDimensionFabric implements ModInitializer {
             mod.getPlayerDataManager().saveAll();
         });
 
+        // アイテム使用
+        ItemEvents.USE.register((world, player, hand) -> {
+            PrivateDimensionMod.LOGGER.info("ItemEvents.USE fired: isClientSide={}", world.isClientSide());
+            if (world.isClientSide() || !(player instanceof ServerPlayer sp)) {
+                return InteractionResult.PASS;
+            }
+            ItemStack stack = player.getItemInHand(hand);
+            if (DimensionBottleItem.isDimensionBottle(stack)) {
+                eventHandler.onItemUse(sp, stack);
+                return InteractionResult.SUCCESS;
+            }
+            return InteractionResult.PASS;
+        });
+
+        // アイテム使用
+        ItemEvents.USE.register((world, player, hand) -> {
+            PrivateDimensionMod.LOGGER.info("ItemEvents.USE fired: isClientSide={}", world.isClientSide());
+            if (world.isClientSide() || !(player instanceof ServerPlayer sp)) {
+                return InteractionResult.PASS;
+            }
+            ItemStack stack = player.getItemInHand(hand);
+            if (DimensionBottleItem.isDimensionBottle(stack)) {
+                eventHandler.onItemUse(sp, stack);
+                return InteractionResult.SUCCESS;
+            }
+            return InteractionResult.PASS;
+        });
+
+        // アイテム使用
+        ItemEvents.USE.register((world, player, hand) -> {
+            PrivateDimensionMod.LOGGER.info("ItemEvents.USE fired: isClientSide={}", world.isClientSide());
+            if (world.isClientSide() || !(player instanceof ServerPlayer sp)) {
+                return InteractionResult.PASS;
+            }
+            ItemStack stack = player.getItemInHand(hand);
+            if (DimensionBottleItem.isDimensionBottle(stack)) {
+                eventHandler.onItemUse(sp, stack);
+                return InteractionResult.SUCCESS;
+            }
+            return InteractionResult.PASS;
+        });
+
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 UUID uid = player.getUUID();
@@ -67,17 +109,7 @@ public class PrivateDimensionFabric implements ModInitializer {
                     lastPos.put(uid, current);
                 }
 
-                // アイテム使用検知: 使用中→未使用に変わった瞬間を検知
-                boolean isUsing = player.isUsingItem();
-                Boolean wasUsing = wasUsingItem.get(uid);
-                if (wasUsing != null && wasUsing && !isUsing) {
-                    ItemStack stack = player.getMainHandItem();
-                    if (DimensionBottleItem.isDimensionBottle(stack)) {
-                        PrivateDimensionMod.LOGGER.info("Bottle use detected for {}", player.getName().getString());
-                        eventHandler.onItemUse(player, stack);
-                    }
-                }
-                wasUsingItem.put(uid, isUsing);
+
             }
         });
 
