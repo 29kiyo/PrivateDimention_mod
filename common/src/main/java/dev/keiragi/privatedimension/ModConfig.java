@@ -12,6 +12,7 @@ public class ModConfig {
     public int    pullEntityLimit    = 10;
     public double pullEntityRadius   = 3.0;
     public boolean borderEnforcement = true;
+    public int     cooldownSeconds    = 2;
 
     public String msgDimensionEnter  = "別世界の空間へ移動しました。";
     public String msgDimensionReturn = "元の世界へ戻りました。";
@@ -53,5 +54,6 @@ public class ModConfig {
         msgDimensionEnter = o.msgDimensionEnter; msgDimensionReturn = o.msgDimensionReturn;
         msgBorderForced = o.msgBorderForced; msgGiveItem = o.msgGiveItem;
         msgNoPermission = o.msgNoPermission;
+        cooldownSeconds = o.cooldownSeconds;
     }
 }

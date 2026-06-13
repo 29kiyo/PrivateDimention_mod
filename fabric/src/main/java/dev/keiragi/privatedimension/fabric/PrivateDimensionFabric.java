@@ -8,10 +8,13 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTabs;
+import dev.keiragi.privatedimension.registry.ModItems;
 import net.fabricmc.loader.api.FabricLoader;
-import dev.keiragi.privatedimension.fabric.network.UseBottlePayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -27,6 +30,13 @@ public class PrivateDimensionFabric implements ModInitializer {
     private final Map<UUID, Boolean> cooldownActive = new HashMap<>();
     @Override
     public void onInitialize() {
+        // アイテム登録
+        Registry.register(
+            BuiltInRegistries.ITEM,
+            ResourceLocation.fromNamespaceAndPath("privatedimension", "dimension_bottle"),
+            ModItems.createDimensionBottle()
+        );
+
         mod = new PrivateDimensionMod();
         mod.init();
 
@@ -40,16 +50,6 @@ public class PrivateDimensionFabric implements ModInitializer {
                 .resolve("privatedimension_playerdata.json"));
 
         eventHandler = new CommonEventHandler(mod);
-
-        // パケット登録
-        PayloadTypeRegistry.playC2S().register(UseBottlePayload.TYPE, UseBottlePayload.CODEC);
-        ServerPlayNetworking.registerGlobalReceiver(UseBottlePayload.TYPE, (payload, context) -> {
-            context.server().execute(() -> {
-                ServerPlayer sp = context.player();
-                PrivateDimensionMod.LOGGER.info("UseBottle packet received from {}", sp.getName().getString());
-                eventHandler.onItemUse(sp, sp.getMainHandItem());
-            });
-        });
 
         registerEvents();
         FabricCommandHandler.register(mod, eventHandler);

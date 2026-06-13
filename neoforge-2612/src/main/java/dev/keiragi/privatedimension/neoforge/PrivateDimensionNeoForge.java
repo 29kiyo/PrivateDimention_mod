@@ -8,6 +8,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.Item;
+import dev.keiragi.privatedimension.registry.ModItems;
+import dev.keiragi.privatedimension.item.DimensionBottleItem;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -29,6 +35,10 @@ import java.util.UUID;
 @Mod(PrivateDimensionMod.MOD_ID)
 public class PrivateDimensionNeoForge {
 
+    private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(PrivateDimensionMod.MOD_ID);
+    public static final DeferredItem<DimensionBottleItem> DIMENSION_BOTTLE =
+        ITEMS.registerItem("dimension_bottle", props -> { ModItems.createDimensionBottle(); return ModItems.DIMENSION_BOTTLE; });
+
     private final PrivateDimensionMod mod;
     private final CommonEventHandler eventHandler;
     private final Map<UUID, Vec3> lastPos = new HashMap<>();
@@ -42,6 +52,7 @@ public class PrivateDimensionNeoForge {
         mod.init();
         eventHandler = new CommonEventHandler(mod);
 
+        ITEMS.register(modBus);
         modBus.addListener(this::setup);
         NeoForge.EVENT_BUS.register(this);
 
