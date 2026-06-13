@@ -9,7 +9,7 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.interaction.v1.UseItemCallback;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -72,7 +72,7 @@ public class PrivateDimensionFabric implements ModInitializer {
 
         // アイテム使用
         UseItemCallback.EVENT.register((player, world, hand) -> {
-            if (world.isClientSide || !(player instanceof ServerPlayer sp)) {
+            if (world.isClientSide() || !(player instanceof ServerPlayer sp)) {
                 return InteractionResultHolder.pass(player.getItemInHand(hand));
             }
             ItemStack stack = player.getItemInHand(hand);
