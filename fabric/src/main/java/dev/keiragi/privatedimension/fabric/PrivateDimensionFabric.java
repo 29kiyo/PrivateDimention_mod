@@ -4,21 +4,13 @@ import dev.keiragi.privatedimension.CommonEventHandler;
 import dev.keiragi.privatedimension.PrivateDimensionMod;
 import dev.keiragi.privatedimension.item.DimensionBottleItem;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.nio.file.Path;
@@ -28,21 +20,18 @@ public class PrivateDimensionFabric implements ModInitializer {
 
     private PrivateDimensionMod mod;
     private CommonEventHandler eventHandler;
-
-    // 移動チェック用：前tickの座標を保持
     private final Map<UUID, Vec3> lastPos = new HashMap<>();
+    private final Map<UUID, Boolean> wasUsingItem = new HashMap<>();
 
     @Override
     public void onInitialize() {
         mod = new PrivateDimensionMod();
         mod.init();
 
-        // 設定ファイルパスをセット（init()後にセット→再ロード）
         Path configDir = FabricLoader.getInstance().getConfigDir().resolve(PrivateDimensionMod.MOD_ID);
         mod.getConfig().setConfigPath(configDir.resolve("config.json"));
         mod.getConfig().load();
 
-        // playerdata.json パス
         mod.getPlayerDataManager().setDataPath(
             FabricLoader.getInstance().getGameDir()
                 .resolve("world")
@@ -53,40 +42,21 @@ public class PrivateDimensionFabric implements ModInitializer {
         registerEvents();
         FabricCommandHandler.register(mod, eventHandler);
 
-        PrivateDimensionMod.LOGGER.info("PrivateDimension Fabric が初期化されました。");
+        PrivateDimensionMod.LOGGER.info("PrivateDimension (Fabric) 初期化完了");
     }
 
     private void registerEvents() {
-        // サーバー起動時
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             mod.getDimensionManager().onServerStart(server);
-            // playerdata パスを実際のワールドフォルダに更新
             mod.getPlayerDataManager().setDataPath(
                 server.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT)
                     .resolve("privatedimension_playerdata.json"));
         });
 
-        // サーバー停止時
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
             mod.getPlayerDataManager().saveAll();
         });
 
-        // アイテム使用
-        UseItemCallback.EVENT.register((player, world, hand) -> {
-            PrivateDimensionMod.LOGGER.info("UseItemCallback fired: isClientSide={}", world.isClientSide());
-            if (world.isClientSide() || !(player instanceof ServerPlayer sp)) {
-                return net.minecraft.world.InteractionResultHolder.pass(player.getItemInHand(hand));
-            }
-            ItemStack stack = player.getItemInHand(hand);
-            PrivateDimensionMod.LOGGER.info("isDimensionBottle={}", DimensionBottleItem.isDimensionBottle(stack));
-            if (DimensionBottleItem.isDimensionBottle(stack)) {
-                eventHandler.onItemUse(sp, stack);
-                return net.minecraft.world.InteractionResultHolder.success(stack);
-            }
-            return net.minecraft.world.InteractionResultHolder.pass(stack);
-        });
-
-        // プレイヤー移動チェック (毎tick)
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 UUID uid = player.getUUID();
@@ -96,17 +66,27 @@ public class PrivateDimensionFabric implements ModInitializer {
                     eventHandler.onPlayerMove(player, current);
                     lastPos.put(uid, current);
                 }
+
+                // アイテム使用検知: 使用中→未使用に変わった瞬間を検知
+                boolean isUsing = player.isUsingItem();
+                Boolean wasUsing = wasUsingItem.get(uid);
+                if (wasUsing != null && wasUsing && !isUsing) {
+                    ItemStack stack = player.getMainHandItem();
+                    if (DimensionBottleItem.isDimensionBottle(stack)) {
+                        PrivateDimensionMod.LOGGER.info("Bottle use detected for {}", player.getName().getString());
+                        eventHandler.onItemUse(player, stack);
+                    }
+                }
+                wasUsingItem.put(uid, isUsing);
             }
         });
 
-        // 死亡
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, source) -> {
             if (entity instanceof ServerPlayer sp) {
                 eventHandler.onPlayerDeath(sp);
             }
         });
 
-        // リスポーン
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
             CommonEventHandler.RespawnInfo info = eventHandler.onPlayerRespawn(newPlayer);
             if (info != null) {
@@ -115,7 +95,6 @@ public class PrivateDimensionFabric implements ModInitializer {
             }
         });
 
-        // プレイヤーログアウト時にデータ保存
         net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents.DISCONNECT.register(
             (handler, server) -> mod.getPlayerDataManager().saveAll());
     }
