@@ -19,10 +19,5 @@
     "fabricloader": ">=${fabric_loader}",
     "fabric-api": "*",
     "minecraft": "~${mc_version}"
-  },
-  "custom": {
-    "fabric-resource-loader:server_data": [
-      "data"
-    ]
   }
 }
