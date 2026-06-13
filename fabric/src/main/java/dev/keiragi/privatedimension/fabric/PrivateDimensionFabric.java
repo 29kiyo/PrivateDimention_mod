@@ -31,11 +31,13 @@ public class PrivateDimensionFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         // アイテム登録
+        PrivateDimensionMod.LOGGER.info("アイテム登録開始");
         Registry.register(
             BuiltInRegistries.ITEM,
             ResourceLocation.fromNamespaceAndPath("privatedimension", "dimension_bottle"),
             ModItems.createDimensionBottle()
         );
+        PrivateDimensionMod.LOGGER.info("アイテム登録完了: {}", ModItems.DIMENSION_BOTTLE);
 
         mod = new PrivateDimensionMod();
         mod.init();
