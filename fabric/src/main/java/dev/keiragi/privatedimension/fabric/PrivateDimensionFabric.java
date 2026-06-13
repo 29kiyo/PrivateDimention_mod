@@ -9,7 +9,7 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.fabricmc.fabric.api.event.player.ItemEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -71,18 +71,18 @@ public class PrivateDimensionFabric implements ModInitializer {
         });
 
         // アイテム使用
-        UseItemCallback.EVENT.register((player, world, hand) -> {
-            PrivateDimensionMod.LOGGER.info("UseItemCallback fired: isClientSide={}, player={}", world.isClientSide(), player.getName().getString());
+        ItemEvents.USE.register((world, player, hand) -> {
+            PrivateDimensionMod.LOGGER.info("ItemEvents.USE fired: isClientSide={}, player={}", world.isClientSide(), player.getName().getString());
             if (world.isClientSide() || !(player instanceof ServerPlayer sp)) {
-                return InteractionResultHolder.pass(player.getItemInHand(hand));
+                return net.minecraft.world.InteractionResult.PASS;
             }
             ItemStack stack = player.getItemInHand(hand);
             PrivateDimensionMod.LOGGER.info("Item used: {}, isDimensionBottle={}", stack.getItem(), DimensionBottleItem.isDimensionBottle(stack));
             if (DimensionBottleItem.isDimensionBottle(stack)) {
                 eventHandler.onItemUse(sp, stack);
-                return InteractionResultHolder.success(stack);
+                return net.minecraft.world.InteractionResult.SUCCESS;
             }
-            return InteractionResultHolder.pass(stack);
+            return net.minecraft.world.InteractionResult.PASS;
         });
 
         // プレイヤー移動チェック (毎tick)
