@@ -7,8 +7,5 @@
     "D": "minecraft:diamond",
     "L": "minecraft:lodestone"
   },
-  "result": {
-    "id": "privatedimension:dimension_bottle",
-    "count": 1
-  }
+  "result": "privatedimension:dimension_bottle"
 }
