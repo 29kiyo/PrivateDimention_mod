@@ -2,10 +2,10 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [ "#E#", "#D#", "#L#" ],
   "key": {
-    "#": { "item": "minecraft:glass" },
-    "E": { "item": "minecraft:ender_eye" },
-    "D": { "item": "minecraft:diamond" },
-    "L": { "item": "minecraft:lodestone" }
+    "#": "minecraft:glass",
+    "E": "minecraft:ender_eye",
+    "D": "minecraft:diamond",
+    "L": "minecraft:lodestone"
   },
   "result": {
     "id": "minecraft:lingering_potion",
