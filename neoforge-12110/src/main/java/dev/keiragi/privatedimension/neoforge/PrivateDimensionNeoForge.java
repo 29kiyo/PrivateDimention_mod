@@ -10,6 +10,8 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.DeferredItem;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.Item;
 import dev.keiragi.privatedimension.registry.ModItems;
 import dev.keiragi.privatedimension.item.DimensionBottleItem;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -57,7 +59,7 @@ public class PrivateDimensionNeoForge {
         PrivateDimensionMod.LOGGER.info("PrivateDimension (NeoForge {}) 初期化完了", mc_version());
     }
 
-    private String mc_version() { return "1.21.10"; }
+    private String mc_version() { return "26.1.2"; }
 
     private void setup(FMLCommonSetupEvent event) {}
 

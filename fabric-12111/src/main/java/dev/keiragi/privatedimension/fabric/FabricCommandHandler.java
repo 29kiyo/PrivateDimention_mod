@@ -14,23 +14,37 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.UUID;
 
+/**
+ * /pd コマンド (Fabric)
+ * Paper版と同等の機能:
+ *   /pd give [player]  - アイテム付与
+ *   /pd reload         - 設定リロード
+ *   /pd info           - プロット情報
+ */
 public class FabricCommandHandler {
 
     static void register(PrivateDimensionMod mod, CommonEventHandler eventHandler) {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            dispatcher.register(Commands.literal("pd")
-                .then(Commands.literal("give")
-                    .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                    .executes(ctx -> giveSelf(ctx, mod))
-                    .then(Commands.argument("player", StringArgumentType.word())
-                        .executes(ctx -> givePlayer(ctx, mod))))
-                .then(Commands.literal("reload")
-                    .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                    .executes(ctx -> reload(ctx, mod)))
-                .then(Commands.literal("info")
-                    .executes(ctx -> info(ctx, mod))));
-            dispatcher.register(Commands.literal("privatedim")
-                .redirect(dispatcher.getRoot().getChild("pd")));
+            dispatcher.register(
+                Commands.literal("pd")
+                    .then(Commands.literal("give")
+                        .requires(src -> src.hasPermission(2))
+                        .executes(ctx -> giveSelf(ctx, mod))
+                        .then(Commands.argument("player", StringArgumentType.word())
+                            .executes(ctx -> givePlayer(ctx, mod))))
+                    .then(Commands.literal("reload")
+                        .requires(src -> src.hasPermission(2))
+                        .executes(ctx -> reload(ctx, mod)))
+                    .then(Commands.literal("info")
+                        .executes(ctx -> info(ctx, mod)))
+                    .then(Commands.literal("tp")
+                        .executes(ctx -> tp(ctx, mod, eventHandler)))
+            );
+            // alias
+            dispatcher.register(
+                Commands.literal("privatedim")
+                    .redirect(dispatcher.getRoot().getChild("pd"))
+            );
         });
     }
 
@@ -46,15 +60,16 @@ public class FabricCommandHandler {
     }
 
     private static int giveSelf(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
-        try {
-            ServerPlayer player = ctx.getSource().getPlayerOrException();
-            if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null) player.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
-            ctx.getSource().sendSuccess(() -> Component.literal("§a[PD] アイテムを付与しました。"), false);
-            return 1;
-        } catch (Exception e) {
+        ServerPlayer player;
+        try { player = ctx.getSource().getPlayerOrException(); }
+        catch (Exception e) {
             ctx.getSource().sendFailure(Component.literal("プレイヤーとして実行してください。"));
             return 0;
         }
+        if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null) player.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
+        ctx.getSource().sendSuccess(() ->
+            Component.literal("§a[PrivateDimension] アイテムを付与しました。"), false);
+        return 1;
     }
 
     private static int givePlayer(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
@@ -65,35 +80,38 @@ public class FabricCommandHandler {
             return 0;
         }
         if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null) target.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
-        ctx.getSource().sendSuccess(() -> Component.literal("§a[PD] " + target.getName().getString() + " に付与しました。"), false);
+        ctx.getSource().sendSuccess(() ->
+            Component.literal("§a[PrivateDimension] " + target.getName().getString() + " にアイテムを付与しました。"), false);
         return 1;
     }
 
     private static int reload(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
         mod.getConfig().load();
-        ctx.getSource().sendSuccess(() -> Component.literal("§a[PD] 設定をリロードしました。"), false);
+        ctx.getSource().sendSuccess(() ->
+            Component.literal("§a[PrivateDimension] 設定をリロードしました。"), false);
         return 1;
     }
 
     private static int info(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
-        try {
-            ServerPlayer player = ctx.getSource().getPlayerOrException();
-            UUID uid = player.getUUID();
-            PlayerDataManager pdm = mod.getPlayerDataManager();
-            if (pdm.hasPlot(uid)) {
-                int id = pdm.getPlotId(uid);
-                double[] pos = pdm.getPlotPos(uid);
-                player.sendSystemMessage(Component.literal("§b[PD] プロットID: §f" + id));
-                if (pos != null)
-                    player.sendSystemMessage(Component.literal(
-                        String.format("§b次元内最終座標: §f%.1f, %.1f, %.1f", pos[0], pos[1], pos[2])));
-            } else {
-                player.sendSystemMessage(Component.literal("§b[PD] まだプロットを持っていません。"));
-            }
-            return 1;
-        } catch (Exception e) {
+        ServerPlayer player;
+        try { player = ctx.getSource().getPlayerOrException(); }
+        catch (Exception e) {
             ctx.getSource().sendFailure(Component.literal("プレイヤーとして実行してください。"));
             return 0;
         }
+        PlayerDataManager pdm = mod.getPlayerDataManager();
+        UUID uid = player.getUUID();
+        if (pdm.hasPlot(uid)) {
+            int id = pdm.getPlotId(uid);
+            double[] pos = pdm.getPlotPos(uid);
+            player.sendSystemMessage(Component.literal("§b[PrivateDimension] プロットID: §f" + id));
+            if (pos != null) {
+                player.sendSystemMessage(Component.literal(
+                    String.format("§b次元内最終座標: §f%.1f, %.1f, %.1f", pos[0], pos[1], pos[2])));
+            }
+        } else {
+            player.sendSystemMessage(Component.literal("§b[PrivateDimension] まだプロットを持っていません。"));
+        }
+        return 1;
     }
 }
