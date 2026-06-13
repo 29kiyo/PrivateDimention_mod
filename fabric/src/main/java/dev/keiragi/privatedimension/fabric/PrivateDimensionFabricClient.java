@@ -1,7 +1,7 @@
 package dev.keiragi.privatedimension.fabric;
 
 import dev.keiragi.privatedimension.item.DimensionBottleItem;
-import dev.keiragi.privatedimension.network.UseBottlePayload;
+import dev.keiragi.privatedimension.fabric.network.UseBottlePayload;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
