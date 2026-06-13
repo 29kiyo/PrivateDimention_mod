@@ -4,7 +4,9 @@
   "version": "${version}",
   "name": "PrivateDimension",
   "description": "Dimension in a Bottle - プライベート次元Mod",
-  "authors": ["29kiyo"],
+  "authors": [
+    "29kiyo"
+  ],
   "license": "CC-BY-SA-4.0",
   "environment": "*",
   "icon": "icon.png",
@@ -17,5 +19,10 @@
     "fabricloader": ">=${fabric_loader}",
     "fabric-api": "*",
     "minecraft": "~${mc_version}"
+  },
+  "custom": {
+    "fabric-resource-loader:server_data": [
+      "data"
+    ]
   }
 }
