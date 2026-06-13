@@ -6,7 +6,7 @@ subprojects {
     apply plugin: 'java'
 
     group   = mod_group
-    version = ''
+    version = mod_version
 
     repositories {
         mavenCentral()
