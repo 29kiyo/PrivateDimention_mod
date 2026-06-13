@@ -19,7 +19,7 @@ public class ModConfig {
     public String msgGiveItem        = "[Private Dimension] アイテムを付与しました。";
     public String msgNoPermission    = "この操作を行う権限がありません。";
 
-    private Path configPath;
+    private transient Path configPath;
 
     public void setConfigPath(Path path) { this.configPath = path; }
 
