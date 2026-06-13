@@ -52,7 +52,7 @@ public class PrivateDimensionFabric implements ModInitializer {
             if (world.isClientSide() || !(player instanceof ServerPlayer sp))
                 return net.minecraft.world.InteractionResult.PASS;
             ItemStack stack = player.getItemInHand(hand);
-            if (DimensionBottleItem.isDimensionBottle(stack)) {
+            if (stack.getItem() instanceof DimensionBottleItem) {
                 eventHandler.onItemUse(sp, stack);
                 return net.minecraft.world.InteractionResult.SUCCESS;
             }

@@ -48,7 +48,7 @@ public class FabricCommandHandler {
     private static int giveSelf(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
         try {
             ServerPlayer player = ctx.getSource().getPlayerOrException();
-            player.getInventory().add(DimensionBottleItem.createItem());
+            if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null) player.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
             ctx.getSource().sendSuccess(() -> Component.literal("§a[PD] アイテムを付与しました。"), false);
             return 1;
         } catch (Exception e) {
@@ -64,7 +64,7 @@ public class FabricCommandHandler {
             ctx.getSource().sendFailure(Component.literal("§cプレイヤーが見つかりません: " + name));
             return 0;
         }
-        target.getInventory().add(DimensionBottleItem.createItem());
+        if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null) target.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
         ctx.getSource().sendSuccess(() -> Component.literal("§a[PD] " + target.getName().getString() + " に付与しました。"), false);
         return 1;
     }

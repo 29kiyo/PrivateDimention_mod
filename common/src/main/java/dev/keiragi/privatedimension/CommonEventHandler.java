@@ -25,7 +25,7 @@ public class CommonEventHandler {
     public TeleportHandler getTeleportHandler() { return teleportHandler; }
 
     public boolean onItemUse(ServerPlayer player, ItemStack stack) {
-        if (!DimensionBottleItem.isDimensionBottle(stack)) return false;
+        if (!(stack.getItem() instanceof DimensionBottleItem)) return false;
         teleportHandler.handleUse(player);
         return true;
     }

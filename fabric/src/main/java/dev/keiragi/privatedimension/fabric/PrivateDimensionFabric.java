@@ -76,7 +76,7 @@ public class PrivateDimensionFabric implements ModInitializer {
                 return InteractionResult.PASS;
             }
             ItemStack stack = player.getItemInHand(hand);
-            if (DimensionBottleItem.isDimensionBottle(stack)) {
+            if (stack.getItem() instanceof DimensionBottleItem) {
                 eventHandler.onItemUse(sp, stack);
                 return InteractionResult.SUCCESS;
             }
@@ -90,7 +90,7 @@ public class PrivateDimensionFabric implements ModInitializer {
                 return InteractionResult.PASS;
             }
             ItemStack stack = player.getItemInHand(hand);
-            if (DimensionBottleItem.isDimensionBottle(stack)) {
+            if (stack.getItem() instanceof DimensionBottleItem) {
                 eventHandler.onItemUse(sp, stack);
                 return InteractionResult.SUCCESS;
             }
@@ -104,7 +104,7 @@ public class PrivateDimensionFabric implements ModInitializer {
                 return InteractionResult.PASS;
             }
             ItemStack stack = player.getItemInHand(hand);
-            if (DimensionBottleItem.isDimensionBottle(stack)) {
+            if (stack.getItem() instanceof DimensionBottleItem) {
                 eventHandler.onItemUse(sp, stack);
                 return InteractionResult.SUCCESS;
             }

@@ -84,7 +84,7 @@ public class PrivateDimensionNeoForge {
         if (event.getEntity().level().isClientSide) return;
         if (!(event.getEntity() instanceof ServerPlayer sp)) return;
         ItemStack stack = event.getItemStack();
-        if (DimensionBottleItem.isDimensionBottle(stack)) {
+        if (stack.getItem() instanceof DimensionBottleItem) {
             event.setCanceled(true);
             eventHandler.onItemUse(sp, stack);
         }

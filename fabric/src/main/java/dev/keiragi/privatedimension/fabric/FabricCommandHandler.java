@@ -66,7 +66,7 @@ public class FabricCommandHandler {
             ctx.getSource().sendFailure(Component.literal("プレイヤーとして実行してください。"));
             return 0;
         }
-        player.getInventory().add(DimensionBottleItem.createItem());
+        if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null) player.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
         ctx.getSource().sendSuccess(() ->
             Component.literal("§a[PrivateDimension] アイテムを付与しました。"), false);
         return 1;
@@ -79,7 +79,7 @@ public class FabricCommandHandler {
             ctx.getSource().sendFailure(Component.literal("§cプレイヤーが見つかりません: " + name));
             return 0;
         }
-        target.getInventory().add(DimensionBottleItem.createItem());
+        if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null) target.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
         ctx.getSource().sendSuccess(() ->
             Component.literal("§a[PrivateDimension] " + target.getName().getString() + " にアイテムを付与しました。"), false);
         return 1;

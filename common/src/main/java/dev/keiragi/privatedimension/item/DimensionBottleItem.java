@@ -16,13 +16,24 @@ public class DimensionBottleItem extends Item {
         super(properties);
     }
 
+    public static boolean isDimensionBottle(net.minecraft.world.item.ItemStack stack) {
+        if (stack == null || stack.isEmpty()) return false;
+        return stack.getItem() instanceof DimensionBottleItem;
+    }
+
+    public static net.minecraft.world.item.ItemStack createItem() {
+        return dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null
+            ? new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE)
+            : net.minecraft.world.item.ItemStack.EMPTY;
+    }
+
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (player.getCooldowns().isOnCooldown(stack)) {
             return InteractionResult.FAIL;
         }
-        if (!level.isClientSide && player instanceof net.minecraft.server.level.ServerPlayer sp) {
+        if (!level.isClientSide() && player instanceof net.minecraft.server.level.ServerPlayer sp) {
             PrivateDimensionMod mod = PrivateDimensionMod.getInstance();
             if (mod != null) {
                 mod.getTeleportHandler().handleUse(sp);
