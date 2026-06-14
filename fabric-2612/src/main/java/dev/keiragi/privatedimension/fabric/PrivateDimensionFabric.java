@@ -8,14 +8,14 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.event.player.ItemEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.resources.Identifier;
 import dev.keiragi.privatedimension.registry.ModItems;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
@@ -28,15 +28,15 @@ public class PrivateDimensionFabric implements ModInitializer {
     private CommonEventHandler eventHandler;
     private final Map<UUID, Vec3> lastPos = new HashMap<>();
     private final Map<UUID, Boolean> cooldownActive = new HashMap<>();
+
     @Override
     public void onInitialize() {
         System.out.println("[PD] onInitialize開始");
-        // アイテム登録
         try {
             PrivateDimensionMod.LOGGER.info("アイテム登録開始");
             Registry.register(
                 BuiltInRegistries.ITEM,
-                ResourceLocation.fromNamespaceAndPath("privatedimension", "dimension_bottle"),
+                Identifier.of("privatedimension", "dimension_bottle"),
                 ModItems.createDimensionBottle()
             );
             PrivateDimensionMod.LOGGER.info("アイテム登録完了: {}", ModItems.DIMENSION_BOTTLE);
@@ -76,35 +76,6 @@ public class PrivateDimensionFabric implements ModInitializer {
             mod.getPlayerDataManager().saveAll();
         });
 
-        // アイテム使用
-        ItemEvents.USE.register((world, player, hand) -> {
-            PrivateDimensionMod.LOGGER.info("ItemEvents.USE fired: isClientSide={}", world.isClientSide());
-            if (world.isClientSide() || !(player instanceof ServerPlayer sp)) {
-                return InteractionResult.PASS;
-            }
-            ItemStack stack = player.getItemInHand(hand);
-            if (stack.getItem() instanceof DimensionBottleItem) {
-                eventHandler.onItemUse(sp, stack);
-                return InteractionResult.SUCCESS;
-            }
-            return InteractionResult.PASS;
-        });
-
-        // アイテム使用
-        ItemEvents.USE.register((world, player, hand) -> {
-            PrivateDimensionMod.LOGGER.info("ItemEvents.USE fired: isClientSide={}", world.isClientSide());
-            if (world.isClientSide() || !(player instanceof ServerPlayer sp)) {
-                return InteractionResult.PASS;
-            }
-            ItemStack stack = player.getItemInHand(hand);
-            if (stack.getItem() instanceof DimensionBottleItem) {
-                eventHandler.onItemUse(sp, stack);
-                return InteractionResult.SUCCESS;
-            }
-            return InteractionResult.PASS;
-        });
-
-        // アイテム使用
         ItemEvents.USE.register((world, player, hand) -> {
             PrivateDimensionMod.LOGGER.info("ItemEvents.USE fired: isClientSide={}", world.isClientSide());
             if (world.isClientSide() || !(player instanceof ServerPlayer sp)) {
@@ -128,7 +99,6 @@ public class PrivateDimensionFabric implements ModInitializer {
                     lastPos.put(uid, current);
                 }
 
-                // アイテムクールダウン監視で右クリック検知
                 ItemStack mainHand = player.getMainHandItem();
                 if (DimensionBottleItem.isDimensionBottle(mainHand)) {
                     float cd = player.getCooldowns().getCooldownPercent(mainHand, 0f);
@@ -140,8 +110,6 @@ public class PrivateDimensionFabric implements ModInitializer {
                     }
                     cooldownActive.put(uid, hasCooldown);
                 }
-
-
             }
         });
 
@@ -155,7 +123,7 @@ public class PrivateDimensionFabric implements ModInitializer {
             CommonEventHandler.RespawnInfo info = eventHandler.onPlayerRespawn(newPlayer);
             if (info != null) {
                 newPlayer.teleportTo(info.level, info.pos.x, info.pos.y, info.pos.z,
-                    newPlayer.getYRot(), newPlayer.getXRot());
+                    java.util.Set.of(), newPlayer.getYRot(), newPlayer.getXRot(), true);
             }
         });
 

@@ -5,11 +5,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import dev.keiragi.privatedimension.CommonEventHandler;
 import dev.keiragi.privatedimension.PrivateDimensionMod;
-import dev.keiragi.privatedimension.item.DimensionBottleItem;
 import dev.keiragi.privatedimension.manager.PlayerDataManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.server.permissions.Permissions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -21,12 +19,12 @@ public class NeoForgeCommandHandler {
                          CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("pd")
             .then(Commands.literal("give")
-                .requires(src -> src.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
+                .requires(src -> src.hasPermission(2))
                 .executes(ctx -> giveSelf(ctx, mod))
                 .then(Commands.argument("player", StringArgumentType.word())
                     .executes(ctx -> givePlayer(ctx, mod))))
             .then(Commands.literal("reload")
-                .requires(src -> src.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
+                .requires(src -> src.hasPermission(2))
                 .executes(ctx -> reload(ctx, mod)))
             .then(Commands.literal("info")
                 .executes(ctx -> info(ctx, mod))));
@@ -37,7 +35,8 @@ public class NeoForgeCommandHandler {
     private static int giveSelf(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
         try {
             ServerPlayer player = ctx.getSource().getPlayerOrException();
-            if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null) player.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
+            if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null)
+                player.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
             ctx.getSource().sendSuccess(() -> Component.literal("§a[PD] アイテムを付与しました。"), false);
             return 1;
         } catch (Exception e) {
@@ -53,7 +52,8 @@ public class NeoForgeCommandHandler {
             ctx.getSource().sendFailure(Component.literal("§cプレイヤーが見つかりません: " + name));
             return 0;
         }
-        if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null) target.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
+        if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null)
+            target.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
         ctx.getSource().sendSuccess(() -> Component.literal("§a[PD] " + target.getName().getString() + " に付与しました。"), false);
         return 1;
     }
@@ -74,7 +74,7 @@ public class NeoForgeCommandHandler {
                 double[] pos = pdm.getPlotPos(uid);
                 if (pos != null)
                     player.sendSystemMessage(Component.literal(
-                        String.format("§b次元内最終座標: §f%.1f, %.1f, %.1f", pos[0], pos[1], pos[2])));
+                        String.format("§b次元内座標: §f%.1f, %.1f, %.1f", pos[0], pos[1], pos[2])));
             } else {
                 player.sendSystemMessage(Component.literal("§b[PD] まだプロットを持っていません。"));
             }
