@@ -8,6 +8,7 @@ import dev.keiragi.privatedimension.PrivateDimensionMod;
 import dev.keiragi.privatedimension.manager.PlayerDataManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -19,12 +20,12 @@ public class NeoForgeCommandHandler {
                          CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("pd")
             .then(Commands.literal("give")
-                .requires(src -> src.hasPermission(2))
+                .requires(src -> src.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
                 .executes(ctx -> giveSelf(ctx, mod))
                 .then(Commands.argument("player", StringArgumentType.word())
                     .executes(ctx -> givePlayer(ctx, mod))))
             .then(Commands.literal("reload")
-                .requires(src -> src.hasPermission(2))
+                .requires(src -> src.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
                 .executes(ctx -> reload(ctx, mod)))
             .then(Commands.literal("info")
                 .executes(ctx -> info(ctx, mod))));

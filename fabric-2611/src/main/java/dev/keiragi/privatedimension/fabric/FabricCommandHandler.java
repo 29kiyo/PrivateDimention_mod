@@ -4,23 +4,16 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import dev.keiragi.privatedimension.CommonEventHandler;
 import dev.keiragi.privatedimension.PrivateDimensionMod;
-import dev.keiragi.privatedimension.item.DimensionBottleItem;
 import dev.keiragi.privatedimension.manager.PlayerDataManager;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.UUID;
 
-/**
- * /pd コマンド (Fabric)
- * Paper版と同等の機能:
- *   /pd give [player]  - アイテム付与
- *   /pd reload         - 設定リロード
- *   /pd info           - プロット情報
- */
 public class FabricCommandHandler {
 
     static void register(PrivateDimensionMod mod, CommonEventHandler eventHandler) {
@@ -28,19 +21,18 @@ public class FabricCommandHandler {
             dispatcher.register(
                 Commands.literal("pd")
                     .then(Commands.literal("give")
-                        .requires(src -> src.hasPermission(2))
+                        .requires(src -> src.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
                         .executes(ctx -> giveSelf(ctx, mod))
                         .then(Commands.argument("player", StringArgumentType.word())
                             .executes(ctx -> givePlayer(ctx, mod))))
                     .then(Commands.literal("reload")
-                        .requires(src -> src.hasPermission(2))
+                        .requires(src -> src.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
                         .executes(ctx -> reload(ctx, mod)))
                     .then(Commands.literal("info")
                         .executes(ctx -> info(ctx, mod)))
                     .then(Commands.literal("tp")
                         .executes(ctx -> tp(ctx, mod, eventHandler)))
             );
-            // alias
             dispatcher.register(
                 Commands.literal("privatedim")
                     .redirect(dispatcher.getRoot().getChild("pd"))
@@ -66,7 +58,8 @@ public class FabricCommandHandler {
             ctx.getSource().sendFailure(Component.literal("プレイヤーとして実行してください。"));
             return 0;
         }
-        if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null) player.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
+        if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null)
+            player.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
         ctx.getSource().sendSuccess(() ->
             Component.literal("§a[PrivateDimension] アイテムを付与しました。"), false);
         return 1;
@@ -79,7 +72,8 @@ public class FabricCommandHandler {
             ctx.getSource().sendFailure(Component.literal("§cプレイヤーが見つかりません: " + name));
             return 0;
         }
-        if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null) target.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
+        if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null)
+            target.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
         ctx.getSource().sendSuccess(() ->
             Component.literal("§a[PrivateDimension] " + target.getName().getString() + " にアイテムを付与しました。"), false);
         return 1;
