@@ -12,6 +12,8 @@ import net.fabricmc.fabric.api.event.player.ItemEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
 import dev.keiragi.privatedimension.registry.ModItems;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,11 +36,13 @@ public class PrivateDimensionFabric implements ModInitializer {
         System.out.println("[PD] onInitialize開始");
         try {
             PrivateDimensionMod.LOGGER.info("アイテム登録開始");
-            Registry.register(
-                BuiltInRegistries.ITEM,
-                Identifier.fromNamespaceAndPath("privatedimension", "dimension_bottle"),
-                ModItems.createDimensionBottle()
+            Identifier id = Identifier.fromNamespaceAndPath("privatedimension", "dimension_bottle");
+            ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
+            DimensionBottleItem item = new DimensionBottleItem(
+                new Item.Properties().setId(key).stacksTo(1)
             );
+            Registry.register(BuiltInRegistries.ITEM, key, item);
+            ModItems.DIMENSION_BOTTLE = item;
             PrivateDimensionMod.LOGGER.info("アイテム登録完了: {}", ModItems.DIMENSION_BOTTLE);
         } catch (Exception e) {
             PrivateDimensionMod.LOGGER.error("アイテム登録失敗: {}", e.getMessage(), e);
