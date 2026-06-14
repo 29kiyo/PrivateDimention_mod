@@ -36,7 +36,7 @@ public class PrivateDimensionFabric implements ModInitializer {
             PrivateDimensionMod.LOGGER.info("アイテム登録開始");
             Registry.register(
                 BuiltInRegistries.ITEM,
-                Identifier.of("privatedimension", "dimension_bottle"),
+                Identifier.fromNamespaceAndPath("privatedimension", "dimension_bottle"),
                 ModItems.createDimensionBottle()
             );
             PrivateDimensionMod.LOGGER.info("アイテム登録完了: {}", ModItems.DIMENSION_BOTTLE);
