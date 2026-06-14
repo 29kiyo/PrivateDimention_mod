@@ -20,11 +20,6 @@ public class DimensionBottleItem extends Item {
     }
 
     @Override
-    public Component getName(ItemStack stack) {
-        return Component.translatable("item.privatedimension.dimension_bottle");
-    }
-
-    @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("item.privatedimension.dimension_bottle.desc1"));
         tooltip.add(Component.translatable("item.privatedimension.dimension_bottle.desc2"));
