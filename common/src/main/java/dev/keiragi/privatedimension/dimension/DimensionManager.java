@@ -58,13 +58,25 @@ public class DimensionManager {
             ensureNbtExtracted(level);
             StructureTemplateManager stm = level.getServer().getStructureManager();
             Object structId = IdUtils.createId(PrivateDimensionMod.MOD_ID, "plot48x48");
-            // loadで直接ディスクから読み込む
+            // getOrCreate または get で取得
             Optional<Object> opt;
             try {
-                java.lang.reflect.Method loadMethod = stm.getClass().getMethod("load", structId.getClass());
-                opt = (Optional<Object>) loadMethod.invoke(stm, structId);
+                // まずgetOrCreateを試す（なければディスクから読む）
+                java.lang.reflect.Method m = null;
+                for (java.lang.reflect.Method candidate : stm.getClass().getMethods()) {
+                    if (candidate.getName().equals("getOrCreate") && candidate.getParameterCount() == 1) {
+                        m = candidate;
+                        break;
+                    }
+                }
+                if (m != null) {
+                    Object result = m.invoke(stm, structId);
+                    opt = Optional.ofNullable(result);
+                } else {
+                    opt = IdUtils.getStructureTemplate(stm, structId);
+                }
             } catch (Exception e) {
-                PrivateDimensionMod.LOGGER.error("load失敗、getにフォールバック: {}", e.getMessage());
+                PrivateDimensionMod.LOGGER.error("getOrCreate失敗: {}", e.getMessage());
                 opt = IdUtils.getStructureTemplate(stm, structId);
             }
             if (opt == null || opt.isEmpty()) {
