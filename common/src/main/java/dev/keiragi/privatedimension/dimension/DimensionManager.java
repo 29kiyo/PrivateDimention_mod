@@ -58,6 +58,11 @@ public class DimensionManager {
             ensureNbtExtracted(level);
             StructureTemplateManager stm = level.getServer().getStructureManager();
             Object structId = IdUtils.createId(PrivateDimensionMod.MOD_ID, "plot48x48");
+            // キャッシュ強制更新
+            try {
+                java.lang.reflect.Method loadMethod = stm.getClass().getMethod("load", structId.getClass());
+                loadMethod.invoke(stm, structId);
+            } catch (Exception ignored) {}
             Optional<Object> opt = IdUtils.getStructureTemplate(stm, structId);
             if (opt.isEmpty()) {
                 PrivateDimensionMod.LOGGER.error("構造物 {} が見つかりません！", structId);
