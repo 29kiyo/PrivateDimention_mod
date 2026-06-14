@@ -62,7 +62,7 @@ public class TeleportHandler {
         int plotId = pdm.getPlotId(uid);
         BlockPos structOrigin = mod.getPlotManager().getPlotStructureOrigin(plotId);
         pd.getChunk(structOrigin);
-        boolean needsStructure = pd.isEmptyBlock(structOrigin.above(5));
+        boolean needsStructure = pd.isEmptyBlock(structOrigin) || pd.isEmptyBlock(structOrigin.above(1));
         if (needsStructure) {
             PrivateDimensionMod.LOGGER.warn("プロット{}の構造物が見つかりません。再配置します。", plotId);
             pd.getChunk(BlockPos.containing(mod.getPlotManager().getPlotSpawn(plotId)));
