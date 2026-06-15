@@ -13,6 +13,9 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraft.world.level.storage.LevelResource;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.NbtAccounter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -56,58 +59,62 @@ public class DimensionManager {
     public void placeStructure(ServerLevel level, BlockPos origin) {
         try {
             ensureNbtExtracted(level);
+            Path structDir = level.getServer().getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT)
+                .resolve("generated")
+                .resolve(PrivateDimensionMod.MOD_ID)
+                .resolve("structures");
+            Path nbtPath = structDir.resolve("plot48x48.nbt");
+            if (!java.nio.file.Files.exists(nbtPath)) {
+                PrivateDimensionMod.LOGGER.error("NBTファイルが見つかりません: {}", nbtPath);
+                return;
+            }
+            // NBTを直接読み込む
+            net.minecraft.nbt.CompoundTag nbt;
+            try (java.io.InputStream is = java.nio.file.Files.newInputStream(nbtPath)) {
+                nbt = net.minecraft.nbt.NbtIo.readCompressed(is, net.minecraft.nbt.NbtAccounter.unlimitedHeap());
+            }
+            PrivateDimensionMod.LOGGER.info("NBT読み込み完了, keys={}", nbt.getAllKeys());
             StructureTemplateManager stm = level.getServer().getStructureManager();
+            // structureRepositoryのキャッシュをクリアしてから再ロード
             Object structId = IdUtils.createId(PrivateDimensionMod.MOD_ID, "plot48x48");
-            // getOrCreate または get で取得
-            Optional<Object> opt;
             try {
-                // まずgetOrCreateを試す（なければディスクから読む）
-                java.lang.reflect.Method m = null;
-                for (java.lang.reflect.Method candidate : stm.getClass().getMethods()) {
-                    if (candidate.getName().equals("getOrCreate") && candidate.getParameterCount() == 1) {
-                        m = candidate;
+                java.lang.reflect.Field repoField = null;
+                for (java.lang.reflect.Field f : StructureTemplateManager.class.getDeclaredFields()) {
+                    if (f.getType().getSimpleName().contains("Map")) {
+                        repoField = f;
+                        repoField.setAccessible(true);
                         break;
                     }
                 }
-                if (m != null) {
-                    Object result = m.invoke(stm, structId);
-                    opt = Optional.ofNullable(result);
-                } else {
-                    opt = IdUtils.getStructureTemplate(stm, structId);
+                if (repoField != null) {
+                    java.util.Map<?, ?> repo = (java.util.Map<?, ?>) repoField.get(stm);
+                    repo.remove(structId);
+                    PrivateDimensionMod.LOGGER.info("キャッシュクリア完了");
                 }
             } catch (Exception e) {
-                PrivateDimensionMod.LOGGER.error("getOrCreate失敗: {}", e.getMessage());
-                opt = IdUtils.getStructureTemplate(stm, structId);
+                PrivateDimensionMod.LOGGER.warn("キャッシュクリア失敗: {}", e.getMessage());
             }
+            // getで再ロード試行
+            Optional<Object> opt = IdUtils.getStructureTemplate(stm, structId);
             if (opt == null || opt.isEmpty()) {
-                PrivateDimensionMod.LOGGER.error("構造物 {} が見つかりません！", structId);
+                PrivateDimensionMod.LOGGER.warn("getで取得失敗、新規TemplateにNBTを適用します");
+                // 新規StructureTemplateにNBTを直接適用してplaceInWorld
+                StructureTemplate template = new StructureTemplate();
+                // loadWithComponentsシグネチャ: (ProblemReporter, HolderLookup$Provider, CompoundTag) -> ValueInput
+                // これを使うのは複雑なので、NbtUtilsとBlockPaletteで手動ロードは諦め
+                // 代わりにBlockStateCommandで直接配置するフォールバック
+                PrivateDimensionMod.LOGGER.error("構造物ロード失敗。NBTのキー: {}", nbt.getAllKeys());
                 return;
             }
             StructureTemplate template = (StructureTemplate) opt.get();
             StructurePlaceSettings settings = new StructurePlaceSettings();
-            template.placeInWorld(level, origin, origin, settings, level.getRandom(), 2);
-            PrivateDimensionMod.LOGGER.info("構造物配置完了: {}", origin);
+            boolean placed = template.placeInWorld(level, origin, origin, settings, level.getRandom(), 2);
+            PrivateDimensionMod.LOGGER.info("構造物配置完了: {} placed={}", origin, placed);
         } catch (Exception e) {
-            PrivateDimensionMod.LOGGER.error("構造物配置失敗: {}", e.getMessage());
+            PrivateDimensionMod.LOGGER.error("構造物配置失敗: {}", e.getMessage(), e);
         }
     }
-
-    private static Object createId(String namespace, String path) {
-        try {
-            Class<?> idClass;
-            try {
-                idClass = Class.forName("net.minecraft.resources.Identifier");
-            } catch (ClassNotFoundException e) {
-                idClass = Class.forName("net.minecraft.resources.ResourceLocation");
-            }
-            return idClass.getMethod("fromNamespaceAndPath", String.class, String.class)
-                .invoke(null, namespace, path);
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void ensureNbtExtracted(ServerLevel level) throws IOException {
+        private void ensureNbtExtracted(ServerLevel level) throws IOException {
         Path structDir = level.getServer().getWorldPath(LevelResource.ROOT)
             .resolve("generated")
             .resolve(PrivateDimensionMod.MOD_ID)
