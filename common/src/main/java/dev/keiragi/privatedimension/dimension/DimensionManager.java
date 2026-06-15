@@ -73,7 +73,7 @@ public class DimensionManager {
             try (java.io.InputStream is = java.nio.file.Files.newInputStream(nbtPath)) {
                 nbt = net.minecraft.nbt.NbtIo.readCompressed(is, net.minecraft.nbt.NbtAccounter.unlimitedHeap());
             }
-            PrivateDimensionMod.LOGGER.info("NBT読み込み完了, keys={}", nbt.getAllKeys());
+            
             StructureTemplateManager stm = level.getServer().getStructureManager();
             // structureRepositoryのキャッシュをクリアしてから再ロード
             Object structId = IdUtils.createId(PrivateDimensionMod.MOD_ID, "plot48x48");
@@ -103,7 +103,7 @@ public class DimensionManager {
                 // loadWithComponentsシグネチャ: (ProblemReporter, HolderLookup$Provider, CompoundTag) -> ValueInput
                 // これを使うのは複雑なので、NbtUtilsとBlockPaletteで手動ロードは諦め
                 // 代わりにBlockStateCommandで直接配置するフォールバック
-                PrivateDimensionMod.LOGGER.error("構造物ロード失敗。NBTのキー: {}", nbt.getAllKeys());
+                
                 return;
             }
             StructureTemplate template = (StructureTemplate) opt.get();
