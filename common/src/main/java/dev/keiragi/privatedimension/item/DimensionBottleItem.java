@@ -31,16 +31,9 @@ public class DimensionBottleItem extends Item {
             : ItemStack.EMPTY;
     }
 
-    /** エンチャントグリッターを表示 */
     @Override
     public boolean isFoil(ItemStack stack) {
         return true;
-    }
-
-    @Override
-    public Component getName(ItemStack stack) {
-        return Component.translatable("item.privatedimension.dimension_bottle")
-            .withStyle(ChatFormatting.AQUA);
     }
 
     @Override

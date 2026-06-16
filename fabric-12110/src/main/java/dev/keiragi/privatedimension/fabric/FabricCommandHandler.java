@@ -14,13 +14,6 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.UUID;
 
-/**
- * /pd コマンド (Fabric)
- * Paper版と同等の機能:
- *   /pd give [player]  - アイテム付与
- *   /pd reload         - 設定リロード
- *   /pd info           - プロット情報
- */
 public class FabricCommandHandler {
 
     static void register(PrivateDimensionMod mod, CommonEventHandler eventHandler) {
@@ -36,17 +29,13 @@ public class FabricCommandHandler {
                         .requires(src -> src.hasPermission(2))
                         .executes(ctx -> reload(ctx, mod)))
                     .then(Commands.literal("info")
-                        .executes(ctx -> info(ctx, mod))))
+                        .executes(ctx -> info(ctx, mod)))
             );
-            // alias
             dispatcher.register(
                 Commands.literal("privatedim")
                     .redirect(dispatcher.getRoot().getChild("pd"))
             );
         });
-    }
-        eventHandler.onItemUse(player, player.getMainHandItem());
-        return 1;
     }
 
     private static int giveSelf(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
@@ -56,7 +45,8 @@ public class FabricCommandHandler {
             ctx.getSource().sendFailure(Component.literal("プレイヤーとして実行してください。"));
             return 0;
         }
-        if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null) player.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
+        if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null)
+            player.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
         ctx.getSource().sendSuccess(() ->
             Component.literal("§a[PrivateDimension] アイテムを付与しました。"), false);
         return 1;
@@ -69,7 +59,8 @@ public class FabricCommandHandler {
             ctx.getSource().sendFailure(Component.literal("§cプレイヤーが見つかりません: " + name));
             return 0;
         }
-        if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null) target.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
+        if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null)
+            target.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
         ctx.getSource().sendSuccess(() ->
             Component.literal("§a[PrivateDimension] " + target.getName().getString() + " にアイテムを付与しました。"), false);
         return 1;

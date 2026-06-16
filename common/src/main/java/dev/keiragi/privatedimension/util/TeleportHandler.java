@@ -16,11 +16,19 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.*;
 
 public class TeleportHandler {
     private final PrivateDimensionMod mod;
     private final Set<UUID> teleporting = Collections.synchronizedSet(new HashSet<>());
+
+    // DimensionTransition が存在するバージョン向けリフレクションキャッシュ
+    private static Constructor<?> dimensionTransitionCtor = null;
+    private static Object doNothingCallback = null;
+    private static Method changeDimensionMethod = null;
+    private static boolean dimensionTransitionChecked = false;
 
     public TeleportHandler(PrivateDimensionMod mod) { this.mod = mod; }
     public boolean isTeleporting(UUID uid) { return teleporting.contains(uid); }
@@ -137,27 +145,58 @@ public class TeleportHandler {
         for (Entity e : entities) {
             if (e instanceof ServerPlayer sp) {
                 sp.teleportTo(dest, pos.x, pos.y, pos.z, Set.of(), sp.getYRot(), sp.getXRot(), false);
+            } else if (e.level() == dest) {
+                e.teleportTo(pos.x, pos.y, pos.z);
             } else {
-                // クロスディメンション対応: changeDimension相当の処理
-                // 同じディメンションの場合はteleportTo、別の場合はchangeDimension
-                if (e.level() == dest) {
-                    e.teleportTo(pos.x, pos.y, pos.z);
-                } else {
-                    Entity moved = e.changeDimension(
-                        new net.minecraft.world.level.portal.DimensionTransition(
-                            dest,
-                            new Vec3(pos.x, pos.y, pos.z),
-                            Vec3.ZERO,
-                            e.getYRot(),
-                            e.getXRot(),
-                            net.minecraft.world.level.portal.DimensionTransition.DO_NOTHING
-                        )
-                    );
-                    if (moved == null) {
-                        PrivateDimensionMod.LOGGER.warn("エンティティの次元転送失敗: {}", e.getType());
+                // DimensionTransition APIをリフレクションで試みる（1.21.5+）
+                // 失敗した場合はエンティティ転送をスキップ（消滅を防ぐ）
+                boolean success = tryChangeDimensionReflection(e, dest, pos);
+                if (!success) {
+                    PrivateDimensionMod.LOGGER.warn(
+                        "クロスディメンション転送スキップ（API非対応）: {}", e.getType());
+                }
+            }
+        }
+    }
+
+    private boolean tryChangeDimensionReflection(Entity entity, ServerLevel dest, Vec3 pos) {
+        try {
+            if (!dimensionTransitionChecked) {
+                dimensionTransitionChecked = true;
+                Class<?> dtClass = Class.forName(
+                    "net.minecraft.world.level.portal.DimensionTransition");
+                // DO_NOTHINGフィールドを取得
+                java.lang.reflect.Field doNothingField = dtClass.getField("DO_NOTHING");
+                doNothingCallback = doNothingField.get(null);
+                // コンストラクタ: (ServerLevel, Vec3, Vec3, float, float, PostDimensionTransition)
+                for (Constructor<?> ctor : dtClass.getConstructors()) {
+                    Class<?>[] params = ctor.getParameterTypes();
+                    if (params.length == 6
+                        && params[0] == ServerLevel.class
+                        && params[1] == Vec3.class
+                        && params[2] == Vec3.class) {
+                        dimensionTransitionCtor = ctor;
+                        break;
+                    }
+                }
+                // changeDimensionメソッドを取得
+                for (Method m : Entity.class.getMethods()) {
+                    if (m.getName().equals("changeDimension") && m.getParameterCount() == 1) {
+                        changeDimensionMethod = m;
+                        break;
                     }
                 }
             }
+            if (dimensionTransitionCtor == null || changeDimensionMethod == null) return false;
+            Object transition = dimensionTransitionCtor.newInstance(
+                dest, pos, Vec3.ZERO,
+                entity.getYRot(), entity.getXRot(),
+                doNothingCallback);
+            changeDimensionMethod.invoke(entity, transition);
+            return true;
+        } catch (Exception ex) {
+            PrivateDimensionMod.LOGGER.debug("DimensionTransitionリフレクション失敗: {}", ex.getMessage());
+            return false;
         }
     }
 
