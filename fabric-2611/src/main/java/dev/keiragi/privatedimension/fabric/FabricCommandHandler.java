@@ -29,9 +29,7 @@ public class FabricCommandHandler {
                         .requires(src -> src.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
                         .executes(ctx -> reload(ctx, mod)))
                     .then(Commands.literal("info")
-                        .executes(ctx -> info(ctx, mod)))
-                    .then(Commands.literal("tp")
-                        .executes(ctx -> tp(ctx, mod, eventHandler)))
+                        .executes(ctx -> info(ctx, mod))))
             );
             dispatcher.register(
                 Commands.literal("privatedim")
@@ -39,14 +37,6 @@ public class FabricCommandHandler {
             );
         });
     }
-
-    private static int tp(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod, CommonEventHandler eventHandler) {
-        ServerPlayer player;
-        try { player = ctx.getSource().getPlayerOrException(); }
-        catch (Exception e) {
-            ctx.getSource().sendFailure(Component.literal("プレイヤーとして実行してください。"));
-            return 0;
-        }
         eventHandler.onItemUse(player, player.getMainHandItem());
         return 1;
     }

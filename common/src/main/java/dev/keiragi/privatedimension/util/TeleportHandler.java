@@ -135,10 +135,29 @@ public class TeleportHandler {
 
     private void pullEntities(ServerLevel dest, Vec3 pos, List<Entity> entities) {
         for (Entity e : entities) {
-            if (e instanceof ServerPlayer sp)
+            if (e instanceof ServerPlayer sp) {
                 sp.teleportTo(dest, pos.x, pos.y, pos.z, Set.of(), sp.getYRot(), sp.getXRot(), false);
-            else
-                e.teleportTo(pos.x, pos.y, pos.z);
+            } else {
+                // クロスディメンション対応: changeDimension相当の処理
+                // 同じディメンションの場合はteleportTo、別の場合はchangeDimension
+                if (e.level() == dest) {
+                    e.teleportTo(pos.x, pos.y, pos.z);
+                } else {
+                    Entity moved = e.changeDimension(
+                        new net.minecraft.world.level.portal.DimensionTransition(
+                            dest,
+                            new Vec3(pos.x, pos.y, pos.z),
+                            Vec3.ZERO,
+                            e.getYRot(),
+                            e.getXRot(),
+                            net.minecraft.world.level.portal.DimensionTransition.DO_NOTHING
+                        )
+                    );
+                    if (moved == null) {
+                        PrivateDimensionMod.LOGGER.warn("エンティティの次元転送失敗: {}", e.getType());
+                    }
+                }
+            }
         }
     }
 
