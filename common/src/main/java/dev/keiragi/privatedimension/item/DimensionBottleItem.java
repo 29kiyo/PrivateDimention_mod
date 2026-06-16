@@ -32,12 +32,12 @@ public class DimensionBottleItem extends Item {
     }
 
     @Override
+
     public boolean isFoil(ItemStack stack) {
         return true;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.literal(""));
         tooltip.add(Component.translatable("item.privatedimension.dimension_bottle.desc1")
             .withStyle(ChatFormatting.GRAY));
@@ -50,7 +50,7 @@ public class DimensionBottleItem extends Item {
             .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC));
     }
 
-    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (player.getCooldowns().isOnCooldown(stack)) {
