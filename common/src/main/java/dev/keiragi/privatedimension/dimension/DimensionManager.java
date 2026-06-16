@@ -2,6 +2,7 @@ package dev.keiragi.privatedimension.dimension;
 
 import dev.keiragi.privatedimension.PrivateDimensionMod;
 import dev.keiragi.privatedimension.util.IdUtils;
+import dev.keiragi.privatedimension.util.NbtStructurePlacer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -16,7 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.util.Arrays;
-import java.util.Optional;
 
 public class DimensionManager {
 
@@ -53,62 +53,23 @@ public class DimensionManager {
     public void placeStructure(ServerLevel level, BlockPos origin) {
         try {
             ensureNbtExtracted(level);
-            Path structDir = level.getServer().getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT)
+            Path structDir = level.getServer().getWorldPath(LevelResource.ROOT)
                 .resolve("generated")
                 .resolve(PrivateDimensionMod.MOD_ID)
                 .resolve("structures");
             Path nbtPath = structDir.resolve("plot48x48.nbt");
-            if (!java.nio.file.Files.exists(nbtPath)) {
+            if (!Files.exists(nbtPath)) {
                 PrivateDimensionMod.LOGGER.error("NBTファイルが見つかりません: {}", nbtPath);
                 return;
             }
-            // NBTを直接読み込む
-            net.minecraft.nbt.CompoundTag nbt;
-            try (java.io.InputStream is = java.nio.file.Files.newInputStream(nbtPath)) {
-                nbt = net.minecraft.nbt.NbtIo.readCompressed(is, net.minecraft.nbt.NbtAccounter.unlimitedHeap());
-            }
-            
-            StructureTemplateManager stm = level.getServer().getStructureManager();
-            // structureRepositoryのキャッシュをクリアしてから再ロード
-            Object structId = IdUtils.createId(PrivateDimensionMod.MOD_ID, "plot48x48");
-            try {
-                java.lang.reflect.Field repoField = null;
-                for (java.lang.reflect.Field f : StructureTemplateManager.class.getDeclaredFields()) {
-                    if (f.getType().getSimpleName().contains("Map")) {
-                        repoField = f;
-                        repoField.setAccessible(true);
-                        break;
-                    }
-                }
-                if (repoField != null) {
-                    java.util.Map<?, ?> repo = (java.util.Map<?, ?>) repoField.get(stm);
-                    repo.remove(structId);
-                    PrivateDimensionMod.LOGGER.info("キャッシュクリア完了");
-                }
-            } catch (Exception e) {
-                PrivateDimensionMod.LOGGER.warn("キャッシュクリア失敗: {}", e.getMessage());
-            }
-            // getで再ロード試行
-            Optional<Object> opt = IdUtils.getStructureTemplate(stm, structId);
-            if (opt == null || opt.isEmpty()) {
-                PrivateDimensionMod.LOGGER.warn("getで取得失敗、新規TemplateにNBTを適用します");
-                // 新規StructureTemplateにNBTを直接適用してplaceInWorld
-                StructureTemplate template = new StructureTemplate();
-                // loadWithComponentsシグネチャ: (ProblemReporter, HolderLookup$Provider, CompoundTag) -> ValueInput
-                // これを使うのは複雑なので、NbtUtilsとBlockPaletteで手動ロードは諦め
-                // 代わりにBlockStateCommandで直接配置するフォールバック
-                
-                return;
-            }
-            StructureTemplate template = (StructureTemplate) opt.get();
-            StructurePlaceSettings settings = new StructurePlaceSettings();
-            boolean placed = template.placeInWorld(level, origin, origin, settings, level.getRandom(), 2);
-            PrivateDimensionMod.LOGGER.info("構造物配置完了: {} placed={}", origin, placed);
+            boolean result = NbtStructurePlacer.place(level, origin, nbtPath);
+            PrivateDimensionMod.LOGGER.info("構造物配置完了: {} placed={}", origin, result);
         } catch (Exception e) {
             PrivateDimensionMod.LOGGER.error("構造物配置失敗: {}", e.getMessage(), e);
         }
     }
-        private void ensureNbtExtracted(ServerLevel level) throws IOException {
+
+    private void ensureNbtExtracted(ServerLevel level) throws IOException {
         Path structDir = level.getServer().getWorldPath(LevelResource.ROOT)
             .resolve("generated")
             .resolve(PrivateDimensionMod.MOD_ID)
