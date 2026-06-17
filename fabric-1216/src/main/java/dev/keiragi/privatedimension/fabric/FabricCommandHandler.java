@@ -21,12 +21,12 @@ public class FabricCommandHandler {
             dispatcher.register(
                 Commands.literal("pd")
                     .then(Commands.literal("give")
-                        .requires(src -> src.isOp())
+                        
                         .executes(ctx -> giveSelf(ctx, mod))
                         .then(Commands.argument("player", StringArgumentType.word())
                             .executes(ctx -> givePlayer(ctx, mod))))
                     .then(Commands.literal("reload")
-                        .requires(src -> src.isOp())
+                        
                         .executes(ctx -> reload(ctx, mod)))
                     .then(Commands.literal("info")
                         .executes(ctx -> info(ctx, mod)))
