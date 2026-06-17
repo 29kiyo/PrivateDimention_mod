@@ -39,6 +39,10 @@ public class FabricCommandHandler {
     }
 
     private static int giveSelf(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
+        if (!isOp(ctx.getSource())) {
+            ctx.getSource().sendFailure(Component.literal("§cこのコマンドはOP専用です。"));
+            return 0;
+        }
         ServerPlayer player;
         try { player = ctx.getSource().getPlayerOrException(); }
         catch (Exception e) {
@@ -67,6 +71,10 @@ public class FabricCommandHandler {
     }
 
     private static int reload(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
+        if (!isOp(ctx.getSource())) {
+            ctx.getSource().sendFailure(Component.literal("§cこのコマンドはOP専用です。"));
+            return 0;
+        }
         mod.getConfig().load();
         ctx.getSource().sendSuccess(() ->
             Component.literal("§a[PrivateDimension] 設定をリロードしました。"), false);
@@ -94,5 +102,30 @@ public class FabricCommandHandler {
             player.sendSystemMessage(Component.literal("§b[PrivateDimension] まだプロットを持っていません。"));
         }
         return 1;
+    }
+
+    /** 全バージョン対応のOP判定 */
+    private static boolean isOp(CommandSourceStack src) {
+        try {
+            // 1.21.5〜: hasPermission(int)
+            return (boolean) src.getClass()
+                .getMethod("hasPermission", int.class)
+                .invoke(src, 2);
+        } catch (NoSuchMethodException e1) {
+            try {
+                // 1.21.11+: permissionSet経由
+                Object permSet = src.getClass()
+                    .getMethod("permissions")
+                    .invoke(src);
+                return (boolean) permSet.getClass()
+                    .getMethod("isOp")
+                    .invoke(permSet);
+            } catch (Exception e2) {
+                // フォールバック: 常にtrue（制限なし）
+                return true;
+            }
+        } catch (Exception e) {
+            return true;
+        }
     }
 }
