@@ -36,6 +36,27 @@ public class DimensionBottleItem extends Item {
         return true;
     }
 
+    // 🌟 アイテム名の色を Rarity.RARE と同じ水色にする
+    @Override
+    public Component getName(ItemStack stack) {
+        return super.getName(stack).copy().withStyle(ChatFormatting.AQUA);
+    }
+
+    // @Override なし: appendHoverText のシグネチャがバージョンにより異なる
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.empty());
+        tooltip.add(Component.translatable("item.privatedimension.dimension_bottle.desc1")
+            .withStyle(ChatFormatting.WHITE));
+        tooltip.add(Component.translatable("item.privatedimension.dimension_bottle.desc2")
+            .withStyle(ChatFormatting.WHITE));
+        tooltip.add(Component.empty());
+        tooltip.add(Component.translatable("item.privatedimension.dimension_bottle.quote.line1")
+            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+        tooltip.add(Component.translatable("item.privatedimension.dimension_bottle.quote.line2")
+            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)); 
+    }
+
     @Override
     public net.minecraft.world.InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
@@ -78,27 +99,4 @@ public class DimensionBottleItem extends Item {
         return net.minecraft.world.InteractionResult.SUCCESS;
     }
 
-
-
-    // 🌟 アイテム名の色を Rarity.RARE と同じ水色にする
-    @Override
-    public Component getName(ItemStack stack) {
-        return super.getName(stack).copy().withStyle(ChatFormatting.AQUA);
-    }
-
-    // @Override なし: appendHoverText のシグネチャがバージョンにより異なる
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.empty());
-        tooltip.add(Component.translatable("item.privatedimension.dimension_bottle.desc1")
-            .withStyle(ChatFormatting.WHITE));
-        tooltip.add(Component.translatable("item.privatedimension.dimension_bottle.desc2")
-            .withStyle(ChatFormatting.WHITE));
-        tooltip.add(Component.empty());
-        tooltip.add(Component.translatable("item.privatedimension.dimension_bottle.quote.line1")
-            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-        tooltip.add(Component.translatable("item.privatedimension.dimension_bottle.quote.line2")
-            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)); 
-    }
-
-    
 }
