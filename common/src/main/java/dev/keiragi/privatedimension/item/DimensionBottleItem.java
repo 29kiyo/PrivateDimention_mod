@@ -36,6 +36,49 @@ public class DimensionBottleItem extends Item {
         return true;
     }
 
+    @Override
+    public net.minecraft.world.InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        
+        if (player.getCooldowns().isOnCooldown(stack)) {
+            return net.minecraft.world.InteractionResultHolder.fail(stack);
+        }
+        
+        if (!level.isClientSide() && player instanceof net.minecraft.server.level.ServerPlayer sp) {
+            PrivateDimensionMod mod = PrivateDimensionMod.getInstance();
+            if (mod != null) {
+                
+                // 🔊 1. コーラスフルーツのワープ音（標準の音量 1.0）
+                level.playSound(
+                    null, 
+                    player.getX(), player.getY(), player.getZ(), 
+                    net.minecraft.sounds.SoundEvents.CHORUS_FRUIT_TELEPORT, 
+                    net.minecraft.sounds.SoundSource.PLAYERS, 
+                    1.0F, 
+                    1.0F
+                );
+
+                // 🔊 2. アメジストのチャイム音（音量を 0.4 に抑えて控えめに）
+                level.playSound(
+                    null, 
+                    player.getX(), player.getY(), player.getZ(), 
+                    net.minecraft.sounds.SoundEvents.AMETHYST_BLOCK_CHIME, 
+                    net.minecraft.sounds.SoundSource.PLAYERS, 
+                    0.4F, 
+                    1.2F
+                );
+
+                mod.getTeleportHandler().handleUse(sp);
+                int cooldownTicks = mod.getConfig().cooldownSeconds * 20;
+                player.getCooldowns().addCooldown(stack, cooldownTicks);
+            }
+        }
+        
+        // 1.21.5以降は SUCCESS ではなく sidedSuccess または success を保持したホルダーを返します
+        return net.minecraft.world.InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+    }
+
+
     // 🌟 アイテム名の色を Rarity.RARE と同じ水色にする
     @Override
     public Component getName(ItemStack stack) {
