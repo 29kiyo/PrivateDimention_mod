@@ -37,11 +37,11 @@ public class DimensionBottleItem extends Item {
     }
 
     @Override
-    public net.minecraft.world.InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public net.minecraft.world.InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         
         if (player.getCooldowns().isOnCooldown(stack)) {
-            return net.minecraft.world.InteractionResultHolder.fail(stack);
+            return net.minecraft.world.InteractionResult.FAIL;
         }
         
         if (!level.isClientSide() && player instanceof net.minecraft.server.level.ServerPlayer sp) {
@@ -74,9 +74,10 @@ public class DimensionBottleItem extends Item {
             }
         }
         
-        // 1.21.5以降は SUCCESS ではなく sidedSuccess または success を保持したホルダーを返します
-        return net.minecraft.world.InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+        // 1.21.4以降は SUCCESS ではなく SUCCESS_NO_ITEM_USED などを返すか、環境に応じたResultを返します
+        return net.minecraft.world.InteractionResult.SUCCESS;
     }
+
 
 
     // 🌟 アイテム名の色を Rarity.RARE と同じ水色にする
