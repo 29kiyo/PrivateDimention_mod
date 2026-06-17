@@ -42,21 +42,6 @@ public class DimensionBottleItem extends Item {
         return super.getName(stack).copy().withStyle(ChatFormatting.AQUA);
     }
 
-       // 🌟 @Override は付けず、引数の型を1.21.5以降の最新標準に修正します
-    public void appendHoverText(ItemStack stack, net.minecraft.world.item.Item.TooltipContext context, List<net.minecraft.network.chat.Component> tooltip, net.minecraft.world.item.TooltipFlag flag) {
-        tooltip.add(net.minecraft.network.chat.Component.empty());
-        tooltip.add(net.minecraft.network.chat.Component.translatable("item.privatedimension.dimension_bottle.desc1")
-            .withStyle(net.minecraft.ChatFormatting.WHITE));
-        tooltip.add(net.minecraft.network.chat.Component.translatable("item.privatedimension.dimension_bottle.desc2")
-            .withStyle(net.minecraft.ChatFormatting.WHITE));
-        tooltip.add(net.minecraft.network.chat.Component.empty());
-        tooltip.add(net.minecraft.network.chat.Component.translatable("item.privatedimension.dimension_bottle.quote.line1")
-            .withStyle(net.minecraft.ChatFormatting.GRAY, net.minecraft.ChatFormatting.ITALIC));
-        tooltip.add(net.minecraft.network.chat.Component.translatable("item.privatedimension.dimension_bottle.quote.line2")
-            .withStyle(net.minecraft.ChatFormatting.GRAY, net.minecraft.ChatFormatting.ITALIC)); 
-    }
-
-
     @Override
     public net.minecraft.world.InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
