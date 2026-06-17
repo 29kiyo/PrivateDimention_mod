@@ -17,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -24,11 +25,11 @@ public class TeleportHandler {
     private final PrivateDimensionMod mod;
     private final Set<UUID> teleporting = Collections.synchronizedSet(new HashSet<>());
 
-    // DimensionTransition が存在するバージョン向けリフレクションキャッシュ
-    private static Constructor<?> dimensionTransitionCtor = null;
+    // TeleportTransition リフレクションキャッシュ
+    private static volatile boolean transitionChecked = false;
+    private static Constructor<?> transitionCtor = null;
     private static Object doNothingCallback = null;
-    private static Method changeDimensionMethod = null;
-    private static boolean dimensionTransitionChecked = false;
+    private static Method teleportCrossDimMethod = null;
 
     public TeleportHandler(PrivateDimensionMod mod) { this.mod = mod; }
     public boolean isTeleporting(UUID uid) { return teleporting.contains(uid); }
@@ -49,7 +50,7 @@ public class TeleportHandler {
                 gotoPrivate(player, collectBringEntities(player));
         } catch (Exception e) {
             release(player.getUUID());
-            PrivateDimensionMod.LOGGER.error("handleUse 例外: {}", e.getMessage());
+            PrivateDimensionMod.LOGGER.error("handleUse 例外: {}", e.getMessage(), e);
         }
     }
 
@@ -148,54 +149,86 @@ public class TeleportHandler {
             } else if (e.level() == dest) {
                 e.teleportTo(pos.x, pos.y, pos.z);
             } else {
-                // DimensionTransition APIをリフレクションで試みる（1.21.5+）
-                // 失敗した場合はエンティティ転送をスキップ（消滅を防ぐ）
-                boolean success = tryChangeDimensionReflection(e, dest, pos);
-                if (!success) {
-                    PrivateDimensionMod.LOGGER.warn(
-                        "クロスディメンション転送スキップ（API非対応）: {}", e.getType());
+                if (!tryTeleportCrossDimension(e, dest, pos)) {
+                    PrivateDimensionMod.LOGGER.warn("クロスディメンション転送失敗: {}", e.getType());
                 }
             }
         }
     }
 
-    private boolean tryChangeDimensionReflection(Entity entity, ServerLevel dest, Vec3 pos) {
+    private static synchronized void initTransitionApi() {
+        if (transitionChecked) return;
+        transitionChecked = true;
         try {
-            if (!dimensionTransitionChecked) {
-                dimensionTransitionChecked = true;
-                Class<?> dtClass = Class.forName(
-                    "net.minecraft.world.level.portal.DimensionTransition");
-                // DO_NOTHINGフィールドを取得
-                java.lang.reflect.Field doNothingField = dtClass.getField("DO_NOTHING");
-                doNothingCallback = doNothingField.get(null);
-                // コンストラクタ: (ServerLevel, Vec3, Vec3, float, float, PostDimensionTransition)
-                for (Constructor<?> ctor : dtClass.getConstructors()) {
-                    Class<?>[] params = ctor.getParameterTypes();
-                    if (params.length == 6
+            Class<?> ttClass = Class.forName("net.minecraft.world.level.portal.TeleportTransition");
+            // DO_NOTHING フィールド
+            Field f = ttClass.getField("DO_NOTHING");
+            doNothingCallback = f.get(null);
+            // コンストラクタを探す: (ServerLevel, Vec3, Vec3, float, float, Set, PostTeleportTransition)
+            // または (ServerLevel, Vec3, Vec3, float, float, PostTeleportTransition)
+            for (Constructor<?> ctor : ttClass.getConstructors()) {
+                Class<?>[] params = ctor.getParameterTypes();
+                if (params.length >= 5
                         && params[0] == ServerLevel.class
                         && params[1] == Vec3.class
                         && params[2] == Vec3.class) {
-                        dimensionTransitionCtor = ctor;
-                        break;
-                    }
+                    transitionCtor = ctor;
+                    PrivateDimensionMod.LOGGER.info("TeleportTransition ctor found: {} params", params.length);
+                    break;
                 }
-                // changeDimensionメソッドを取得
+            }
+            // teleportCrossDimension メソッド
+            for (Method m : Entity.class.getMethods()) {
+                if (m.getName().equals("teleportCrossDimension") && m.getParameterCount() == 1) {
+                    teleportCrossDimMethod = m;
+                    break;
+                }
+            }
+            // なければ teleport メソッド
+            if (teleportCrossDimMethod == null) {
                 for (Method m : Entity.class.getMethods()) {
-                    if (m.getName().equals("changeDimension") && m.getParameterCount() == 1) {
-                        changeDimensionMethod = m;
+                    if (m.getName().equals("teleport") && m.getParameterCount() == 1) {
+                        teleportCrossDimMethod = m;
                         break;
                     }
                 }
             }
-            if (dimensionTransitionCtor == null || changeDimensionMethod == null) return false;
-            Object transition = dimensionTransitionCtor.newInstance(
-                dest, pos, Vec3.ZERO,
-                entity.getYRot(), entity.getXRot(),
-                doNothingCallback);
-            changeDimensionMethod.invoke(entity, transition);
+            PrivateDimensionMod.LOGGER.info("TeleportTransition API初期化完了: ctor={}, method={}",
+                transitionCtor != null, teleportCrossDimMethod != null);
+        } catch (Exception e) {
+            PrivateDimensionMod.LOGGER.warn("TeleportTransition API初期化失敗: {}", e.getMessage());
+        }
+    }
+
+    private boolean tryTeleportCrossDimension(Entity entity, ServerLevel dest, Vec3 pos) {
+        initTransitionApi();
+        if (transitionCtor == null || teleportCrossDimMethod == null || doNothingCallback == null) {
+            return false;
+        }
+        try {
+            Class<?>[] params = transitionCtor.getParameterTypes();
+            Object transition;
+            if (params.length == 6) {
+                // (ServerLevel, Vec3, Vec3, float, float, PostTeleportTransition)
+                transition = transitionCtor.newInstance(
+                    dest, pos, Vec3.ZERO,
+                    entity.getYRot(), entity.getXRot(),
+                    doNothingCallback);
+            } else if (params.length == 7) {
+                // (ServerLevel, Vec3, Vec3, float, float, Set, PostTeleportTransition)
+                transition = transitionCtor.newInstance(
+                    dest, pos, Vec3.ZERO,
+                    entity.getYRot(), entity.getXRot(),
+                    Set.of(),
+                    doNothingCallback);
+            } else {
+                PrivateDimensionMod.LOGGER.warn("未知のTeleportTransitionコンストラクタ引数数: {}", params.length);
+                return false;
+            }
+            teleportCrossDimMethod.invoke(entity, transition);
             return true;
-        } catch (Exception ex) {
-            PrivateDimensionMod.LOGGER.debug("DimensionTransitionリフレクション失敗: {}", ex.getMessage());
+        } catch (Exception e) {
+            PrivateDimensionMod.LOGGER.warn("teleportCrossDimension失敗: {}", e.getMessage());
             return false;
         }
     }
