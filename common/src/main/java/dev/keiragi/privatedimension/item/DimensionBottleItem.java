@@ -38,16 +38,16 @@ public class DimensionBottleItem extends Item {
 
     // @Override なし: appendHoverText のシグネチャがバージョンにより異なる
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.literal(""));
+        tooltip.add(Component.empty());
         tooltip.add(Component.translatable("item.privatedimension.dimension_bottle.desc1")
-            .withStyle(ChatFormatting.GRAY));
+            .withStyle(ChatFormatting.WHITE));
         tooltip.add(Component.translatable("item.privatedimension.dimension_bottle.desc2")
-            .withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.literal(""));
-        tooltip.add(Component.literal("\"この小さな丸い瓶の中には、")
-            .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC));
-        tooltip.add(Component.literal(" どういうわけか別の世界が詰まっている\"")
-            .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC));
+            .withStyle(ChatFormatting.WHITE));
+        tooltip.add(Component.empty());
+        tooltip.add(Component.translatable("item.privatedimension.dimension_bottle.quote.line1")
+            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+        tooltip.add(Component.translatable("item.privatedimension.dimension_bottle.quote.line2")
+            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)); 
     }
 
     @Override
