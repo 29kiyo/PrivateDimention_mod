@@ -100,20 +100,5 @@ public class DimensionBottleItem extends Item {
             .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)); 
     }
 
-    @Override
-    public InteractionResult use(Level level, Player player, InteractionHand hand) {
-        ItemStack stack = player.getItemInHand(hand);
-        if (player.getCooldowns().isOnCooldown(stack)) {
-            return InteractionResult.FAIL;
-        }
-        if (!level.isClientSide() && player instanceof net.minecraft.server.level.ServerPlayer sp) {
-            PrivateDimensionMod mod = PrivateDimensionMod.getInstance();
-            if (mod != null) {
-                mod.getTeleportHandler().handleUse(sp);
-                int cooldownTicks = mod.getConfig().cooldownSeconds * 20;
-                player.getCooldowns().addCooldown(stack, cooldownTicks);
-            }
-        }
-        return InteractionResult.SUCCESS;
-    }
+    
 }
