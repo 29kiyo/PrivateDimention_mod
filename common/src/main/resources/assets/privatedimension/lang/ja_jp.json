@@ -2,5 +2,6 @@
   "item.privatedimension.dimension_bottle": "Dimension in a Bottle",
   "item.privatedimension.dimension_bottle.desc1": "使用すると、別世界の空間へと移動する。",
   "item.privatedimension.dimension_bottle.desc2": "その世界で再び使用すると、元の世界へと戻る。",
-  "item.privatedimension.dimension_bottle.quote": "\"この小さな丸い瓶の中には、\nどういうわけか別の世界が詰まっている\""
+  "item.privatedimension.dimension_bottle.quote.line1": "\"この小さな丸い瓶の中には、",
+  "item.privatedimension.dimension_bottle.quote.line2": "どういうわけか別の世界が詰まっている\""
 }
