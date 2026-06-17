@@ -36,6 +36,24 @@ public class DimensionBottleItem extends Item {
         return true;
     }
 
+    @Override
+    public boolean canBeHurtBy(net.minecraft.world.damagesource.DamageSource source) {
+        // サボテン、爆発、マグマなどのあらゆるダメージを無効化（無敵化）
+        return false;
+    }
+
+    @Override
+    public boolean isFireResistant() {
+        // ネザライトのように炎や溶岩で燃え尽きないようにする
+        return true;
+    }
+
+    // 🌟 アイテム名の色を Rarity.RARE と同じ水色にする
+    @Override
+    public Component getName(ItemStack stack) {
+        return super.getName(stack).copy().withStyle(ChatFormatting.AQUA);
+    }
+
     // @Override なし: appendHoverText のシグネチャがバージョンにより異なる
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.empty());
