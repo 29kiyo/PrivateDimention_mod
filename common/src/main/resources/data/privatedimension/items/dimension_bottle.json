@@ -1,0 +1,11 @@
+{
+  "components": {
+    "minecraft:lore": [
+      "{\"translate\":\"item.privatedimension.dimension_bottle.desc1\",\"color\":\"white\",\"italic\":false}",
+      "{\"translate\":\"item.privatedimension.dimension_bottle.desc2\",\"color\":\"white\",\"italic\":false}",
+      "{}",
+      "{\"translate\":\"item.privatedimension.dimension_bottle.quote.line1\",\"color\":\"gray\",\"italic\":true}",
+      "{\"translate\":\"item.privatedimension.dimension_bottle.quote.line2\",\"color\":\"gray\",\"italic\":true}"
+    ]
+  }
+}
