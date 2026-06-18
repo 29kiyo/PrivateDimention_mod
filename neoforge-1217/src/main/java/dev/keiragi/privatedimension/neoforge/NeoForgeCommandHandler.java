@@ -19,12 +19,10 @@ public class NeoForgeCommandHandler {
                          CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("pd")
             .then(Commands.literal("give")
-                .requires(src -> src.hasPermission(2))
                 .executes(ctx -> giveSelf(ctx, mod))
                 .then(Commands.argument("player", StringArgumentType.word())
                     .executes(ctx -> givePlayer(ctx, mod))))
             .then(Commands.literal("reload")
-                .requires(src -> src.hasPermission(2))
                 .executes(ctx -> reload(ctx, mod)))
             .then(Commands.literal("info")
                 .executes(ctx -> info(ctx, mod))));
@@ -34,13 +32,14 @@ public class NeoForgeCommandHandler {
 
     private static int giveSelf(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
         if (!isOp(ctx.getSource())) {
-            ctx.getSource().sendFailure(net.minecraft.network.chat.Component.literal("§cこのコマンドはOP専用です。"));
+            ctx.getSource().sendFailure(Component.literal("§cこのコマンドはOP専用です。"));
             return 0;
         }
         try {
             ServerPlayer player = ctx.getSource().getPlayerOrException();
             if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null)
-                player.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
+                player.getInventory().add(new net.minecraft.world.item.ItemStack(
+                    dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
             ctx.getSource().sendSuccess(() -> Component.literal("§a[PD] アイテムを付与しました。"), false);
             return 1;
         } catch (Exception e) {
@@ -50,6 +49,10 @@ public class NeoForgeCommandHandler {
     }
 
     private static int givePlayer(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
+        if (!isOp(ctx.getSource())) {
+            ctx.getSource().sendFailure(Component.literal("§cこのコマンドはOP専用です。"));
+            return 0;
+        }
         String name = StringArgumentType.getString(ctx, "player");
         ServerPlayer target = ctx.getSource().getServer().getPlayerList().getPlayerByName(name);
         if (target == null) {
@@ -57,14 +60,16 @@ public class NeoForgeCommandHandler {
             return 0;
         }
         if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null)
-            target.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
-        ctx.getSource().sendSuccess(() -> Component.literal("§a[PD] " + target.getName().getString() + " に付与しました。"), false);
+            target.getInventory().add(new net.minecraft.world.item.ItemStack(
+                dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
+        ctx.getSource().sendSuccess(() -> Component.literal(
+            "§a[PD] " + target.getName().getString() + " に付与しました。"), false);
         return 1;
     }
 
     private static int reload(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
         if (!isOp(ctx.getSource())) {
-            ctx.getSource().sendFailure(net.minecraft.network.chat.Component.literal("§cこのコマンドはOP専用です。"));
+            ctx.getSource().sendFailure(Component.literal("§cこのコマンドはOP専用です。"));
             return 0;
         }
         mod.getConfig().load();
@@ -82,7 +87,7 @@ public class NeoForgeCommandHandler {
                 double[] pos = pdm.getPlotPos(uid);
                 if (pos != null)
                     player.sendSystemMessage(Component.literal(
-                        String.format("§b次元内座標: §f%.1f, %.1f, %.1f", pos[0], pos[1], pos[2])));
+                        String.format("§b次元内最終座標: §f%.1f, %.1f, %.1f", pos[0], pos[1], pos[2])));
             } else {
                 player.sendSystemMessage(Component.literal("§b[PD] まだプロットを持っていません。"));
             }
@@ -91,5 +96,23 @@ public class NeoForgeCommandHandler {
             ctx.getSource().sendFailure(Component.literal("プレイヤーとして実行してください。"));
             return 0;
         }
+    }
+
+    private static boolean isOp(CommandSourceStack src) {
+        try {
+            return (boolean) src.getClass()
+                .getMethod("canUseGameMasterBlocks").invoke(src);
+        } catch (Exception ignored) {}
+        try {
+            return (boolean) src.getClass()
+                .getMethod("hasPermission", int.class).invoke(src, 2);
+        } catch (Exception ignored) {}
+        try {
+            Object entity = src.getClass().getMethod("getEntity").invoke(src);
+            if (entity instanceof ServerPlayer sp) {
+                return sp.getPermissionLevel() >= 2;
+            }
+        } catch (Exception ignored) {}
+        return false;
     }
 }

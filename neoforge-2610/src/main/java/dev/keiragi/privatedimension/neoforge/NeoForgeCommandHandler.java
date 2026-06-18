@@ -5,11 +5,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import dev.keiragi.privatedimension.CommonEventHandler;
 import dev.keiragi.privatedimension.PrivateDimensionMod;
-import dev.keiragi.privatedimension.item.DimensionBottleItem;
 import dev.keiragi.privatedimension.manager.PlayerDataManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.server.permissions.Permissions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -21,12 +19,10 @@ public class NeoForgeCommandHandler {
                          CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("pd")
             .then(Commands.literal("give")
-                .requires(src -> src.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
                 .executes(ctx -> giveSelf(ctx, mod))
                 .then(Commands.argument("player", StringArgumentType.word())
                     .executes(ctx -> givePlayer(ctx, mod))))
             .then(Commands.literal("reload")
-                .requires(src -> src.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
                 .executes(ctx -> reload(ctx, mod)))
             .then(Commands.literal("info")
                 .executes(ctx -> info(ctx, mod))));
@@ -36,12 +32,14 @@ public class NeoForgeCommandHandler {
 
     private static int giveSelf(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
         if (!isOp(ctx.getSource())) {
-            ctx.getSource().sendFailure(net.minecraft.network.chat.Component.literal("§cこのコマンドはOP専用です。"));
+            ctx.getSource().sendFailure(Component.literal("§cこのコマンドはOP専用です。"));
             return 0;
         }
         try {
             ServerPlayer player = ctx.getSource().getPlayerOrException();
-            if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null) player.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
+            if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null)
+                player.getInventory().add(new net.minecraft.world.item.ItemStack(
+                    dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
             ctx.getSource().sendSuccess(() -> Component.literal("§a[PD] アイテムを付与しました。"), false);
             return 1;
         } catch (Exception e) {
@@ -51,20 +49,27 @@ public class NeoForgeCommandHandler {
     }
 
     private static int givePlayer(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
+        if (!isOp(ctx.getSource())) {
+            ctx.getSource().sendFailure(Component.literal("§cこのコマンドはOP専用です。"));
+            return 0;
+        }
         String name = StringArgumentType.getString(ctx, "player");
         ServerPlayer target = ctx.getSource().getServer().getPlayerList().getPlayerByName(name);
         if (target == null) {
             ctx.getSource().sendFailure(Component.literal("§cプレイヤーが見つかりません: " + name));
             return 0;
         }
-        if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null) target.getInventory().add(new net.minecraft.world.item.ItemStack(dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
-        ctx.getSource().sendSuccess(() -> Component.literal("§a[PD] " + target.getName().getString() + " に付与しました。"), false);
+        if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null)
+            target.getInventory().add(new net.minecraft.world.item.ItemStack(
+                dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
+        ctx.getSource().sendSuccess(() -> Component.literal(
+            "§a[PD] " + target.getName().getString() + " に付与しました。"), false);
         return 1;
     }
 
     private static int reload(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
         if (!isOp(ctx.getSource())) {
-            ctx.getSource().sendFailure(net.minecraft.network.chat.Component.literal("§cこのコマンドはOP専用です。"));
+            ctx.getSource().sendFailure(Component.literal("§cこのコマンドはOP専用です。"));
             return 0;
         }
         mod.getConfig().load();
@@ -91,5 +96,23 @@ public class NeoForgeCommandHandler {
             ctx.getSource().sendFailure(Component.literal("プレイヤーとして実行してください。"));
             return 0;
         }
+    }
+
+    private static boolean isOp(CommandSourceStack src) {
+        try {
+            return (boolean) src.getClass()
+                .getMethod("canUseGameMasterBlocks").invoke(src);
+        } catch (Exception ignored) {}
+        try {
+            return (boolean) src.getClass()
+                .getMethod("hasPermission", int.class).invoke(src, 2);
+        } catch (Exception ignored) {}
+        try {
+            Object entity = src.getClass().getMethod("getEntity").invoke(src);
+            if (entity instanceof ServerPlayer sp) {
+                return sp.getPermissionLevel() >= 2;
+            }
+        } catch (Exception ignored) {}
+        return false;
     }
 }
