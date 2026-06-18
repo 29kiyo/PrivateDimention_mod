@@ -121,8 +121,8 @@ public class FabricCommandHandler {
         // 方法3: getEntity() がServerPlayerならgetPermissionLevel()
         try {
             Object entity = src.getClass().getMethod("getEntity").invoke(src);
-            if (entity instanceof net.minecraft.server.level.ServerPlayer sp) {
-                return sp.getPermissionLevel() >= 2;
+            if (entity != null) {
+                return (int) entity.getClass().getMethod("getPermissionLevel").invoke(entity) >= 2;
             }
         } catch (Exception ignored) {}
         // フォールバック: OP不明なので拒否

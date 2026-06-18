@@ -109,8 +109,9 @@ public class NeoForgeCommandHandler {
         } catch (Exception ignored) {}
         try {
             Object entity = src.getClass().getMethod("getEntity").invoke(src);
-            if (entity instanceof ServerPlayer sp) {
-                return sp.getPermissionLevel() >= 2;
+            if (entity != null) {
+                return (int) entity.getClass()
+                    .getMethod("getPermissionLevel").invoke(entity) >= 2;
             }
         } catch (Exception ignored) {}
         return false;
