@@ -106,26 +106,26 @@ public class FabricCommandHandler {
 
     /** 全バージョン対応のOP判定 */
     private static boolean isOp(CommandSourceStack src) {
+        // 方法1: canUseGameMasterBlocks (全バージョン共通)
         try {
-            // 1.21.5〜: hasPermission(int)
+            return (boolean) src.getClass()
+                .getMethod("canUseGameMasterBlocks")
+                .invoke(src);
+        } catch (Exception ignored) {}
+        // 方法2: hasPermission(int) (1.21.5〜1.21.10)
+        try {
             return (boolean) src.getClass()
                 .getMethod("hasPermission", int.class)
                 .invoke(src, 2);
-        } catch (NoSuchMethodException e1) {
-            try {
-                // 1.21.11+: permissionSet経由
-                Object permSet = src.getClass()
-                    .getMethod("permissions")
-                    .invoke(src);
-                return (boolean) permSet.getClass()
-                    .getMethod("isOp")
-                    .invoke(permSet);
-            } catch (Exception e2) {
-                // フォールバック: 常にtrue（制限なし）
-                return true;
+        } catch (Exception ignored) {}
+        // 方法3: getEntity() がServerPlayerならgetPermissionLevel()
+        try {
+            Object entity = src.getClass().getMethod("getEntity").invoke(src);
+            if (entity instanceof net.minecraft.server.level.ServerPlayer sp) {
+                return sp.getPermissionLevel() >= 2;
             }
-        } catch (Exception e) {
-            return true;
-        }
+        } catch (Exception ignored) {}
+        // フォールバック: OP不明なので拒否
+        return false;
     }
 }

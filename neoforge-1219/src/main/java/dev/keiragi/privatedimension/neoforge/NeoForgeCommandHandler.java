@@ -33,6 +33,10 @@ public class NeoForgeCommandHandler {
     }
 
     private static int giveSelf(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
+        if (!isOp(ctx.getSource())) {
+            ctx.getSource().sendFailure(net.minecraft.network.chat.Component.literal("§cこのコマンドはOP専用です。"));
+            return 0;
+        }
         try {
             ServerPlayer player = ctx.getSource().getPlayerOrException();
             if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null)
@@ -59,6 +63,10 @@ public class NeoForgeCommandHandler {
     }
 
     private static int reload(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
+        if (!isOp(ctx.getSource())) {
+            ctx.getSource().sendFailure(net.minecraft.network.chat.Component.literal("§cこのコマンドはOP専用です。"));
+            return 0;
+        }
         mod.getConfig().load();
         ctx.getSource().sendSuccess(() -> Component.literal("§a[PD] 設定をリロードしました。"), false);
         return 1;
