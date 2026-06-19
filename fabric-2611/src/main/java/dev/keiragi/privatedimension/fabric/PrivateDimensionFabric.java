@@ -96,10 +96,9 @@ public class PrivateDimensionFabric implements ModInitializer {
         // ドロップしたBottleを保護（爆発・溶岩・サボテン等すべてのダメージを無効化）
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (net.minecraft.server.level.ServerLevel level : server.getAllLevels()) {
-                for (net.minecraft.world.entity.item.ItemEntity itemEntity :
-                        level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
-                            new net.minecraft.world.phys.AABB(-3.0e7, -2048, -3.0e7, 3.0e7, 4096, 3.0e7))) {
-                    if (dev.keiragi.privatedimension.item.DimensionBottleItem.isDimensionBottle(itemEntity.getItem())) {
+                for (net.minecraft.world.entity.Entity entity : level.getAllEntities()) {
+                    if (entity instanceof net.minecraft.world.entity.item.ItemEntity itemEntity
+                            && dev.keiragi.privatedimension.item.DimensionBottleItem.isDimensionBottle(itemEntity.getItem())) {
                         itemEntity.setInvulnerable(true);
                     }
                 }
@@ -109,10 +108,9 @@ public class PrivateDimensionFabric implements ModInitializer {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             // ドロップしたBottleを無敵化
             for (net.minecraft.server.level.ServerLevel level : server.getAllLevels()) {
-                for (net.minecraft.world.entity.item.ItemEntity ie :
-                        level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
-                            new net.minecraft.world.phys.AABB(-3e7, -2048, -3e7, 3e7, 4096, 3e7))) {
-                    if (dev.keiragi.privatedimension.item.DimensionBottleItem.isDimensionBottle(ie.getItem())) {
+                for (net.minecraft.world.entity.Entity entity : level.getAllEntities()) {
+                    if (entity instanceof net.minecraft.world.entity.item.ItemEntity ie
+                            && dev.keiragi.privatedimension.item.DimensionBottleItem.isDimensionBottle(ie.getItem())) {
                         ie.setInvulnerable(true);
                     }
                 }
