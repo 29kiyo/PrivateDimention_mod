@@ -4,11 +4,16 @@
   "version": "1.0.0",
   "name": "PrivateDimension",
   "description": "Dimension in a Bottle - プライベート次元Mod",
-  "authors": ["Keiragi"],
+  "authors": [
+    "29kiyo"
+  ],
   "license": "CC-BY-SA-4.0",
   "environment": "*",
+  "icon": "icon.png",
   "entrypoints": {
-    "main": ["dev.29kiyo.privatedimension.fabric.PrivateDimensionFabric"]
+    "main": [
+      "dev.keiragi.privatedimension.fabric.PrivateDimensionFabric"
+    ]
   },
   "depends": {
     "fabricloader": ">=0.17.2",

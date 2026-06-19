@@ -1,3 +1,5 @@
 {
-  "parent": "minecraft:item/lingering_potion"
+  "parent": "minecraft:item/lingering_potion",
+  "overrides": [],
+  "gui_light": "front"
 }
