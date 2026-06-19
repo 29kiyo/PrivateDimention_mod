@@ -125,7 +125,6 @@ public class PrivateDimensionFabric implements ModInitializer {
                     level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, level.getWorldBorder().getBoundingBox(), ie -> dev.keiragi.privatedimension.item.DimensionBottleItem.isDimensionBottle(ie.getItem())).forEach(ie -> {
                         
                             ie.setInvulnerable(true);
-                        }
                     });
                 }
             }
