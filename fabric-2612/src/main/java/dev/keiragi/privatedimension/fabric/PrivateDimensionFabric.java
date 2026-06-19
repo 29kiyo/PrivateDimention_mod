@@ -97,9 +97,8 @@ public class PrivateDimensionFabric implements ModInitializer {
             // ドロップしたBottleを無敵化（50tickに1回チェック、効率化）
             if (server.getTickCount() % 50 == 0) {
                 for (net.minecraft.server.level.ServerLevel level : server.getAllLevels()) {
-                    level.getEntities().getAll().forEach(entity -> {
-                        if (entity instanceof net.minecraft.world.entity.item.ItemEntity ie
-                                && dev.keiragi.privatedimension.item.DimensionBottleItem.isDimensionBottle(ie.getItem())) {
+                    level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, level.getWorldBorder().getBoundingBox(), ie -> dev.keiragi.privatedimension.item.DimensionBottleItem.isDimensionBottle(ie.getItem())).forEach(ie -> {
+                        
                             ie.setInvulnerable(true);
                         }
                     });
