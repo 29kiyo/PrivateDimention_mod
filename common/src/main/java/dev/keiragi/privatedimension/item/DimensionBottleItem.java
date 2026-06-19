@@ -36,6 +36,12 @@ public class DimensionBottleItem extends Item {
         return true;
     }
 
+    /** ドロップ時に炎・溶岩で消滅しない */
+    @Override
+    public boolean isFireResistant() {
+        return true;
+    }
+
     // 🌟 アイテム名の色を Rarity.RARE と同じ水色にする
     @Override
     public Component getName(ItemStack stack) {

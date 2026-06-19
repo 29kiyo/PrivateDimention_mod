@@ -39,7 +39,7 @@ public class PrivateDimensionFabric implements ModInitializer {
             Identifier id = Identifier.fromNamespaceAndPath("privatedimension", "dimension_bottle");
             ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
             DimensionBottleItem item = new DimensionBottleItem(
-                new Item.Properties().setId(key).stacksTo(1)
+                new Item.Properties().setId(key).stacksTo(1).overrideDescription("item.privatedimension.dimension_bottle")
             );
             Registry.register(BuiltInRegistries.ITEM, key, item);
             ModItems.DIMENSION_BOTTLE = item;
@@ -93,7 +93,30 @@ public class PrivateDimensionFabric implements ModInitializer {
             return InteractionResult.PASS;
         });
 
+        // ドロップしたBottleを保護（爆発・溶岩・サボテン等すべてのダメージを無効化）
         ServerTickEvents.END_SERVER_TICK.register(server -> {
+            for (net.minecraft.server.level.ServerLevel level : server.getAllLevels()) {
+                for (net.minecraft.world.entity.item.ItemEntity itemEntity :
+                        level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
+                            level.getWorldBorder().createBoundingBox())) {
+                    if (dev.keiragi.privatedimension.item.DimensionBottleItem.isDimensionBottle(itemEntity.getItem())) {
+                        itemEntity.setInvulnerable(true);
+                    }
+                }
+            }
+        });
+
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            // ドロップしたBottleを無敵化
+            for (net.minecraft.server.level.ServerLevel level : server.getAllLevels()) {
+                for (net.minecraft.world.entity.item.ItemEntity ie :
+                        level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
+                            new net.minecraft.world.phys.AABB(-3e7, -2048, -3e7, 3e7, 4096, 3e7))) {
+                    if (dev.keiragi.privatedimension.item.DimensionBottleItem.isDimensionBottle(ie.getItem())) {
+                        ie.setInvulnerable(true);
+                    }
+                }
+            }
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 UUID uid = player.getUUID();
                 Vec3 current = player.position();
@@ -133,5 +156,13 @@ public class PrivateDimensionFabric implements ModInitializer {
 
         net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents.DISCONNECT.register(
             (handler, server) -> mod.getPlayerDataManager().saveAll());
+
+        // ドロップ状態の Dimension in a Bottle をあらゆるダメージから守る
+        net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
+            if (entity instanceof net.minecraft.world.entity.item.ItemEntity itemEntity) {
+                // ロード時にアイテムをチェックし、fireImmuneを設定済みのため追加処理不要
+                // 爆発ダメージはServerTickで対処
+            }
+        });
     }
 }

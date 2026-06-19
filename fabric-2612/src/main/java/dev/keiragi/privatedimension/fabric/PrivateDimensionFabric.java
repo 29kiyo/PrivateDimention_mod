@@ -39,7 +39,7 @@ public class PrivateDimensionFabric implements ModInitializer {
             Identifier id = Identifier.fromNamespaceAndPath("privatedimension", "dimension_bottle");
             ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
             DimensionBottleItem item = new DimensionBottleItem(
-                new Item.Properties().setId(key).stacksTo(1)
+                new Item.Properties().setId(key).stacksTo(1).overrideDescription("item.privatedimension.dimension_bottle")
             );
             Registry.register(BuiltInRegistries.ITEM, key, item);
             ModItems.DIMENSION_BOTTLE = item;
@@ -94,6 +94,16 @@ public class PrivateDimensionFabric implements ModInitializer {
         });
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {
+            // ドロップしたBottleを無敵化
+            for (net.minecraft.server.level.ServerLevel level : server.getAllLevels()) {
+                for (net.minecraft.world.entity.item.ItemEntity ie :
+                        level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
+                            new net.minecraft.world.phys.AABB(-3.0e7, -2048, -3.0e7, 3.0e7, 4096, 3.0e7))) {
+                    if (dev.keiragi.privatedimension.item.DimensionBottleItem.isDimensionBottle(ie.getItem())) {
+                        ie.setInvulnerable(true);
+                    }
+                }
+            }
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 UUID uid = player.getUUID();
                 Vec3 current = player.position();
