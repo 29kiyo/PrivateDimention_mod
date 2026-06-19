@@ -119,14 +119,15 @@ public class PrivateDimensionFabric implements ModInitializer {
         });
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {
-            // ドロップしたBottleを無敵化
-            for (net.minecraft.server.level.ServerLevel level : server.getAllLevels()) {
-                for (net.minecraft.world.entity.item.ItemEntity ie :
-                        level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
-                            new net.minecraft.world.phys.AABB(-3.0e7, -2048, -3.0e7, 3.0e7, 4096, 3.0e7))) {
-                    if (dev.keiragi.privatedimension.item.DimensionBottleItem.isDimensionBottle(ie.getItem())) {
-                        ie.setInvulnerable(true);
-                    }
+            // ドロップしたBottleを無敵化（50tickに1回チェック、効率化）
+            if (server.getTickCount() % 50 == 0) {
+                for (net.minecraft.server.level.ServerLevel level : server.getAllLevels()) {
+                    level.getEntities().getAll().forEach(entity -> {
+                        if (entity instanceof net.minecraft.world.entity.item.ItemEntity ie
+                                && dev.keiragi.privatedimension.item.DimensionBottleItem.isDimensionBottle(ie.getItem())) {
+                            ie.setInvulnerable(true);
+                        }
+                    });
                 }
             }
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
