@@ -37,7 +37,7 @@ public class DimensionBottleItem extends Item {
     }
 
     /** ドロップ時に炎・溶岩で消滅しない */
-    @Override
+    // @Override なし: isFireResistant のシグネチャがバージョンにより異なる
     public boolean isFireResistant() {
         return true;
     }
