@@ -98,7 +98,7 @@ public class PrivateDimensionFabric implements ModInitializer {
             for (net.minecraft.server.level.ServerLevel level : server.getAllLevels()) {
                 for (net.minecraft.world.entity.item.ItemEntity itemEntity :
                         level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
-                            level.getWorldBorder().createBoundingBox())) {
+                            new net.minecraft.world.phys.AABB(-3.0e7, -2048, -3.0e7, 3.0e7, 4096, 3.0e7))) {
                     if (dev.keiragi.privatedimension.item.DimensionBottleItem.isDimensionBottle(itemEntity.getItem())) {
                         itemEntity.setInvulnerable(true);
                     }
