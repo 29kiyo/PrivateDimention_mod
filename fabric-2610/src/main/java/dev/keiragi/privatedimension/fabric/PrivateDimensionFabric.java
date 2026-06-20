@@ -30,6 +30,7 @@ public class PrivateDimensionFabric implements ModInitializer {
     private final Map<UUID, Boolean> cooldownActive = new HashMap<>();
     @Override
     public void onInitialize() {
+        dev.keiragi.privatedimension.util.IdUtils.init(new FabricIdFactoryImpl());
         System.out.println("[PD] onInitialize開始");
         // アイテム登録
         try {

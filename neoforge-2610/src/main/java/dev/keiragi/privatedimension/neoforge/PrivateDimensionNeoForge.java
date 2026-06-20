@@ -44,6 +44,7 @@ public class PrivateDimensionNeoForge {
     private final Map<UUID, Vec3> lastPos = new HashMap<>();
 
     public PrivateDimensionNeoForge(IEventBus modBus, ModContainer container) {
+        dev.keiragi.privatedimension.util.IdUtils.init(new NeoForgeIdFactoryImpl());
         mod = new PrivateDimensionMod();
         mod.getConfig().setConfigPath(
             FMLPaths.CONFIGDIR.get()

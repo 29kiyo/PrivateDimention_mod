@@ -33,6 +33,7 @@ public class PrivateDimensionFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        dev.keiragi.privatedimension.util.IdUtils.init(new FabricIdFactoryImpl());
         System.out.println("[PD] onInitialize開始");
         try {
             PrivateDimensionMod.LOGGER.info("アイテム登録開始");
