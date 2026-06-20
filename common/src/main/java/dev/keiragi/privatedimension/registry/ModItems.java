@@ -7,7 +7,7 @@ public class ModItems {
     public static DimensionBottleItem DIMENSION_BOTTLE;
 
     public static DimensionBottleItem createDimensionBottle() {
-        DIMENSION_BOTTLE = new DimensionBottleItem(new Item.Properties().stacksTo(1));
+        DIMENSION_BOTTLE = new DimensionBottleItem(new Item.Properties().stacksTo(1).fireResistant());
         return DIMENSION_BOTTLE;
     }
 }

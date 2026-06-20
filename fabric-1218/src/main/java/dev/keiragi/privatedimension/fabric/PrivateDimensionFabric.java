@@ -67,6 +67,13 @@ public class PrivateDimensionFabric implements ModInitializer {
     }
 
     private void registerEvents() {
+        net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {
+            if (entity instanceof net.minecraft.world.entity.item.ItemEntity ie
+                    && dev.keiragi.privatedimension.item.DimensionBottleItem.isDimensionBottle(ie.getItem())) {
+                ie.setInvulnerable(true);
+            }
+        });
+
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             mod.getDimensionManager().onServerStart(server);
             mod.getPlayerDataManager().setDataPath(

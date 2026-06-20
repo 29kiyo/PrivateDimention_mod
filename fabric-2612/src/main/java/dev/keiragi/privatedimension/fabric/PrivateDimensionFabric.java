@@ -39,7 +39,7 @@ public class PrivateDimensionFabric implements ModInitializer {
             Identifier id = Identifier.fromNamespaceAndPath("privatedimension", "dimension_bottle");
             ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
             DimensionBottleItem item = new DimensionBottleItem(
-                new Item.Properties().setId(key).stacksTo(1).overrideDescription("item.privatedimension.dimension_bottle")
+                new Item.Properties().setId(key).stacksTo(1).overrideDescription("item.privatedimension.dimension_bottle").fireResistant()
             );
             Registry.register(BuiltInRegistries.ITEM, key, item);
             ModItems.DIMENSION_BOTTLE = item;
@@ -69,6 +69,13 @@ public class PrivateDimensionFabric implements ModInitializer {
     }
 
     private void registerEvents() {
+        net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {
+            if (entity instanceof net.minecraft.world.entity.item.ItemEntity ie
+                    && dev.keiragi.privatedimension.item.DimensionBottleItem.isDimensionBottle(ie.getItem())) {
+                ie.setInvulnerable(true);
+            }
+        });
+
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             mod.getDimensionManager().onServerStart(server);
             mod.getPlayerDataManager().setDataPath(
@@ -83,14 +90,14 @@ public class PrivateDimensionFabric implements ModInitializer {
         ItemEvents.USE.register((world, player, hand) -> {
             PrivateDimensionMod.LOGGER.info("ItemEvents.USE fired: isClientSide={}", world.isClientSide());
             if (world.isClientSide() || !(player instanceof ServerPlayer sp)) {
-                return InteractionResult.PASS;
+                return null;
             }
             ItemStack stack = player.getItemInHand(hand);
             if (stack.getItem() instanceof DimensionBottleItem) {
                 eventHandler.onItemUse(sp, stack);
                 return InteractionResult.SUCCESS;
             }
-            return InteractionResult.PASS;
+            return null;
         });
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {

@@ -39,7 +39,7 @@ public class PrivateDimensionFabric implements ModInitializer {
             Identifier id = Identifier.fromNamespaceAndPath("privatedimension", "dimension_bottle");
             ResourceKey<Item> key = ResourceKey.create(BuiltInRegistries.ITEM.key(), id);
             DimensionBottleItem item = new DimensionBottleItem(
-                new Item.Properties().setId(key).stacksTo(1).overrideDescription("item.privatedimension.dimension_bottle")
+                new Item.Properties().setId(key).stacksTo(1).overrideDescription("item.privatedimension.dimension_bottle").fireResistant()
             );
             Registry.register(BuiltInRegistries.ITEM, key, item);
             ModItems.DIMENSION_BOTTLE = item;
@@ -83,14 +83,14 @@ public class PrivateDimensionFabric implements ModInitializer {
         ItemEvents.USE.register((world, player, hand) -> {
             PrivateDimensionMod.LOGGER.info("ItemEvents.USE fired: isClientSide={}", world.isClientSide());
             if (world.isClientSide() || !(player instanceof ServerPlayer sp)) {
-                return InteractionResult.PASS;
+                return null;
             }
             ItemStack stack = player.getItemInHand(hand);
             if (stack.getItem() instanceof DimensionBottleItem) {
                 eventHandler.onItemUse(sp, stack);
                 return InteractionResult.SUCCESS;
             }
-            return InteractionResult.PASS;
+            return null;
         });
 
         // ドロップしたBottleを保護（爆発・溶岩・サボテン等すべてのダメージを無効化）
@@ -157,9 +157,9 @@ public class PrivateDimensionFabric implements ModInitializer {
 
         // ドロップ状態の Dimension in a Bottle をあらゆるダメージから守る
         net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
-            if (entity instanceof net.minecraft.world.entity.item.ItemEntity itemEntity) {
-                // ロード時にアイテムをチェックし、fireImmuneを設定済みのため追加処理不要
-                // 爆発ダメージはServerTickで対処
+            if (entity instanceof net.minecraft.world.entity.item.ItemEntity itemEntity
+                    && dev.keiragi.privatedimension.item.DimensionBottleItem.isDimensionBottle(itemEntity.getItem())) {
+                itemEntity.setInvulnerable(true);
             }
         });
     }
