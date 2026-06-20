@@ -19,5 +19,8 @@
     "fabricloader": ">=${fabric_loader}",
     "fabric-api": "*",
     "minecraft": "~${mc_version}"
-  }
+  },
+  "mixins": [
+    "privatedimension-fabric-2612.mixins.json"
+  ]
 }

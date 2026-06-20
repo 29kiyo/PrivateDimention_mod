@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.keiragi.privatedimension.fabric.mixin",
+  "mixins": [
+    "DimensionBottleProtectionMixin"
+  ],
+  "client": [],
+  "server": []
+}
