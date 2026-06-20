@@ -22,3 +22,6 @@ type         = "required"
 versionRange = "[${mc_version},)"
 ordering     = "NONE"
 side         = "BOTH"
+
+[[mixins]]
+config="privatedimension-neoforge-1215.mixins.json"
