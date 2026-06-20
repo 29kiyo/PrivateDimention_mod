@@ -36,10 +36,14 @@ public class PrivateDimensionFabric implements ModInitializer {
         System.out.println("[PD] onInitialize開始");
         try {
             PrivateDimensionMod.LOGGER.info("アイテム登録開始");
+            net.minecraft.resources.ResourceLocation bottleId =
+                ResourceLocation.fromNamespaceAndPath("privatedimension", "dimension_bottle");
+            net.minecraft.resources.ResourceKey<net.minecraft.world.item.Item> bottleKey =
+                net.minecraft.resources.ResourceKey.create(BuiltInRegistries.ITEM.key(), bottleId);
             Registry.register(
                 BuiltInRegistries.ITEM,
-                ResourceLocation.fromNamespaceAndPath("privatedimension", "dimension_bottle"),
-                ModItems.createDimensionBottle()
+                bottleId,
+                ModItems.createDimensionBottle(new net.minecraft.world.item.Item.Properties().setId(bottleKey))
             );
             PrivateDimensionMod.LOGGER.info("アイテム登録完了: {}", ModItems.DIMENSION_BOTTLE);
         } catch (Exception e) {

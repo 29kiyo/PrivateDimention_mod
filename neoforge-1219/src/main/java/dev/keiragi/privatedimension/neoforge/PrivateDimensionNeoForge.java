@@ -37,7 +37,7 @@ public class PrivateDimensionNeoForge {
 
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(PrivateDimensionMod.MOD_ID);
     public static final DeferredItem<DimensionBottleItem> DIMENSION_BOTTLE =
-        ITEMS.registerItem("dimension_bottle", props -> { ModItems.createDimensionBottle(); return ModItems.DIMENSION_BOTTLE; });
+        ITEMS.registerItem("dimension_bottle", props -> ModItems.createDimensionBottle(props));
 
     private final PrivateDimensionMod mod;
     private final CommonEventHandler eventHandler;
@@ -59,7 +59,7 @@ public class PrivateDimensionNeoForge {
         PrivateDimensionMod.LOGGER.info("PrivateDimension (NeoForge {}) 初期化完了", mc_version());
     }
 
-    private String mc_version() { return "26.1.2"; }
+    private String mc_version() { return "1.21.9"; }
 
     private void setup(FMLCommonSetupEvent event) {}
 

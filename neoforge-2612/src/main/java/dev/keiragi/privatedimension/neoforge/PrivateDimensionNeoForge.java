@@ -37,7 +37,7 @@ public class PrivateDimensionNeoForge {
 
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(PrivateDimensionMod.MOD_ID);
     public static final DeferredItem<DimensionBottleItem> DIMENSION_BOTTLE =
-        ITEMS.registerItem("dimension_bottle", props -> { ModItems.createDimensionBottle(); return ModItems.DIMENSION_BOTTLE; });
+        ITEMS.registerItem("dimension_bottle", props -> ModItems.createDimensionBottle(props));
 
     private final PrivateDimensionMod mod;
     private final CommonEventHandler eventHandler;
