@@ -17,9 +17,14 @@ public class FabricIdFactoryImpl implements IdFactory {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
     public Object createResourceKey(Object registryKey, Object id) {
-        return ResourceKey.create((ResourceKey<Registry>) registryKey, (Identifier) id);
+        return createResourceKeyTyped(registryKey, (Identifier) id);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> ResourceKey<T> createResourceKeyTyped(Object registryKey, Identifier id) {
+        ResourceKey<Registry<T>> rk = (ResourceKey<Registry<T>>) registryKey;
+        return ResourceKey.create(rk, id);
     }
 
     @Override

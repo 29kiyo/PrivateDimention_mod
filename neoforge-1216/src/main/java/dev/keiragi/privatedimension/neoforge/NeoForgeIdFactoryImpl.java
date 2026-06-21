@@ -17,9 +17,14 @@ public class NeoForgeIdFactoryImpl implements IdFactory {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
     public Object createResourceKey(Object registryKey, Object id) {
-        return ResourceKey.create((ResourceKey<Registry>) registryKey, (ResourceLocation) id);
+        return createResourceKeyTyped(registryKey, (ResourceLocation) id);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> ResourceKey<T> createResourceKeyTyped(Object registryKey, ResourceLocation id) {
+        ResourceKey<Registry<T>> rk = (ResourceKey<Registry<T>>) registryKey;
+        return ResourceKey.create(rk, id);
     }
 
     @Override
