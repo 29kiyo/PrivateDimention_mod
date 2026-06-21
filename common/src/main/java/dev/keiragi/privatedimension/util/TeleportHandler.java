@@ -160,7 +160,28 @@ public class TeleportHandler {
         if (transitionChecked) return;
         transitionChecked = true;
         try {
-            Class<?> ttClass = Class.forName("net.minecraft.world.level.portal.TeleportTransition");
+            // 1.21.2〜1.21.11あたりは DimensionTransition、26.1.x系で TeleportTransition にリネームされた模様。
+            // 両方試す。
+            Class<?> ttClass = null;
+            String foundClassName = null;
+            for (String className : new String[]{
+                    "net.minecraft.world.level.portal.TeleportTransition",
+                    "net.minecraft.world.level.portal.DimensionTransition"
+            }) {
+                try {
+                    ttClass = Class.forName(className);
+                    foundClassName = className;
+                    break;
+                } catch (ClassNotFoundException ignored) {
+                    // 次の候補を試す
+                }
+            }
+            if (ttClass == null) {
+                PrivateDimensionMod.LOGGER.warn(
+                    "TeleportTransition/DimensionTransition のいずれも見つかりませんでした。クロスディメンション転送は無効になります。");
+                return;
+            }
+
             Field f = ttClass.getField("DO_NOTHING");
             doNothingCallback = f.get(null);
 
@@ -189,8 +210,8 @@ public class TeleportHandler {
                     if (m.getName().equals("teleportCrossDimension")) break; // 優先
                 }
             }
-            PrivateDimensionMod.LOGGER.info("TeleportTransition API: ctor={}params, method={}",
-                transitionCtorParamCount, teleportCrossDimMethod != null ? teleportCrossDimMethod.getName() : "null");
+            PrivateDimensionMod.LOGGER.info("TeleportTransition API: class={}, ctor={}params, method={}",
+                foundClassName, transitionCtorParamCount, teleportCrossDimMethod != null ? teleportCrossDimMethod.getName() : "null");
         } catch (Exception e) {
             PrivateDimensionMod.LOGGER.warn("TeleportTransition API初期化失敗: {}", e.getMessage());
         }
