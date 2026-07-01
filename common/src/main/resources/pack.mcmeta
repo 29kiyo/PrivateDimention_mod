@@ -2,6 +2,8 @@
   "pack": {
     "description": "PrivateDimension Mod Resources",
     "pack_format": 57,
-    "supported_formats": [57, 74]
+    "supported_formats": [57, 74],
+    "min_format": 57,
+    "max_format": 999
   }
 }
