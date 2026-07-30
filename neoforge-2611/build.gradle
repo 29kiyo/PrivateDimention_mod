@@ -23,6 +23,7 @@ sourceSets {
 neoForge {
     version = neoforge_2611
     runs {
+        client { client() }
         server { server() }
     }
     mods {
