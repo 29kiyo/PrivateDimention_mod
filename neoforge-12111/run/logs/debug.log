@@ -1,0 +1,139 @@
+[317月2026 06:28:36.759] [main/INFO] [net.neoforged.fml.startup.Entrypoint/]: JVM Uptime at startup: 293ms
+[317月2026 06:28:36.779] [main/INFO] [net.neoforged.fml.loading.FMLLoader/]: Starting FancyModLoader version 10.0.36 (CLIENT in DEV)
+[317月2026 06:28:36.779] [main/INFO] [net.neoforged.fml.loading.FMLLoader/]: Game directory: C:\Users\owner\IdeaProjects\PrivateDimention_mod\neoforge-12111\run
+[317月2026 06:28:36.891] [main/INFO] [net.neoforged.fml.loading.EarlyServiceDiscovery/]: Found 2 early service jars (out of 104) in 42ms
+[317月2026 06:28:36.891] [main/INFO] [net.neoforged.fml.loading.FMLLoader/]: Loading FML Early Services:
+[317月2026 06:28:36.894] [main/INFO] [net.neoforged.fml.loading.FMLLoader/]:  - C:/Users/owner/.gradle/caches/modules-2/files-2.1/net.neoforged.fancymodloader/earlydisplay/10.0.36/dbd0e11d545443f602addede111c39d9639708f9/earlydisplay-10.0.36.jar
+[317月2026 06:28:36.895] [main/INFO] [net.neoforged.fml.loading.FMLLoader/]:  - C:/Users/owner/.gradle/caches/modules-2/files-2.1/net.neoforged.fancymodloader/loader/10.0.36/f72ab4d3e755fe736829883d90430a281527aca/loader-10.0.36.jar
+[317月2026 06:28:36.905] [main/INFO] [net.neoforged.fml.loading.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow
+[317月2026 06:28:37.653] [ForkJoinPool.commonPool-worker-1/INFO] [net.neoforged.fml.loading.moddiscovery.locators.GameLocator/]: Detected a joined NeoForge and Minecraft configuration. Applying filtering...
+[317月2026 06:28:37.854] [ForkJoinPool.commonPool-worker-1/INFO] [net.neoforged.fml.loading.moddiscovery.locators.InDevFolderLocator/CORE]: Got mod coordinates privatedimension%%C:\Users\owner\IdeaProjects\PrivateDimention_mod\neoforge-12111\build\classes\java\main;privatedimension%%C:\Users\owner\IdeaProjects\PrivateDimention_mod\neoforge-12111\build\resources\main from env
+[317月2026 06:28:38.007] [fml-loadingscreen/INFO] [net.neoforged.fml.earlydisplay.render.LoadingScreenRenderer/]: GL info: NVIDIA GeForce GTX 1660 SUPER/PCIe/SSE2 GL version 3.3.0 NVIDIA 581.57, NVIDIA Corporation
+[317月2026 06:28:38.127] [ForkJoinPool.commonPool-worker-1/INFO] [net.neoforged.fml.loading.moddiscovery.locators.JarInJarDependencyLocator/]: Found 2 dependencies adding them to mods collection
+[317月2026 06:28:38.131] [ForkJoinPool.commonPool-worker-1/INFO] [net.neoforged.fml.loading.moddiscovery.ModDiscoverer/]: 
+     Mod List:
+		Name Version (Mod Id)
+
+		Minecraft 1.21.11 (minecraft)
+		NeoForge 21.11.45 (neoforge)
+		PrivateDimension 1.0.0 (privatedimension)
+[317月2026 06:28:38.503] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=file:/C:/Users/owner/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.16.5+mixin.0.8.7/80fc3a9f592673cea87f4cd702f87991c6c9fe4d/sponge-mixin-0.16.5+mixin.0.8.7.jar Service=FML Env=CLIENT
+[317月2026 06:28:38.549] [main/INFO] [net.neoforged.fml.loading.FMLLoader/]: Loading FML Plugins:
+[317月2026 06:28:38.552] [main/INFO] [net.neoforged.fml.loading.FMLLoader/]:  - C:/Users/owner/IdeaProjects/PrivateDimention_mod/neoforge-12111/build/moddev/artifacts/neoforge-21.11.45.jar > net.neoforged.neoforge-coremods-21.11.45.jar
+[317月2026 06:28:38.719] [main/INFO] [net.neoforged.fml.loading.FMLLoader/]: Building game content classloader:
+ - minecraft (composite(jar(C:/Users/owner/IdeaProjects/PrivateDimention_mod/neoforge-12111/build/moddev/artifacts/neoforge-21.11.45-client-extra-aka-minecraft-resources.jar), filtered(jar(C:/Users/owner/IdeaProjects/PrivateDimention_mod/neoforge-12111/build/moddev/artifacts/neoforge-21.11.45.jar))))
+ - mixinextras.neoforge (jar(C:/Users/owner/IdeaProjects/PrivateDimention_mod/neoforge-12111/build/moddev/artifacts/neoforge-21.11.45.jar > mixinextras-neoforge-0.5.3.jar))
+ - neoforge (composite(filtered(jar(C:/Users/owner/IdeaProjects/PrivateDimention_mod/neoforge-12111/build/moddev/artifacts/neoforge-21.11.45.jar))))
+ - net.neoforged.fml.generated (empty(VirtualJar/net.neoforged.fml.generated))
+ - privatedimension (composite(folder(C:/Users/owner/IdeaProjects/PrivateDimention_mod/neoforge-12111/build/classes/java/main), folder(C:/Users/owner/IdeaProjects/PrivateDimention_mod/neoforge-12111/build/resources/main)))
+[317月2026 06:28:38.746] [main/INFO] [net.neoforged.fml.loading.FMLLoader/]: Built game content classloader in 49ms
+[317月2026 06:28:42.145] [Datafixer Bootstrap/INFO] [com.mojang.datafixers.DataFixerBuilder/]: 290 Datafixer optimizations took 1220 milliseconds
+[317月2026 06:28:42.198] [pool-8-thread-1/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.3).
+[317月2026 06:28:52.131] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, location] and [teleport, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[317月2026 06:28:52.134] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, location] and [teleport, targets] with inputs: [0.1 -0.5 .9, 0 0 0]
+[317月2026 06:28:52.140] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, destination] and [teleport, targets] with inputs: [Player, 0123, @e, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[317月2026 06:28:52.143] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, targets] and [teleport, destination] with inputs: [Player, 0123, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[317月2026 06:28:52.146] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, targets, location] and [teleport, targets, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[317月2026 06:28:52.150] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [waypoint, modify, waypoint, color, reset] and [waypoint, modify, waypoint, color, color] with inputs: [reset]
+[317月2026 06:28:52.265] [modloading-worker-0/INFO] [privatedimension/]: PrivateDimension Mod が有効化されました！
+[317月2026 06:28:52.282] [modloading-worker-0/INFO] [net.neoforged.neoforge.common.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.11.45, for MC 1.21.11
+[317月2026 06:28:52.298] [modloading-worker-0/INFO] [privatedimension/]: PrivateDimension (NeoForge 1.21.11) 初期化完了
+[317月2026 06:28:53.440] [Render thread/INFO] [com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService/]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, profilesHost=https://api.mojang.com, name=PROD]
+[317月2026 06:28:53.490] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Setting user: Dev
+[317月2026 06:28:53.673] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Backend library: LWJGL version 3.3.3+5
+[317月2026 06:28:53.964] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Using optional rendering extensions: GL_ARB_buffer_storage, GL_KHR_debug, GL_ARB_vertex_attrib_binding, GL_ARB_direct_state_access, GL_EXT_texture_filter_anisotropic
+[317月2026 06:28:54.305] [Render thread/ERROR] [net.minecraft.server.packs.AbstractPackResources/]: Couldn't load mod/privatedimension pack metadata: Pack version declaration mismatch between supported_formats (up to 74) and max_format (999.*)
+[317月2026 06:28:55.274] [Render thread/INFO] [net.minecraft.server.packs.resources.ReloadableResourceManager/]: Reloading ResourceManager: vanilla, mod_resources, mod/privatedimension, mod/neoforge
+[317月2026 06:28:55.765] [resourceLoad/INFO] [net.minecraft.client.gui.font.providers.UnihexProvider/]: Found unifont_all_no_pua-17.0.01.hex, loading
+[317月2026 06:28:55.766] [resourceLoad/INFO] [net.minecraft.client.gui.font.providers.UnihexProvider/]: Found unifont_pua-17.0.01.hex, loading
+[317月2026 06:28:55.891] [resourceLoad/INFO] [net.minecraft.client.gui.font.providers.UnihexProvider/]: Found unifont_jp_patch-17.0.01.hex, loading
+[317月2026 06:28:57.250] [Render thread/INFO] [com.mojang.blaze3d.audio.Library/]: OpenAL initialized on device OpenAL Soft on スピーカー (Realtek High Definition Audio)
+[317月2026 06:28:57.251] [Render thread/INFO] [net.minecraft.client.sounds.SoundEngine/SOUNDS]: Sound engine started
+[317月2026 06:28:57.252] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x0 minecraft:textures/atlas/particles.png-atlas
+[317月2026 06:28:57.281] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 128x128x0 minecraft:textures/atlas/decorated_pot.png-atlas
+[317月2026 06:28:57.284] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 2048x1024x0 minecraft:textures/atlas/armor_trims.png-atlas
+[317月2026 06:28:57.326] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x0 minecraft:textures/atlas/paintings.png-atlas
+[317月2026 06:28:57.330] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x512x0 minecraft:textures/atlas/shield_patterns.png-atlas
+[317月2026 06:28:57.336] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 2048x2048x4 minecraft:textures/atlas/blocks.png-atlas
+[317月2026 06:28:57.439] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x512x0 minecraft:textures/atlas/chest.png-atlas
+[317月2026 06:28:57.442] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x128x0 minecraft:textures/atlas/celestials.png-atlas
+[317月2026 06:28:57.443] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x512x0 minecraft:textures/atlas/banner_patterns.png-atlas
+[317月2026 06:28:57.448] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x512x0 minecraft:textures/atlas/beds.png-atlas
+[317月2026 06:28:57.451] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x512x0 minecraft:textures/atlas/items.png-atlas
+[317月2026 06:28:57.471] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x1024x0 minecraft:textures/atlas/gui.png-atlas
+[317月2026 06:28:57.491] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 128x64x0 minecraft:textures/atlas/map_decorations.png-atlas
+[317月2026 06:28:57.493] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x0 minecraft:textures/atlas/signs.png-atlas
+[317月2026 06:28:57.496] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x512x0 minecraft:textures/atlas/shulker_boxes.png-atlas
+[317月2026 06:28:57.709] [Render thread/INFO] [net.neoforged.neoforge.client.entity.animation.json.AnimationLoader/]: Loaded 0 entity animations
+[317月2026 06:29:04.451] [Render thread/ERROR] [net.minecraft.server.packs.AbstractPackResources/]: Couldn't load mod/privatedimension pack metadata: Pack version declaration mismatch between supported_formats (up to 74) and max_format (999.*)
+[317月2026 06:29:04.456] [Render thread/WARN] [net.minecraft.server.MinecraftServer/]: Missing data pack tests
+[317月2026 06:29:08.404] [Render thread/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 1471 recipes
+[317月2026 06:29:08.424] [Render thread/INFO] [net.minecraft.advancements.AdvancementTree/]: Loaded 1585 advancements
+[317月2026 06:29:08.428] [Render thread/INFO] [net.neoforged.neoforge.common.crafting.RecipePriorityManager/]: Loaded 0 recipe priority overrides
+[317月2026 06:29:12.106] [Render thread/ERROR] [net.minecraft.server.packs.AbstractPackResources/]: Couldn't load mod/privatedimension pack metadata: Pack version declaration mismatch between supported_formats (up to 74) and max_format (999.*)
+[317月2026 06:29:12.289] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Starting integrated minecraft server version 1.21.11
+[317月2026 06:29:12.289] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Generating keypair
+[317月2026 06:29:12.892] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Selecting global world spawn...
+[317月2026 06:29:16.191] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Loading 0 persistent chunks...
+[317月2026 06:29:16.192] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Preparing spawn area: 16%
+[317月2026 06:29:16.198] [Server thread/INFO] [net.neoforged.neoforge.server.permission.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler
+[317月2026 06:29:16.202] [Server thread/INFO] [privatedimension/]: プライベート次元ワールドを確認しました: privatedimension:private_dimension
+[317月2026 06:29:16.633] [Render thread/ERROR] [net.minecraft.server.packs.AbstractPackResources/]: Couldn't load mod/privatedimension pack metadata: Pack version declaration mismatch between supported_formats (up to 74) and max_format (999.*)
+[317月2026 06:29:17.370] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Loading 47 chunks for player spawn...
+[317月2026 06:29:17.370] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Preparing spawn area: 16%
+[317月2026 06:29:17.403] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Preparing spawn area: 16%
+[317月2026 06:29:17.454] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Preparing spawn area: 16%
+[317月2026 06:29:17.503] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Preparing spawn area: 16%
+[317月2026 06:29:17.554] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Preparing spawn area: 16%
+[317月2026 06:29:17.603] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Preparing spawn area: 16%
+[317月2026 06:29:17.653] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Preparing spawn area: 16%
+[317月2026 06:29:17.703] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Preparing spawn area: 16%
+[317月2026 06:29:17.753] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Preparing spawn area: 16%
+[317月2026 06:29:17.903] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Preparing spawn area: 16%
+[317月2026 06:29:18.403] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Preparing spawn area: 29%
+[317月2026 06:29:18.903] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Preparing spawn area: 29%
+[317月2026 06:29:19.404] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Preparing spawn area: 31%
+[317月2026 06:29:19.904] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Preparing spawn area: 57%
+[317月2026 06:29:20.404] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Preparing spawn area: 57%
+[317月2026 06:29:20.904] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Preparing spawn area: 57%
+[317月2026 06:29:21.353] [Server thread/INFO] [net.minecraft.server.level.progress.LoggingLevelLoadListener/]: Time elapsed: 8461 ms
+[317月2026 06:29:21.966] [Server thread/INFO] [net.minecraft.server.players.PlayerList/]: Dev[local:E:99cdfbdb] logged in with entity id 25 at (-12.5, 106.0, 11.5)
+[317月2026 06:29:22.059] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Dev joined the game
+[317月2026 06:29:22.291] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Changing view distance to 16, from 10
+[317月2026 06:29:22.293] [Render thread/WARN] [net.minecraft.client.multiplayer.ClientPacketListener/]: Ignoring chat session from Dev due to missing Services public key
+[317月2026 06:29:22.296] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Changing simulation distance to 12, from 0
+[317月2026 06:29:22.306] [Render thread/INFO] [net.minecraft.advancements.AdvancementTree/]: Loaded 3 advancements
+[317月2026 06:29:22.425] [Render thread/INFO] [net.minecraft.client.renderer.DynamicUniformStorage/]: Resizing Dynamic Transforms UBO, capacity limit of 2 reached during a single frame. New capacity will be 4.
+[317月2026 06:29:22.495] [Render thread/INFO] [net.minecraft.client.renderer.DynamicUniformStorage/]: Resizing Dynamic Transforms UBO, capacity limit of 4 reached during a single frame. New capacity will be 8.
+[317月2026 06:29:22.661] [Render thread/INFO] [net.minecraft.client.renderer.DynamicUniformStorage/]: Resizing Dynamic Transforms UBO, capacity limit of 8 reached during a single frame. New capacity will be 16.
+[317月2026 06:29:22.785] [Render thread/INFO] [net.minecraft.client.renderer.DynamicUniformStorage/]: Resizing Chunk Sections UBO, capacity limit of 2 reached during a single frame. New capacity will be 4.
+[317月2026 06:29:22.825] [Render thread/INFO] [net.minecraft.client.renderer.DynamicUniformStorage/]: Resizing Chunk Sections UBO, capacity limit of 4 reached during a single frame. New capacity will be 8.
+[317月2026 06:29:22.869] [Render thread/INFO] [net.minecraft.client.renderer.DynamicUniformStorage/]: Resizing Chunk Sections UBO, capacity limit of 8 reached during a single frame. New capacity will be 16.
+[317月2026 06:29:25.097] [Render thread/INFO] [net.minecraft.client.renderer.DynamicUniformStorage/]: Resizing Chunk Sections UBO, capacity limit of 16 reached during a single frame. New capacity will be 32.
+[317月2026 06:29:25.239] [Render thread/INFO] [net.minecraft.client.renderer.DynamicUniformStorage/]: Resizing Chunk Sections UBO, capacity limit of 32 reached during a single frame. New capacity will be 64.
+[317月2026 06:29:27.636] [Render thread/INFO] [net.minecraft.client.renderer.DynamicUniformStorage/]: Resizing Chunk Sections UBO, capacity limit of 64 reached during a single frame. New capacity will be 128.
+[317月2026 06:29:32.047] [Render thread/INFO] [net.minecraft.client.renderer.DynamicUniformStorage/]: Resizing Chunk Sections UBO, capacity limit of 128 reached during a single frame. New capacity will be 256.
+[317月2026 06:29:40.141] [Render thread/INFO] [net.minecraft.client.renderer.DynamicUniformStorage/]: Resizing Chunk Sections UBO, capacity limit of 256 reached during a single frame. New capacity will be 512.
+[317月2026 06:29:59.394] [Render thread/INFO] [net.minecraft.client.renderer.DynamicUniformStorage/]: Resizing Chunk Sections UBO, capacity limit of 512 reached during a single frame. New capacity will be 1024.
+[317月2026 06:30:23.713] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] [PD] Dev に付与しました。
+[317月2026 06:34:19.903] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Saving and pausing game...
+[317月2026 06:34:19.944] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[New World]'/minecraft:overworld
+[317月2026 06:34:20.004] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[New World]'/minecraft:the_nether
+[317月2026 06:34:20.005] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[New World]'/privatedimension:private_dimension
+[317月2026 06:34:20.005] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[New World]'/minecraft:the_end
+[317月2026 06:34:20.404] [Server thread/INFO] [net.minecraft.server.network.ServerGamePacketListenerImpl/]: Dev lost connection: Disconnected
+[317月2026 06:34:20.404] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Dev left the game
+[317月2026 06:34:20.428] [Server thread/INFO] [net.minecraft.server.network.ServerCommonPacketListenerImpl/]: Stopping singleplayer server as player logged out
+[317月2026 06:34:20.474] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Stopping server
+[317月2026 06:34:20.475] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving players
+[317月2026 06:34:20.475] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving worlds
+[317月2026 06:34:23.428] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[New World]'/minecraft:overworld
+[317月2026 06:34:23.608] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[New World]'/minecraft:the_nether
+[317月2026 06:34:23.616] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[New World]'/privatedimension:private_dimension
+[317月2026 06:34:23.625] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[New World]'/minecraft:the_end
+[317月2026 06:34:23.640] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (New World (4)): All chunks are saved
+[317月2026 06:34:23.640] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[317月2026 06:34:23.640] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (private_dimension): All chunks are saved
+[317月2026 06:34:23.641] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[317月2026 06:34:23.641] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage: All dimensions are saved
+[317月2026 06:34:24.150] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Stopping!

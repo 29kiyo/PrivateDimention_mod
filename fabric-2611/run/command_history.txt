@@ -1,0 +1,3 @@
+/pd give Player649
+/give ps minecraft:structure_block
+/give @s minecraft:structure_block

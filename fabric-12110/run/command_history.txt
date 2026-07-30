@@ -1,0 +1,5 @@
+/pd give 29kiyo
+/pd give @s
+/pd info
+/pd reload
+/pd give Player479

@@ -1,0 +1,30 @@
+{
+  "stats": {
+    "minecraft:custom": {
+      "minecraft:time_since_rest": 3182,
+      "minecraft:walk_one_cm": 1235,
+      "minecraft:total_world_time": 1909,
+      "minecraft:leave_game": 2,
+      "minecraft:sneak_time": 10,
+      "minecraft:play_time": 1687,
+      "minecraft:jump": 6,
+      "minecraft:time_since_death": 1687,
+      "minecraft:drop": 4
+    },
+    "minecraft:picked_up": {
+      "privatedimension:dimension_bottle": 4,
+      "minecraft:cobblestone": 9
+    },
+    "minecraft:used": {
+      "minecraft:smooth_stone": 4,
+      "minecraft:lava_bucket": 1,
+      "minecraft:flint_and_steel": 1,
+      "minecraft:sheep_spawn_egg": 1,
+      "minecraft:creeper_spawn_egg": 2
+    },
+    "minecraft:dropped": {
+      "privatedimension:dimension_bottle": 4
+    }
+  },
+  "DataVersion": 4788
+}

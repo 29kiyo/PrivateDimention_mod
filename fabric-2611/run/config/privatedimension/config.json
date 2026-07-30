@@ -1,0 +1,15 @@
+{
+  "worldName": "private_dimension",
+  "plotSize": 48,
+  "plotSpacing": 128,
+  "plotFloorY": 64,
+  "pullEntityLimit": 10,
+  "pullEntityRadius": 3.0,
+  "borderEnforcement": true,
+  "cooldownSeconds": 2,
+  "msgDimensionEnter": "別世界の空間へ移動しました。",
+  "msgDimensionReturn": "元の世界へ戻りました。",
+  "msgBorderForced": "[Private Dimension] プロットの外には出られません！",
+  "msgGiveItem": "[Private Dimension] アイテムを付与しました。",
+  "msgNoPermission": "この操作を行う権限がありません。"
+}

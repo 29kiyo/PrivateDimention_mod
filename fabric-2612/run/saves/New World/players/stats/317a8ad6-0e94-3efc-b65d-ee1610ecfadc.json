@@ -1,0 +1,25 @@
+{
+  "stats": {
+    "minecraft:custom": {
+      "minecraft:talked_to_villager": 2,
+      "minecraft:time_since_rest": 5331,
+      "minecraft:walk_one_cm": 6399,
+      "minecraft:leave_game": 3,
+      "minecraft:play_time": 5331,
+      "minecraft:jump": 47,
+      "minecraft:time_since_death": 5331,
+      "minecraft:sprint_one_cm": 41,
+      "minecraft:total_world_time": 5389,
+      "minecraft:fly_one_cm": 1991,
+      "minecraft:walk_on_water_one_cm": 322,
+      "minecraft:crouch_one_cm": 487,
+      "minecraft:sneak_time": 119
+    },
+    "minecraft:used": {
+      "minecraft:pig_spawn_egg": 21,
+      "minecraft:creeper_spawn_egg": 16,
+      "minecraft:cobblestone": 18
+    }
+  },
+  "DataVersion": 4790
+}

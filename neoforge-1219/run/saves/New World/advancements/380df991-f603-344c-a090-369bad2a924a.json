@@ -1,0 +1,27 @@
+{
+  "minecraft:recipes/decorations/crafting_table": {
+    "criteria": {
+      "unlock_right_away": "2026-07-30 22:07:42 +0900"
+    },
+    "done": true
+  },
+  "privatedimension:recipes/misc/dimension_in_a_bottle": {
+    "criteria": {
+      "tick": "2026-07-30 22:07:42 +0900"
+    },
+    "done": true
+  },
+  "minecraft:adventure/adventuring_time": {
+    "criteria": {
+      "minecraft:old_growth_birch_forest": "2026-07-30 22:07:43 +0900"
+    },
+    "done": false
+  },
+  "minecraft:story/lava_bucket": {
+    "criteria": {
+      "lava_bucket": "2026-07-30 22:07:49 +0900"
+    },
+    "done": true
+  },
+  "DataVersion": 4554
+}

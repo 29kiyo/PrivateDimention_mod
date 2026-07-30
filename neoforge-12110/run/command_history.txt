@@ -1,0 +1,2 @@
+/pd give dev
+/pd info

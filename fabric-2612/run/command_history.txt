@@ -1,0 +1,3 @@
+/pd give Player275
+/kill @e[type=minecraft:creeper]
+/kill @e[type=minecraft:pig]
