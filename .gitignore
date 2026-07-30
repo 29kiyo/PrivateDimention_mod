@@ -7,3 +7,4 @@ out/
 !gradle/wrapper/gradle-wrapper.jar
 .gradle/
 **/build/
+.idea/
