@@ -18,16 +18,16 @@ public class NeoForgeCommandHandler {
     static void register(PrivateDimensionMod mod, CommonEventHandler eventHandler,
                          CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("pd")
-            .then(Commands.literal("give")
-                .executes(ctx -> giveSelf(ctx, mod))
-                .then(Commands.argument("player", StringArgumentType.word())
-                    .executes(ctx -> givePlayer(ctx, mod))))
-            .then(Commands.literal("reload")
-                .executes(ctx -> reload(ctx, mod)))
-            .then(Commands.literal("info")
-                .executes(ctx -> info(ctx, mod))));
+                .then(Commands.literal("give")
+                        .executes(ctx -> giveSelf(ctx, mod))
+                        .then(Commands.argument("player", StringArgumentType.word())
+                                .executes(ctx -> givePlayer(ctx, mod))))
+                .then(Commands.literal("reload")
+                        .executes(ctx -> reload(ctx, mod)))
+                .then(Commands.literal("info")
+                        .executes(ctx -> info(ctx, mod))));
         dispatcher.register(Commands.literal("privatedim")
-            .redirect(dispatcher.getRoot().getChild("pd")));
+                .redirect(dispatcher.getRoot().getChild("pd")));
     }
 
     private static int giveSelf(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
@@ -39,7 +39,7 @@ public class NeoForgeCommandHandler {
             ServerPlayer player = ctx.getSource().getPlayerOrException();
             if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null)
                 player.getInventory().add(new net.minecraft.world.item.ItemStack(
-                    dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
+                        dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
             ctx.getSource().sendSuccess(() -> Component.literal("§a[PD] アイテムを付与しました。"), false);
             return 1;
         } catch (Exception e) {
@@ -61,9 +61,9 @@ public class NeoForgeCommandHandler {
         }
         if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null)
             target.getInventory().add(new net.minecraft.world.item.ItemStack(
-                dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
+                    dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
         ctx.getSource().sendSuccess(() -> Component.literal(
-            "§a[PD] " + target.getName().getString() + " に付与しました。"), false);
+                "§a[PD] " + target.getName().getString() + " に付与しました。"), false);
         return 1;
     }
 
@@ -87,7 +87,7 @@ public class NeoForgeCommandHandler {
                 double[] pos = pdm.getPlotPos(uid);
                 if (pos != null)
                     player.sendSystemMessage(Component.literal(
-                        String.format("§b次元内最終座標: §f%.1f, %.1f, %.1f", pos[0], pos[1], pos[2])));
+                            String.format("§b次元内最終座標: §f%.1f, %.1f, %.1f", pos[0], pos[1], pos[2])));
             } else {
                 player.sendSystemMessage(Component.literal("§b[PD] まだプロットを持っていません。"));
             }
@@ -99,21 +99,10 @@ public class NeoForgeCommandHandler {
     }
 
     private static boolean isOp(CommandSourceStack src) {
-        try {
-            return (boolean) src.getClass()
-                .getMethod("canUseGameMasterBlocks").invoke(src);
-        } catch (Exception ignored) {}
-        try {
-            return (boolean) src.getClass()
-                .getMethod("hasPermission", int.class).invoke(src, 2);
-        } catch (Exception ignored) {}
-        try {
-            Object entity = src.getClass().getMethod("getEntity").invoke(src);
-            if (entity != null) {
-                return (int) entity.getClass()
-                    .getMethod("getPermissionLevel").invoke(entity) >= 2;
-            }
-        } catch (Exception ignored) {}
+        var perms = src.permissions();
+        if (perms instanceof net.minecraft.server.permissions.LevelBasedPermissionSet lbps) {
+            return lbps.level().ordinal() >= net.minecraft.server.permissions.PermissionLevel.GAMEMASTERS.ordinal();
+        }
         return false;
     }
 }

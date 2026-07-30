@@ -4,6 +4,6 @@
     "pack_format": 57,
     "supported_formats": [57, 74],
     "min_format": 57,
-    "max_format": 999
+    "max_format": 74
   }
 }

@@ -99,21 +99,10 @@ public class NeoForgeCommandHandler {
     }
 
     private static boolean isOp(CommandSourceStack src) {
-        try {
-            return (boolean) src.getClass()
-                .getMethod("canUseGameMasterBlocks").invoke(src);
-        } catch (Exception ignored) {}
-        try {
-            return (boolean) src.getClass()
-                .getMethod("hasPermission", int.class).invoke(src, 2);
-        } catch (Exception ignored) {}
-        try {
-            Object entity = src.getClass().getMethod("getEntity").invoke(src);
-            if (entity != null) {
-                return (int) entity.getClass()
-                    .getMethod("getPermissionLevel").invoke(entity) >= 2;
-            }
-        } catch (Exception ignored) {}
+        var perms = src.permissions();
+        if (perms instanceof net.minecraft.server.permissions.LevelBasedPermissionSet lbps) {
+            return lbps.level().ordinal() >= net.minecraft.server.permissions.PermissionLevel.GAMEMASTERS.ordinal();
+        }
         return false;
     }
 }
