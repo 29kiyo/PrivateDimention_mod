@@ -100,18 +100,23 @@ public class NeoForgeCommandHandler {
 
     private static boolean isOp(CommandSourceStack src) {
         try {
-            return (boolean) src.getClass()
-                .getMethod("canUseGameMasterBlocks").invoke(src);
+            Class<?> lbpsClass = Class.forName("net.minecraft.server.permissions.LevelBasedPermissionSet");
+            Object perms = src.getClass().getMethod("permissions").invoke(src);
+            if (lbpsClass.isInstance(perms)) {
+                Object level = lbpsClass.getMethod("level").invoke(perms);
+                if (level instanceof Enum<?> lvl) return lvl.ordinal() >= 2;
+            }
         } catch (Exception ignored) {}
         try {
-            return (boolean) src.getClass()
-                .getMethod("hasPermission", int.class).invoke(src, 2);
+            return (boolean) src.getClass().getMethod("canUseGameMasterBlocks").invoke(src);
+        } catch (Exception ignored) {}
+        try {
+            return (boolean) src.getClass().getMethod("hasPermission", int.class).invoke(src, 2);
         } catch (Exception ignored) {}
         try {
             Object entity = src.getClass().getMethod("getEntity").invoke(src);
             if (entity != null) {
-                return (int) entity.getClass()
-                    .getMethod("getPermissionLevel").invoke(entity) >= 2;
+                return (int) entity.getClass().getMethod("getPermissionLevel").invoke(entity) >= 2;
             }
         } catch (Exception ignored) {}
         return false;
