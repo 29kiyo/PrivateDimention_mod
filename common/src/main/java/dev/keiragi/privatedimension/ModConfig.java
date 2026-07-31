@@ -12,6 +12,7 @@ public class ModConfig {
     public int    pullEntityLimit    = 10;
     public double pullEntityRadius   = 3.0;
     public boolean borderEnforcement = true;
+    public String  plotBypassTag      = "pd_free";
     public int     cooldownSeconds    = 2;
 
     public String msgDimensionEnter  = "別世界の空間へ移動しました。";
@@ -50,7 +51,7 @@ public class ModConfig {
     private void copyFrom(ModConfig o) {
         worldName = o.worldName; plotSize = o.plotSize; plotSpacing = o.plotSpacing;
         plotFloorY = o.plotFloorY; pullEntityLimit = o.pullEntityLimit;
-        pullEntityRadius = o.pullEntityRadius; borderEnforcement = o.borderEnforcement;
+        pullEntityRadius = o.pullEntityRadius; borderEnforcement = o.borderEnforcement; plotBypassTag = o.plotBypassTag;
         msgDimensionEnter = o.msgDimensionEnter; msgDimensionReturn = o.msgDimensionReturn;
         msgBorderForced = o.msgBorderForced; msgGiveItem = o.msgGiveItem;
         msgNoPermission = o.msgNoPermission;

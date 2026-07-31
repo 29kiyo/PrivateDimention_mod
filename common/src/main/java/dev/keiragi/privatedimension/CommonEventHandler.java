@@ -33,6 +33,7 @@ public class CommonEventHandler {
     public void onPlayerMove(ServerPlayer player, Vec3 newPos) {
         if (!mod.getDimensionManager().isPrivateDimension((ServerLevel) player.level())) return;
         if (player.canUseGameMasterBlocks()) return;
+        if (player.getTags().contains(mod.getConfig().plotBypassTag)) return;
         UUID uid = player.getUUID();
         if (!mod.getPlayerDataManager().hasPlot(uid)) return;
         if (teleportHandler.isTeleporting(uid)) return;
