@@ -84,13 +84,15 @@ The config file is generated at `config/privatedimension/config.json`.
 ```json
 {
   "plotSize": 48,
+  "plotHeight": 46,
   "plotSpacing": 128,
   "plotFloorY": 64,
   "pullEntityLimit": 10,
   "pullEntityRadius": 3.0,
   "borderEnforcement": true,
   "cooldownSeconds": 2,
-  "plotBypassTag": "pd_free"
+  "plotBypassTag": "pd_free",
+  "structureFile": "plot48x48.nbt"
 }
 ```
 
@@ -108,3 +110,21 @@ By default, leaving your plot pushes you back inside it. There are two ways to b
   Remove it with `/tag <player> remove pd_free`.
 
   Example: `/tag Steve add pd_free` lets the player Steve freely leave any plot.
+
+## Custom Island (.nbt)
+
+By default, plots use a built-in 48x48 island (`plot48x48.nbt`). You can replace it with your own structure:
+
+1. Please start the server or join a single-player game once. The log will print the structure folder path, e.g.:
+   ```
+   <world folder>/generated/privatedimension/structures
+   ```
+2. Place your own `.nbt` file in that folder (e.g. `my_island.nbt`).
+3. Set `structureFile` in `config.json` to that file name (e.g. `"my_island.nbt"`).
+4. Adjust `plotSize` (width), `plotHeight`, and `plotSpacing` to match your structure's actual dimensions.
+
+When a player first enters an empty plot, the mod automatically searches for a safe landing spot (solid ground, clear head/foot space) near the default spawn point, so unusual structure shapes will not cause fall-through or suffocation on entry.
+
+## Tab Completion
+
+`/pd give <player>` supports tab completion for online player names, same as vanilla commands like `/give`.

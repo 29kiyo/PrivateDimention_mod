@@ -84,13 +84,15 @@ A derivative work of "Private_Dimension" by Chuzume.<br>
 ```json
 {
   "plotSize": 48,
+  "plotHeight": 46,
   "plotSpacing": 128,
   "plotFloorY": 64,
   "pullEntityLimit": 10,
   "pullEntityRadius": 3.0,
   "borderEnforcement": true,
   "cooldownSeconds": 2,
-  "plotBypassTag": "pd_free"
+  "plotBypassTag": "pd_free",
+  "structureFile": "plot48x48.nbt"
 }
 ```
 
@@ -108,3 +110,21 @@ A derivative work of "Private_Dimension" by Chuzume.<br>
   外す場合は `/tag <プレイヤー名> remove pd_free` です。
 
   例: `/tag Steve add pd_free` とすると、Steveはどのプロットでも境界を気にせず出入りできるようになります。
+
+## カスタム島(.nbt)
+
+デフォルトでは、48x48の同梱アイランド(`plot48x48.nbt`)が使われます。自分で用意した構造物に差し替えることもできます。
+
+1. 一度サーバーを起動、またはシングルプレイに参加してください。ログに構造物フォルダの絶対パスが出力されます(例):
+   ```
+   <ワールドフォルダ>/generated/privatedimension/structures
+   ```
+2. そのフォルダに、自分で用意した`.nbt`ファイル(例: `my_island.nbt`)を置いてください。
+3. `config.json`の`structureFile`をそのファイル名(例: `"my_island.nbt"`)に設定してください。
+4. `plotSize`(横幅)・`plotHeight`(高さ)・`plotSpacing`(間隔)を、実際の構造物のサイズに合わせて調整してください。
+
+プレイヤーが初めてプロットに入る際、既定のスポーン地点付近で自動的に安全な着地点(足場があり、頭上・足元が空いている場所)を探すため、変わった形の構造物でも落下や窒息が起きにくくなっています。
+
+## タブ補完
+
+`/pd give <プレイヤー名>` は、バニラの`/give`コマンドなどと同じように、オンラインプレイヤー名のタブ補完に対応しています。
