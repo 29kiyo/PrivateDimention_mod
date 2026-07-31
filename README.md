@@ -53,7 +53,7 @@ This mod is a reimplementation of [Private Dimension by Chuzume](https://github.
 | 🔙 Return | Use the item again inside the dimension to return to your original location |
 | 👥 Entity Escort | Sneak + use to bring friendly entities within 3 blocks along with you |
 | 🏠 48×48 Plot | Each player is automatically assigned a dedicated 48×48 space |
-| 🚫 Plot Boundary | Leaving the plot boundary forces you back to the overworld |
+| 🚫 Plot Boundary | Leaving the plot boundary forces you back to the overworld (OPs and tagged players bypass this) |
 | ☠️ Death Handling | Dying inside the dimension respawns you in the overworld |
 
 ## Requirements
@@ -88,6 +88,23 @@ The config file is generated at `config/privatedimension/config.json`.
   "plotFloorY": 64,
   "pullEntityLimit": 10,
   "pullEntityRadius": 3.0,
-  "enableBorderEnforcement": true
+  "borderEnforcement": true,
+  "cooldownSeconds": 2,
+  "plotBypassTag": "pd_free"
 }
 ```
+
+## Plot Boundary Bypass
+
+By default, leaving your plot pushes you back inside it. There are two ways to bypass this:
+
+- **Operators** (permission level 2+) always bypass the boundary check.
+- **Tagged players** can bypass it too. Grant the bypass tag (default: `pd_free`, configurable via `plotBypassTag` in the config) using the vanilla `/tag` command:
+
+  ```
+  /tag <player> add pd_free
+  ```
+
+  Remove it with `/tag <player> remove pd_free`.
+
+  Example: `/tag Steve add pd_free` lets the player Steve freely leave any plot.

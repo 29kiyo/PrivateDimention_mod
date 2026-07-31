@@ -1,0 +1,49 @@
+{
+  "minecraft:recipes/decorations/crafting_table": {
+    "criteria": {
+      "unlock_right_away": "2026-07-30 21:24:31 +0900"
+    },
+    "done": true
+  },
+  "privatedimension:recipes/misc/dimension_in_a_bottle": {
+    "criteria": {
+      "tick": "2026-07-30 21:24:31 +0900"
+    },
+    "done": true
+  },
+  "minecraft:adventure/adventuring_time": {
+    "criteria": {
+      "minecraft:old_growth_birch_forest": "2026-07-30 21:24:32 +0900",
+      "minecraft:dark_forest": "2026-07-30 21:25:45 +0900",
+      "minecraft:river": "2026-07-30 21:25:44 +0900",
+      "minecraft:birch_forest": "2026-07-30 21:25:47 +0900",
+      "minecraft:stony_shore": "2026-07-30 21:25:50 +0900"
+    },
+    "done": false
+  },
+  "minecraft:story/lava_bucket": {
+    "criteria": {
+      "lava_bucket": "2026-07-30 21:25:01 +0900"
+    },
+    "done": true
+  },
+  "minecraft:recipes/food/cooked_porkchop_from_campfire_cooking": {
+    "criteria": {
+      "has_porkchop": "2026-07-30 21:25:29 +0900"
+    },
+    "done": true
+  },
+  "minecraft:recipes/food/cooked_porkchop": {
+    "criteria": {
+      "has_porkchop": "2026-07-30 21:25:29 +0900"
+    },
+    "done": true
+  },
+  "minecraft:recipes/food/cooked_porkchop_from_smoking": {
+    "criteria": {
+      "has_porkchop": "2026-07-30 21:25:29 +0900"
+    },
+    "done": true
+  },
+  "DataVersion": 4788
+}

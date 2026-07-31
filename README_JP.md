@@ -53,7 +53,7 @@ A derivative work of "Private_Dimension" by Chuzume.<br>
 | 🔙 帰還 | 次元内で再び使用すると元の座標に戻る |
 | 👥 エンティティ連行 | スニーク+使用で半径3ブロック内の友好的エンティティを連れていける |
 | 🏠 48×48 プロット | プレイヤーごとに専用の 48×48 空間を自動割り当て |
-| 🚫 プロット境界 | プロット外に出ると強制的に元の世界へ送還 |
+| 🚫 プロット境界 | プロット外に出ると強制的に元の世界へ送還（OPおよびタグ付きプレイヤーは対象外） |
 | ☠️ 死亡対応 | 次元内で死亡しても元の世界でリスポーン |
 
 ## 必要環境
@@ -88,6 +88,23 @@ A derivative work of "Private_Dimension" by Chuzume.<br>
   "plotFloorY": 64,
   "pullEntityLimit": 10,
   "pullEntityRadius": 3.0,
-  "enableBorderEnforcement": true
+  "borderEnforcement": true,
+  "cooldownSeconds": 2,
+  "plotBypassTag": "pd_free"
 }
 ```
+
+## プロット境界のバイパス
+
+デフォルトでは、プロット外に出ると自分のプロット内へ押し戻されます。以下の2通りでバイパスできます。
+
+- **OP**（権限レベル2以上）は常に境界チェックの対象外です。
+- **タグ付きプレイヤー**もバイパス可能です。バニラの`/tag`コマンドでバイパス用タグ（デフォルト: `pd_free`、設定ファイルの`plotBypassTag`で変更可）を付与してください。
+
+  ```
+  /tag <プレイヤー名> add pd_free
+  ```
+
+  外す場合は `/tag <プレイヤー名> remove pd_free` です。
+
+  例: `/tag Steve add pd_free` とすると、Steveはどのプロットでも境界を気にせず出入りできるようになります。

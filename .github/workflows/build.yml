@@ -37,10 +37,10 @@ jobs:
           BUILD_GROUP: g8
         run: |
           for proj in \
-            fabric-1215 fabric-1216 fabric-1217 fabric-1218 \
-            neoforge-1215 neoforge-1216 neoforge-1217 neoforge-1218; do
+            fabric/1215 fabric/1216 fabric/1217 fabric/1218 \
+            neoforge/1215 neoforge/1216 neoforge/1217 neoforge/1218; do
             echo "::group::Build :$proj"
-            gradle :${proj}:build --no-daemon --info -Pversion=${{ github.sha }}
+            gradle ":${proj//\//:}:build" --no-daemon --info -Pversion=${{ github.sha }}
             echo "::endgroup::"
           done
 
@@ -48,8 +48,8 @@ jobs:
         run: |
           mkdir -p dist
           for proj in \
-            fabric-1215 fabric-1216 fabric-1217 fabric-1218 \
-            neoforge-1215 neoforge-1216 neoforge-1217 neoforge-1218; do
+            fabric/1215 fabric/1216 fabric/1217 fabric/1218 \
+            neoforge/1215 neoforge/1216 neoforge/1217 neoforge/1218; do
             find ${proj}/build/libs -name "*.jar" \
               ! -name "*-sources*" ! -name "*-dev*" \
               -exec cp {} dist/ \; 2>/dev/null || true
@@ -85,10 +85,10 @@ jobs:
           BUILD_GROUP: g9
         run: |
           for proj in \
-            neoforge-12111 neoforge-12110 neoforge-1219 \
-            fabric-12111 fabric-12110 fabric-1219; do
+            neoforge/12111 neoforge/12110 neoforge/1219 \
+            fabric/12111 fabric/12110 fabric/1219; do
             echo "::group::Build :$proj"
-            gradle :${proj}:build --no-daemon --info -Pversion=${{ github.sha }}
+            gradle ":${proj//\//:}:build" --no-daemon --info -Pversion=${{ github.sha }}
             echo "::endgroup::"
           done
 
@@ -96,8 +96,8 @@ jobs:
         run: |
           mkdir -p dist
           for proj in \
-            neoforge-12111 neoforge-12110 neoforge-1219 \
-            fabric-12111 fabric-12110 fabric-1219; do
+            neoforge/12111 neoforge/12110 neoforge/1219 \
+            fabric/12111 fabric/12110 fabric/1219; do
             find ${proj}/build/libs -name "*.jar" \
               ! -name "*-sources*" ! -name "*-dev*" \
               -exec cp {} dist/ \; 2>/dev/null || true
@@ -133,10 +133,10 @@ jobs:
           BUILD_GROUP: g26
         run: |
           for proj in \
-            neoforge-2611 neoforge-2612 \
-            fabric-2611 fabric-2612; do
+            neoforge/2611 neoforge/2612 \
+            fabric/2611 fabric/2612; do
             echo "::group::Build :$proj"
-            gradle :${proj}:build --no-daemon --info -Pversion=${{ github.sha }}
+            gradle ":${proj//\//:}:build" --no-daemon --info -Pversion=${{ github.sha }}
             echo "::endgroup::"
           done
 
@@ -144,8 +144,8 @@ jobs:
         run: |
           mkdir -p dist
           for proj in \
-            neoforge-2611 neoforge-2612 \
-            fabric-2611 fabric-2612; do
+            neoforge/2611 neoforge/2612 \
+            fabric/2611 fabric/2612; do
             find ${proj}/build/libs -name "*.jar" \
               ! -name "*-sources*" ! -name "*-dev*" \
               -exec cp {} dist/ \; 2>/dev/null || true

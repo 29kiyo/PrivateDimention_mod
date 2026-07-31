@@ -1,0 +1,3 @@
+/pd give dev
+/pd info
+/pd reload

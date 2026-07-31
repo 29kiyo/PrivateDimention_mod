@@ -1,0 +1,33 @@
+{
+  "stats": {
+    "minecraft:dropped": {
+      "privatedimension:dimension_bottle": 2
+    },
+    "minecraft:custom": {
+      "minecraft:sprint_one_cm": 1306,
+      "minecraft:time_since_rest": 4337,
+      "minecraft:walk_one_cm": 1784,
+      "minecraft:total_world_time": 4749,
+      "minecraft:leave_game": 2,
+      "minecraft:fly_one_cm": 19281,
+      "minecraft:crouch_one_cm": 48,
+      "minecraft:sneak_time": 64,
+      "minecraft:play_time": 4337,
+      "minecraft:jump": 41,
+      "minecraft:time_since_death": 4337,
+      "minecraft:drop": 2
+    },
+    "minecraft:picked_up": {
+      "minecraft:porkchop": 2,
+      "privatedimension:dimension_bottle": 2
+    },
+    "minecraft:used": {
+      "minecraft:structure_block": 1,
+      "minecraft:grass_block": 12,
+      "minecraft:lava_bucket": 1,
+      "minecraft:pig_spawn_egg": 1,
+      "minecraft:creeper_spawn_egg": 1
+    }
+  },
+  "DataVersion": 4788
+}

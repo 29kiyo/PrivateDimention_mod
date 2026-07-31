@@ -104,6 +104,16 @@ public class TeleportHandler {
         release(uid);
     }
 
+    public void pushBackToPlot(ServerPlayer player, Vec3 dest) {
+        UUID uid = player.getUUID();
+        teleporting.add(uid);
+        ServerLevel level = (ServerLevel) player.level();
+        playVfx(level, player.position());
+        player.teleportTo(dest.x, dest.y, dest.z);
+        playVfx(level, dest);
+        release(uid);
+    }
+
     public void gotoBaseWorld(ServerPlayer player) {
         UUID uid = player.getUUID();
         teleporting.add(uid);

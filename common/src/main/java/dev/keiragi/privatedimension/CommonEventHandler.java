@@ -30,9 +30,22 @@ public class CommonEventHandler {
         return true;
     }
 
+    private static boolean hasTag(ServerPlayer player, String tag) {
+        try {
+            Object result = player.getClass().getMethod("getTags").invoke(player);
+            if (result instanceof java.util.Set<?> tags) return tags.contains(tag);
+        } catch (Exception ignored) {}
+        try {
+            Object result = player.getClass().getMethod("tags").invoke(player);
+            if (result instanceof java.util.Set<?> tags) return tags.contains(tag);
+        } catch (Exception ignored) {}
+        return false;
+    }
+
     public void onPlayerMove(ServerPlayer player, Vec3 newPos) {
         if (!mod.getDimensionManager().isPrivateDimension((ServerLevel) player.level())) return;
         if (player.canUseGameMasterBlocks()) return;
+        if (hasTag(player, mod.getConfig().plotBypassTag)) return;
         UUID uid = player.getUUID();
         if (!mod.getPlayerDataManager().hasPlot(uid)) return;
         if (teleportHandler.isTeleporting(uid)) return;
@@ -44,8 +57,7 @@ public class CommonEventHandler {
         if (last != null && now - last < BORDER_COOLDOWN_MS) return;
         borderCooldown.put(uid, now);
         player.sendSystemMessage(Component.literal("§c" + mod.getConfig().msgBorderForced));
-        teleportHandler.playVfx((ServerLevel) player.level(), player.position());
-        teleportHandler.gotoBaseWorld(player);
+        teleportHandler.pushBackToPlot(player, mod.getPlotManager().getPlotSpawn(plotId));
     }
 
     public void onPlayerDeath(ServerPlayer player) {

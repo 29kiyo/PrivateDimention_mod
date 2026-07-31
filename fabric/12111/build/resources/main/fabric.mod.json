@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "privatedimension",
+  "version": "1.0.0",
+  "name": "PrivateDimension",
+  "description": "Dimension in a Bottle - プライベート次元Mod",
+  "authors": [
+    "29kiyo"
+  ],
+  "license": "CC-BY-SA-4.0",
+  "environment": "*",
+  "icon": "icon.png",
+  "entrypoints": {
+    "main": [
+      "dev.keiragi.privatedimension.fabric.PrivateDimensionFabric"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.17.3",
+    "fabric-api": "*",
+    "minecraft": "~1.21.11"
+  },
+  "mixins": [
+    "privatedimension-fabric-12111.mixins.json"
+  ]
+}
