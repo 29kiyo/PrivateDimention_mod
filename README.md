@@ -53,7 +53,7 @@ This mod is a reimplementation of [Private Dimension by Chuzume](https://github.
 | 🔙 Return | Use the item again inside the dimension to return to your original location |
 | 👥 Entity Escort | Sneak + use to bring friendly entities within 3 blocks along with you |
 | 🏠 48×48 Plot | Each player is automatically assigned a dedicated 48×48 space |
-| 🚫 Plot Boundary | Leaving the plot boundary forces you back to the overworld |
+| 🚫 Plot Boundary | Leaving the plot boundary forces you back to the overworld (OPs and tagged players bypass this) |
 | ☠️ Death Handling | Dying inside the dimension respawns you in the overworld |
 
 ## Requirements
