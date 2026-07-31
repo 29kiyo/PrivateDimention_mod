@@ -51,6 +51,7 @@ public class PrivateDimensionNeoForge {
                 .resolve(PrivateDimensionMod.MOD_ID)
                 .resolve("config.json"));
         mod.init();
+        mod.getConfig().load();
         eventHandler = new CommonEventHandler(mod);
 
         ITEMS.register(modBus);
