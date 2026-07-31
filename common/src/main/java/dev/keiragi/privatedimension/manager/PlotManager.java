@@ -17,14 +17,16 @@ public class PlotManager {
     }
 
     public BlockPos getPlotStructureOrigin(int plotId) {
-        return new BlockPos(-24, mod.getConfig().plotFloorY - 1, getPlotOriginZ(plotId) - 24);
+        int half = mod.getConfig().plotSize / 2;
+        return new BlockPos(-half, mod.getConfig().plotFloorY - 1, getPlotOriginZ(plotId) - half);
     }
 
     public boolean isInsidePlot(int plotId, double x, double y, double z) {
+        int half = mod.getConfig().plotSize / 2;
         int oz = getPlotOriginZ(plotId);
         int fy = mod.getConfig().plotFloorY;
-        return x >= -24 && x <= 24
-            && z >= (oz - 24) && z <= (oz + 24)
-            && y >= (fy - 1)  && y <= (fy + 46);
+        return x >= -half && x <= half
+            && z >= (oz - half) && z <= (oz + half)
+            && y >= (fy - 1)  && y <= (fy + mod.getConfig().plotHeight);
     }
 }

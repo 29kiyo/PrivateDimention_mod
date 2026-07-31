@@ -37,6 +37,13 @@ public class DimensionManager {
         ServerLevel dim = getPrivateDimension();
         if (dim != null) {
             PrivateDimensionMod.LOGGER.info("プライベート次元ワールドを確認しました: {}", DIMENSION_ID);
+            try {
+                Path structDir = getStructureDir();
+                Files.createDirectories(structDir);
+                PrivateDimensionMod.LOGGER.info(
+                    "独自の.nbt構造物はここに配置してください（配置後 config.json の structureFile にファイル名を指定）: {}",
+                    structDir.toAbsolutePath());
+            } catch (Exception ignored) {}
         } else {
             PrivateDimensionMod.LOGGER.warn("プライベート次元が見つかりません。データパック確認が必要です。");
         }
@@ -50,16 +57,23 @@ public class DimensionManager {
         return level != null && level.dimension().equals(DIMENSION_KEY);
     }
 
+    private Path getStructureDir() {
+        return server.getWorldPath(LevelResource.ROOT)
+            .resolve("generated")
+            .resolve(PrivateDimensionMod.MOD_ID)
+            .resolve("structures");
+    }
+
     public void placeStructure(ServerLevel level, BlockPos origin) {
         try {
-            ensureNbtExtracted(level);
-            Path structDir = level.getServer().getWorldPath(LevelResource.ROOT)
-                .resolve("generated")
-                .resolve(PrivateDimensionMod.MOD_ID)
-                .resolve("structures");
-            Path nbtPath = structDir.resolve("plot48x48.nbt");
+            ensureDefaultNbtExtracted(level);
+            Path structDir = getStructureDir();
+            String fileName = mod.getConfig().structureFile;
+            if (fileName == null || fileName.isBlank()) fileName = "plot48x48.nbt";
+            Path nbtPath = structDir.resolve(fileName);
             if (!Files.exists(nbtPath)) {
-                PrivateDimensionMod.LOGGER.error("NBTファイルが見つかりません: {}", nbtPath);
+                PrivateDimensionMod.LOGGER.error(
+                    "NBTファイルが見つかりません: {} (config.json の structureFile を確認してください)", nbtPath);
                 return;
             }
             boolean result = NbtStructurePlacer.place(level, origin, nbtPath);
@@ -69,11 +83,8 @@ public class DimensionManager {
         }
     }
 
-    private void ensureNbtExtracted(ServerLevel level) throws IOException {
-        Path structDir = level.getServer().getWorldPath(LevelResource.ROOT)
-            .resolve("generated")
-            .resolve(PrivateDimensionMod.MOD_ID)
-            .resolve("structures");
+    private void ensureDefaultNbtExtracted(ServerLevel level) throws IOException {
+        Path structDir = getStructureDir();
         Files.createDirectories(structDir);
         Path dest = structDir.resolve("plot48x48.nbt");
 

@@ -7,12 +7,14 @@ import java.nio.file.*;
 public class ModConfig {
     public String worldName          = "private_dimension";
     public int    plotSize           = 48;
+    public int    plotHeight         = 46;
     public int    plotSpacing        = 128;
     public int    plotFloorY         = 64;
     public int    pullEntityLimit    = 10;
     public double pullEntityRadius   = 3.0;
     public boolean borderEnforcement = true;
     public String  plotBypassTag      = "pd_free";
+    public String  structureFile      = "plot48x48.nbt";
     public int     cooldownSeconds    = 2;
 
     public String msgDimensionEnter  = "別世界の空間へ移動しました。";
@@ -49,9 +51,12 @@ public class ModConfig {
     }
 
     private void copyFrom(ModConfig o) {
-        worldName = o.worldName; plotSize = o.plotSize; plotSpacing = o.plotSpacing;
+        worldName = o.worldName; plotSize = o.plotSize; plotHeight = o.plotHeight;
+        plotSpacing = o.plotSpacing;
         plotFloorY = o.plotFloorY; pullEntityLimit = o.pullEntityLimit;
-        pullEntityRadius = o.pullEntityRadius; borderEnforcement = o.borderEnforcement; if (o.plotBypassTag != null) plotBypassTag = o.plotBypassTag;
+        pullEntityRadius = o.pullEntityRadius; borderEnforcement = o.borderEnforcement;
+        if (o.plotBypassTag != null) plotBypassTag = o.plotBypassTag;
+        if (o.structureFile != null) structureFile = o.structureFile;
         msgDimensionEnter = o.msgDimensionEnter; msgDimensionReturn = o.msgDimensionReturn;
         msgBorderForced = o.msgBorderForced; msgGiveItem = o.msgGiveItem;
         msgNoPermission = o.msgNoPermission;
