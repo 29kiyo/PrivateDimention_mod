@@ -45,8 +45,7 @@ public class CommonEventHandler {
         if (last != null && now - last < BORDER_COOLDOWN_MS) return;
         borderCooldown.put(uid, now);
         player.sendSystemMessage(Component.literal("§c" + mod.getConfig().msgBorderForced));
-        teleportHandler.playVfx((ServerLevel) player.level(), player.position());
-        teleportHandler.gotoBaseWorld(player);
+        teleportHandler.pushBackToPlot(player, mod.getPlotManager().getPlotSpawn(plotId));
     }
 
     public void onPlayerDeath(ServerPlayer player) {

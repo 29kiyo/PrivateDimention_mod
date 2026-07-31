@@ -88,6 +88,23 @@ The config file is generated at `config/privatedimension/config.json`.
   "plotFloorY": 64,
   "pullEntityLimit": 10,
   "pullEntityRadius": 3.0,
-  "enableBorderEnforcement": true
+  "borderEnforcement": true,
+  "cooldownSeconds": 2,
+  "plotBypassTag": "pd_free"
 }
 ```
+
+## Plot Boundary Bypass
+
+By default, leaving your plot pushes you back inside it. There are two ways to bypass this:
+
+- **Operators** (permission level 2+) always bypass the boundary check.
+- **Tagged players** can bypass it too. Grant the bypass tag (default: `pd_free`, configurable via `plotBypassTag` in the config) using the vanilla `/tag` command:
+
+  ```
+  /tag <player> add pd_free
+  ```
+
+  Remove it with `/tag <player> remove pd_free`.
+
+  Example: `/tag Steve add pd_free` lets the player Steve freely leave any plot.
