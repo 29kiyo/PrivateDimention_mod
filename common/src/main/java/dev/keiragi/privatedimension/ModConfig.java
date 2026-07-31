@@ -51,7 +51,7 @@ public class ModConfig {
     private void copyFrom(ModConfig o) {
         worldName = o.worldName; plotSize = o.plotSize; plotSpacing = o.plotSpacing;
         plotFloorY = o.plotFloorY; pullEntityLimit = o.pullEntityLimit;
-        pullEntityRadius = o.pullEntityRadius; borderEnforcement = o.borderEnforcement; plotBypassTag = o.plotBypassTag;
+        pullEntityRadius = o.pullEntityRadius; borderEnforcement = o.borderEnforcement; if (o.plotBypassTag != null) plotBypassTag = o.plotBypassTag;
         msgDimensionEnter = o.msgDimensionEnter; msgDimensionReturn = o.msgDimensionReturn;
         msgBorderForced = o.msgBorderForced; msgGiveItem = o.msgGiveItem;
         msgNoPermission = o.msgNoPermission;
