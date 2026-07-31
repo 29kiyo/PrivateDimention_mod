@@ -1,0 +1,3 @@
+/pd info
+/tp Player943
+/tag Player943 add privatedimension.debug
