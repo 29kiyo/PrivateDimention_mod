@@ -69,14 +69,7 @@ public class TeleportHandler {
         UUID uid = player.getUUID();
         ServerLevel pd = mod.getDimensionManager().getPrivateDimension();
         int plotId = pdm.getPlotId(uid);
-        BlockPos structOrigin = mod.getPlotManager().getPlotStructureOrigin(plotId);
-        pd.getChunk(structOrigin);
-        boolean needsStructure = pd.isEmptyBlock(structOrigin) || pd.isEmptyBlock(structOrigin.above(1));
-        if (needsStructure) {
-            PrivateDimensionMod.LOGGER.warn("プロット{}の構造物が見つかりません。再配置します。", plotId);
-            pd.getChunk(BlockPos.containing(mod.getPlotManager().getPlotSpawn(plotId)));
-            mod.getDimensionManager().placeStructure(pd, structOrigin);
-        }
+        pd.getChunk(mod.getPlotManager().getPlotStructureOrigin(plotId));
         double[] saved = pdm.getPlotPos(uid);
         Vec3 dest = saved != null ? new Vec3(saved[0], saved[1], saved[2]) : mod.getPlotManager().getPlotSpawn(plotId);
         teleportTo(player, pd, dest);
