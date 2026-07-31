@@ -78,6 +78,30 @@ public class TeleportHandler {
         release(uid);
     }
 
+    private Vec3 findSafeSpawn(ServerLevel level, Vec3 fallback, int plotId) {
+        int floorY = mod.getConfig().plotFloorY;
+        int topY = floorY + mod.getConfig().plotHeight;
+        int half = mod.getConfig().plotSize / 2;
+        int cx = (int) Math.floor(fallback.x);
+        int cz = (int) Math.floor(fallback.z);
+        for (int y = floorY - 5; y <= topY; y++) {
+            for (int r = 0; r <= half; r++) {
+                for (int dx = -r; dx <= r; dx++) {
+                    for (int dz = -r; dz <= r; dz++) {
+                        if (Math.max(Math.abs(dx), Math.abs(dz)) != r) continue;
+                        BlockPos feet = new BlockPos(cx + dx, y, cz + dz);
+                        if (level.getBlockState(feet.below()).isAir()) continue;
+                        if (!level.getBlockState(feet).isAir()) continue;
+                        if (!level.getBlockState(feet.above()).isAir()) continue;
+                        return new Vec3(feet.getX() + 0.5, feet.getY(), feet.getZ() + 0.5);
+                    }
+                }
+            }
+        }
+        PrivateDimensionMod.LOGGER.warn("プロット{}に安全なスポーン地点が見つかりませんでした。デフォルト座標を使用します。", plotId);
+        return fallback;
+    }
+
     private void claimPlot(ServerPlayer player, List<Entity> bring) {
         PlayerDataManager pdm = mod.getPlayerDataManager();
         UUID uid = player.getUUID();
@@ -89,11 +113,13 @@ public class TeleportHandler {
         pd.getChunk(BlockPos.containing(spawn));
         pd.getChunk(origin);
         mod.getDimensionManager().placeStructure(pd, origin);
+        pd.getChunk(BlockPos.containing(spawn));
+        Vec3 safeSpawn = findSafeSpawn(pd, spawn, plotId);
         addSlowFalling(player);
-        teleportTo(player, pd, spawn);
-        pdm.setPlotPosFromVec3(uid, spawn);
-        pullEntities(pd, spawn, bring);
-        playVfx(pd, spawn);
+        teleportTo(player, pd, safeSpawn);
+        pdm.setPlotPosFromVec3(uid, safeSpawn);
+        pullEntities(pd, safeSpawn, bring);
+        playVfx(pd, safeSpawn);
         release(uid);
     }
 
