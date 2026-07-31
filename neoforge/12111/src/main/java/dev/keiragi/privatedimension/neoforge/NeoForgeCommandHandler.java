@@ -2,6 +2,7 @@ package dev.keiragi.privatedimension.neoforge;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import net.minecraft.commands.arguments.EntityArgument;
 import com.mojang.brigadier.context.CommandContext;
 import dev.keiragi.privatedimension.CommonEventHandler;
 import dev.keiragi.privatedimension.PrivateDimensionMod;
@@ -20,7 +21,7 @@ public class NeoForgeCommandHandler {
         dispatcher.register(Commands.literal("pd")
                 .then(Commands.literal("give")
                         .executes(ctx -> giveSelf(ctx, mod))
-                        .then(Commands.argument("player", StringArgumentType.word())
+                        .then(Commands.argument("player", EntityArgument.player())
                                 .executes(ctx -> givePlayer(ctx, mod))))
                 .then(Commands.literal("reload")
                         .executes(ctx -> reload(ctx, mod)))
@@ -48,17 +49,12 @@ public class NeoForgeCommandHandler {
         }
     }
 
-    private static int givePlayer(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
+    private static int givePlayer(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
         if (!isOp(ctx.getSource())) {
             ctx.getSource().sendFailure(Component.literal("§cこのコマンドはOP専用です。"));
             return 0;
         }
-        String name = StringArgumentType.getString(ctx, "player");
-        ServerPlayer target = ctx.getSource().getServer().getPlayerList().getPlayerByName(name);
-        if (target == null) {
-            ctx.getSource().sendFailure(Component.literal("§cプレイヤーが見つかりません: " + name));
-            return 0;
-        }
+        ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
         if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null)
             target.getInventory().add(new net.minecraft.world.item.ItemStack(
                     dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
