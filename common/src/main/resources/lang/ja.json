@@ -1,9 +1,13 @@
 {
   "border.forced": "[Private Dimension] プロットの外には出られません！",
   "give.success.self": "[PrivateDimension] アイテムを付与しました。",
-  "give.success.other": "[PrivateDimension] %s にアイテムを付与しました。",
+  "give.success.other": "[PrivateDimension] %d人にアイテムを付与しました。",
   "error.op.only": "このコマンドはOP専用です。",
   "error.player.only": "プレイヤーとして実行してください。",
   "dimension.enter": "別世界の空間へ移動しました。",
-  "dimension.return": "元の世界へ戻りました。"
+  "dimension.return": "元の世界へ戻りました。",
+  "config.reloaded": "[PrivateDimension] 設定をリロードしました。",
+  "info.no.plot": "[PrivateDimension] まだプロットを持っていません。",
+  "info.plot.id": "[PrivateDimension] プロットID: %s",
+  "info.last.pos": "次元内最終座標: %.1f, %.1f, %.1f"
 }

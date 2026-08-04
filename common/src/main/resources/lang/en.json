@@ -1,9 +1,13 @@
 {
   "border.forced": "[Private Dimension] You cannot leave your plot!",
   "give.success.self": "[PrivateDimension] Item given.",
-  "give.success.other": "[PrivateDimension] Given item to %s.",
+  "give.success.other": "[PrivateDimension] Given item to %d player(s).",
   "error.op.only": "This command is OP only.",
   "error.player.only": "This command must be run by a player.",
   "dimension.enter": "You have moved to another dimension.",
-  "dimension.return": "You have returned to the original world."
+  "dimension.return": "You have returned to the original world.",
+  "config.reloaded": "[PrivateDimension] Config reloaded.",
+  "info.no.plot": "[PrivateDimension] You don't have a plot yet.",
+  "info.plot.id": "[PrivateDimension] Plot ID: %s",
+  "info.last.pos": "Last position in dimension: %.1f, %.1f, %.1f"
 }
