@@ -3,6 +3,7 @@ package dev.keiragi.privatedimension.neoforge;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.commands.arguments.EntityArgument;
+import dev.keiragi.privatedimension.util.Lang;
 import com.mojang.brigadier.context.CommandContext;
 import dev.keiragi.privatedimension.CommonEventHandler;
 import dev.keiragi.privatedimension.PrivateDimensionMod;
@@ -33,7 +34,7 @@ public class NeoForgeCommandHandler {
 
     private static int giveSelf(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
         if (!isOp(ctx.getSource())) {
-            ctx.getSource().sendFailure(Component.literal("§cこのコマンドはOP専用です。"));
+            ctx.getSource().sendFailure(Component.literal("§c" + Lang.get(mod, ctx.getSource().getPlayer(), "error.op.only")));
             return 0;
         }
         try {
@@ -41,17 +42,17 @@ public class NeoForgeCommandHandler {
             if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null)
                 player.getInventory().add(new net.minecraft.world.item.ItemStack(
                     dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
-            ctx.getSource().sendSuccess(() -> Component.literal("§a[PD] アイテムを付与しました。"), false);
+            ctx.getSource().sendSuccess(() -> Component.literal("§a" + Lang.get(mod, ctx.getSource().getPlayer(), "give.success.self")), false);
             return 1;
         } catch (Exception e) {
-            ctx.getSource().sendFailure(Component.literal("プレイヤーとして実行してください。"));
+            ctx.getSource().sendFailure(Component.literal(Lang.get(mod, ctx.getSource().getPlayer(), "error.player.only")));
             return 0;
         }
     }
 
     private static int givePlayer(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
         if (!isOp(ctx.getSource())) {
-            ctx.getSource().sendFailure(Component.literal("§cこのコマンドはOP専用です。"));
+            ctx.getSource().sendFailure(Component.literal("§c" + Lang.get(mod, ctx.getSource().getPlayer(), "error.op.only")));
             return 0;
         }
         ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
@@ -65,7 +66,7 @@ public class NeoForgeCommandHandler {
 
     private static int reload(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
         if (!isOp(ctx.getSource())) {
-            ctx.getSource().sendFailure(Component.literal("§cこのコマンドはOP専用です。"));
+            ctx.getSource().sendFailure(Component.literal("§c" + Lang.get(mod, ctx.getSource().getPlayer(), "error.op.only")));
             return 0;
         }
         mod.getConfig().load();
@@ -89,7 +90,7 @@ public class NeoForgeCommandHandler {
             }
             return 1;
         } catch (Exception e) {
-            ctx.getSource().sendFailure(Component.literal("プレイヤーとして実行してください。"));
+            ctx.getSource().sendFailure(Component.literal(Lang.get(mod, ctx.getSource().getPlayer(), "error.player.only")));
             return 0;
         }
     }
