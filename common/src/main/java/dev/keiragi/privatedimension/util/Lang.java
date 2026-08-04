@@ -18,7 +18,6 @@ public class Lang {
     private static final String[] BUNDLED = { "en", "ja" };
     private static final String FALLBACK = "en";
 
-    /** サーバー起動時に1回呼ぶ。config/privatedimension/lang/ に同梱言語ファイルを展開し、フォルダ内の全*.jsonを読み込む */
     public static void init(Path langDir) {
         try {
             Files.createDirectories(langDir);
@@ -48,7 +47,6 @@ public class Lang {
         }
     }
 
-    /** player は null 可(コンソール実行など)。その場合 config の language 設定 (auto なら en) を使う */
     public static String get(PrivateDimensionMod mod, ServerPlayer player, String key, Object... args) {
         String code = resolveLanguage(mod, player);
         String template = lookup(code, key);
@@ -75,7 +73,6 @@ public class Lang {
         return clientLang != null ? clientLang : FALLBACK;
     }
 
-    /** バージョン間のAPI差異に対応するため、複数の方法を試すリフレクション実装 */
     private static String getClientLanguageCode(ServerPlayer player) {
         if (player == null) return null;
         try {
