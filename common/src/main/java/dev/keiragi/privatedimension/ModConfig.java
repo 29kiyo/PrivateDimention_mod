@@ -3,6 +3,7 @@ package dev.keiragi.privatedimension;
 import com.google.gson.*;
 import java.io.*;
 import java.nio.file.*;
+import dev.keiragi.privatedimension.util.Lang;
 
 public class ModConfig {
     public String worldName          = "private_dimension";
@@ -17,11 +18,8 @@ public class ModConfig {
     public String  structureFile      = "plot48x48.nbt";
     public int     cooldownSeconds    = 2;
 
-    public String msgDimensionEnter  = "別世界の空間へ移動しました。";
-    public String msgDimensionReturn = "元の世界へ戻りました。";
-    public String msgBorderForced    = "[Private Dimension] プロットの外には出られません！";
-    public String msgGiveItem        = "[Private Dimension] アイテムを付与しました。";
-    public String msgNoPermission    = "この操作を行う権限がありません。";
+    /** "auto" = クライアントの言語を自動検出。それ以外は "en" / "ja" のように固定言語コードを指定 */
+    public String language = "auto";
 
     private transient Path configPath;
 
@@ -29,10 +27,11 @@ public class ModConfig {
 
     public void load() {
         if (configPath == null) return;
-        if (!Files.exists(configPath)) { save(); return; }
+        if (!Files.exists(configPath)) { save(); Lang.init(configPath.getParent().resolve("lang")); return; }
         try (Reader r = Files.newBufferedReader(configPath)) {
             ModConfig loaded = new Gson().fromJson(r, ModConfig.class);
             if (loaded != null) copyFrom(loaded);
+            Lang.init(configPath.getParent().resolve("lang"));
         } catch (Exception e) {
             PrivateDimensionMod.LOGGER.warn("設定読み込み失敗: {}", e.getMessage());
         }
@@ -57,9 +56,7 @@ public class ModConfig {
         pullEntityRadius = o.pullEntityRadius; borderEnforcement = o.borderEnforcement;
         if (o.plotBypassTag != null) plotBypassTag = o.plotBypassTag;
         if (o.structureFile != null) structureFile = o.structureFile;
-        msgDimensionEnter = o.msgDimensionEnter; msgDimensionReturn = o.msgDimensionReturn;
-        msgBorderForced = o.msgBorderForced; msgGiveItem = o.msgGiveItem;
-        msgNoPermission = o.msgNoPermission;
+        if (o.language != null) language = o.language;
         cooldownSeconds = o.cooldownSeconds;
     }
 }

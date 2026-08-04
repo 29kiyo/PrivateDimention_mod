@@ -3,6 +3,7 @@ package dev.keiragi.privatedimension;
 import dev.keiragi.privatedimension.item.DimensionBottleItem;
 import dev.keiragi.privatedimension.manager.PlayerDataManager;
 import dev.keiragi.privatedimension.util.TeleportHandler;
+import dev.keiragi.privatedimension.util.Lang;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -56,7 +57,7 @@ public class CommonEventHandler {
         Long last = borderCooldown.get(uid);
         if (last != null && now - last < BORDER_COOLDOWN_MS) return;
         borderCooldown.put(uid, now);
-        player.sendSystemMessage(Component.literal("§c" + mod.getConfig().msgBorderForced));
+        player.sendSystemMessage(Component.literal("§c" + Lang.get(mod, player, "border.forced")));
         teleportHandler.pushBackToPlot(player, mod.getPlotManager().getPlotSpawn(plotId));
     }
 

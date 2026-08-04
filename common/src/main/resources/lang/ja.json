@@ -1,0 +1,9 @@
+{
+  "border.forced": "[Private Dimension] プロットの外には出られません！",
+  "give.success.self": "[PrivateDimension] アイテムを付与しました。",
+  "give.success.other": "[PrivateDimension] %s にアイテムを付与しました。",
+  "error.op.only": "このコマンドはOP専用です。",
+  "error.player.only": "プレイヤーとして実行してください。",
+  "dimension.enter": "別世界の空間へ移動しました。",
+  "dimension.return": "元の世界へ戻りました。"
+}

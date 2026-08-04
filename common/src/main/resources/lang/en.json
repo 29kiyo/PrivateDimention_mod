@@ -1,0 +1,9 @@
+{
+  "border.forced": "[Private Dimension] You cannot leave your plot!",
+  "give.success.self": "[PrivateDimension] Item given.",
+  "give.success.other": "[PrivateDimension] Given item to %s.",
+  "error.op.only": "This command is OP only.",
+  "error.player.only": "This command must be run by a player.",
+  "dimension.enter": "You have moved to another dimension.",
+  "dimension.return": "You have returned to the original world."
+}

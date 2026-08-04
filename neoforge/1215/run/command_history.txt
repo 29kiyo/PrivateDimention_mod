@@ -1,3 +1,5 @@
 /pd give dev
 /pd info
 /pd reload
+/pd give
+/pd give Dev

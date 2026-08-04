@@ -1,3 +1,13 @@
 /pd give dev
 /give @s minecraft:acacia_button 12
 /pd give dev
+/pd give
+/tag Dev add pd_free
+/pd give
+/tag Dev add pd_free
+/tag @a
+/tag @a list
+/pd give dev
+/pd
+/pd reload
+/pd give Dev

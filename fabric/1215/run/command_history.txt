@@ -1,3 +1,10 @@
 /pd info
 /tp Player943
 /tag Player943 add privatedimension.debug
+/pd give
+/tag Player742 add pd_free
+/deop
+/pd give
+/tag Player838 add pd_free
+/tag Player439 remove pd_free
+/pd give Player862
