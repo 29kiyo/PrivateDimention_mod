@@ -23,7 +23,13 @@ public class PlayerDataManager {
 
     public PlayerDataManager(PrivateDimensionMod mod) { this.mod = mod; }
 
-    public void setDataPath(Path path) { this.dataFile = path; load(); }
+    public void setDataPath(Path path) {
+        plotIdCache.clear();
+        plotPosCache.clear();
+        returnLocCache.clear();
+        this.dataFile = path;
+        load();
+    }
 
     private void load() {
         if (dataFile == null || !Files.exists(dataFile)) return;
