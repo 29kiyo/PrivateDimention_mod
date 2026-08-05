@@ -71,7 +71,7 @@ This mod is a reimplementation of [Private Dimension by Chuzume](https://github.
 
 | Command | Description | Permission |
 |---------|-------------|------------|
-| `/pd give [player]` | Give the item to a player | OP (level 2+) |
+| `/pd give <players>` | Give the item to one or more players (supports selectors like `@a`) | OP (level 2+) |
 | `/pd info` | Show your plot information | Everyone |
 | `/pd reload` | Reload the config | OP (level 2+) |
 
@@ -128,3 +128,18 @@ When a player first enters an empty plot, the mod automatically searches for a s
 ## Tab Completion
 
 `/pd give <player>` supports tab completion for online player names, same as vanilla commands like `/give`.
+
+## Language / Localization
+
+The mod comes with English (default) and Japanese messages. On first launch, both are extracted to:
+```
+config/privatedimension/lang/
+```
+
+By default (`"language": "auto"` in `config.json`), each player sees messages in their own client language if a matching file exists, otherwise English.
+
+**To force a fixed language for everyone:** set `"language"` in `config.json` to a language code, e.g. `"ja"`.
+
+**To add your own language:** drop a file named `<code>.json` (e.g. `fr.json`) into `config/privatedimension/lang/`, using the same keys as `en.json`, then set `"language"` to that code (or leave it on `"auto"` if the client's language matches).
+
+Updating the mod will automatically add any new message keys to your existing language files without overwriting your custom translations.
