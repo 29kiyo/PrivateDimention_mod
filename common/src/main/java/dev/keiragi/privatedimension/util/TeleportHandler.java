@@ -69,13 +69,23 @@ public class TeleportHandler {
         UUID uid = player.getUUID();
         ServerLevel pd = mod.getDimensionManager().getPrivateDimension();
         int plotId = pdm.getPlotId(uid);
-        pd.getChunk(mod.getPlotManager().getPlotStructureOrigin(plotId));
+        BlockPos structOrigin = mod.getPlotManager().getPlotStructureOrigin(plotId);
+        pd.getChunk(structOrigin);
         double[] saved = pdm.getPlotPos(uid);
-        Vec3 dest = saved != null ? new Vec3(saved[0], saved[1], saved[2]) : mod.getPlotManager().getPlotSpawn(plotId);
+        Vec3 base = saved != null ? new Vec3(saved[0], saved[1], saved[2]) : mod.getPlotManager().getPlotSpawn(plotId);
+        Vec3 dest = isSafe(pd, base) ? base : findSafeSpawn(pd, mod.getPlotManager().getPlotSpawn(plotId), plotId);
         teleportTo(player, pd, dest);
+        pdm.setPlotPosFromVec3(uid, dest);
         pullEntities(pd, dest, bring);
         playVfx(pd, dest);
         release(uid);
+    }
+
+    private boolean isSafe(ServerLevel level, Vec3 pos) {
+        BlockPos feet = BlockPos.containing(pos);
+        return !level.getBlockState(feet.below()).isAir()
+            && level.getBlockState(feet).isAir()
+            && level.getBlockState(feet.above()).isAir();
     }
 
     private Vec3 findSafeSpawn(ServerLevel level, Vec3 fallback, int plotId) {
