@@ -3,6 +3,7 @@ package dev.keiragi.privatedimension.neoforge;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.commands.arguments.EntityArgument;
+import java.util.Collection;
 import dev.keiragi.privatedimension.util.Lang;
 import com.mojang.brigadier.context.CommandContext;
 import dev.keiragi.privatedimension.CommonEventHandler;
@@ -22,7 +23,7 @@ public class NeoForgeCommandHandler {
         dispatcher.register(Commands.literal("pd")
                 .then(Commands.literal("give")
                         .executes(ctx -> giveSelf(ctx, mod))
-                        .then(Commands.argument("player", EntityArgument.player())
+                        .then(Commands.argument("player", EntityArgument.players())
                                 .executes(ctx -> givePlayer(ctx, mod))))
                 .then(Commands.literal("reload")
                         .executes(ctx -> reload(ctx, mod)))
@@ -55,13 +56,16 @@ public class NeoForgeCommandHandler {
             ctx.getSource().sendFailure(Component.literal("§c" + Lang.get(mod, ctx.getSource().getPlayer(), "error.op.only")));
             return 0;
         }
-        ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
-        if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null)
-            target.getInventory().add(new net.minecraft.world.item.ItemStack(
+        Collection<ServerPlayer> targets = EntityArgument.getPlayers(ctx, "player");
+        for (ServerPlayer target : targets) {
+            if (dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE != null)
+                target.getInventory().add(new net.minecraft.world.item.ItemStack(
                     dev.keiragi.privatedimension.registry.ModItems.DIMENSION_BOTTLE));
+        }
+        final int count = targets.size();
         ctx.getSource().sendSuccess(() -> Component.literal(
-                "§a[PD] " + target.getName().getString() + " に付与しました。"), false);
-        return 1;
+            "§a" + Lang.get(mod, ctx.getSource().getPlayer(), "give.success.other", count)), false);
+        return count;
     }
 
     private static int reload(CommandContext<CommandSourceStack> ctx, PrivateDimensionMod mod) {
@@ -70,7 +74,7 @@ public class NeoForgeCommandHandler {
             return 0;
         }
         mod.getConfig().load();
-        ctx.getSource().sendSuccess(() -> Component.literal("§a[PD] 設定をリロードしました。"), false);
+        ctx.getSource().sendSuccess(() -> Component.literal("§a" + Lang.get(mod, ctx.getSource().getPlayer(), "config.reloaded")), false);
         return 1;
     }
 
@@ -80,13 +84,13 @@ public class NeoForgeCommandHandler {
             UUID uid = player.getUUID();
             PlayerDataManager pdm = mod.getPlayerDataManager();
             if (pdm.hasPlot(uid)) {
-                player.sendSystemMessage(Component.literal("§b[PD] プロットID: §f" + pdm.getPlotId(uid)));
+                player.sendSystemMessage(Component.literal("§b" + Lang.get(mod, player, "info.plot.id", pdm.getPlotId(uid))));
                 double[] pos = pdm.getPlotPos(uid);
                 if (pos != null)
                     player.sendSystemMessage(Component.literal(
-                            String.format("§b次元内最終座標: §f%.1f, %.1f, %.1f", pos[0], pos[1], pos[2])));
+                            "§b" + Lang.get(mod, player, "info.last.pos", pos[0], pos[1], pos[2])));
             } else {
-                player.sendSystemMessage(Component.literal("§b[PD] まだプロットを持っていません。"));
+                player.sendSystemMessage(Component.literal("§b" + Lang.get(mod, player, "info.no.plot")));
             }
             return 1;
         } catch (Exception e) {
