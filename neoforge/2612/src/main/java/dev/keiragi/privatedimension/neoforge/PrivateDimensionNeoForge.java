@@ -58,7 +58,7 @@ public class PrivateDimensionNeoForge {
         modBus.addListener(this::setup);
         NeoForge.EVENT_BUS.register(this);
 
-        PrivateDimensionMod.LOGGER.info("PrivateDimension (NeoForge {}) 初期化完了", mc_version());
+        PrivateDimensionMod.LOGGER.info("PrivateDimension (NeoForge {}) initialization complete", mc_version());
     }
 
     private String mc_version() { return "26.1.2"; }

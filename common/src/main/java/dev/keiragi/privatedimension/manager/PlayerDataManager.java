@@ -38,7 +38,7 @@ public class PlayerDataManager {
             if (root == null) root = new JsonObject();
             nextPlotId = root.has("nextPlotId") ? root.get("nextPlotId").getAsInt() : 0;
         } catch (Exception e) {
-            PrivateDimensionMod.LOGGER.warn("playerdata.json 読み込み失敗: {}", e.getMessage());
+            PrivateDimensionMod.LOGGER.warn("Failed to load playerdata.json: {}", e.getMessage());
             root = new JsonObject();
         }
     }
@@ -77,7 +77,7 @@ public class PlayerDataManager {
                 new GsonBuilder().setPrettyPrinting().create().toJson(root, w);
             }
         } catch (Exception e) {
-            PrivateDimensionMod.LOGGER.warn("playerdata.json 保存失敗: {}", e.getMessage());
+            PrivateDimensionMod.LOGGER.warn("Failed to save playerdata.json: {}", e.getMessage());
         }
     }
 

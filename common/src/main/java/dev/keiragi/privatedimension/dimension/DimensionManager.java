@@ -36,16 +36,16 @@ public class DimensionManager {
         this.server = server;
         ServerLevel dim = getPrivateDimension();
         if (dim != null) {
-            PrivateDimensionMod.LOGGER.info("プライベート次元ワールドを確認しました: {}", DIMENSION_ID);
+            PrivateDimensionMod.LOGGER.info("Private dimension world found: {}", DIMENSION_ID);
             try {
                 Path structDir = getStructureDir();
                 Files.createDirectories(structDir);
                 PrivateDimensionMod.LOGGER.info(
-                    "独自の.nbt構造物はここに配置してください（配置後 config.json の structureFile にファイル名を指定）: {}",
+                    "Place your custom .nbt structures here (then set the file name in config.json's structureFile): {}",
                     structDir.toAbsolutePath());
             } catch (Exception ignored) {}
         } else {
-            PrivateDimensionMod.LOGGER.warn("プライベート次元が見つかりません。データパック確認が必要です。");
+            PrivateDimensionMod.LOGGER.warn("Private dimension not found. Please check the datapack.");
         }
     }
 
@@ -73,13 +73,13 @@ public class DimensionManager {
             Path nbtPath = structDir.resolve(fileName);
             if (!Files.exists(nbtPath)) {
                 PrivateDimensionMod.LOGGER.error(
-                    "NBTファイルが見つかりません: {} (config.json の structureFile を確認してください)", nbtPath);
+                    "NBT file not found: {} (check structureFile in config.json)", nbtPath);
                 return;
             }
             boolean result = NbtStructurePlacer.place(level, origin, nbtPath);
-            PrivateDimensionMod.LOGGER.info("構造物配置完了: {} placed={}", origin, result);
+            PrivateDimensionMod.LOGGER.info("Structure placement complete: {} placed={}", origin, result);
         } catch (Exception e) {
-            PrivateDimensionMod.LOGGER.error("構造物配置失敗: {}", e.getMessage(), e);
+            PrivateDimensionMod.LOGGER.error("Structure placement failed: {}", e.getMessage(), e);
         }
     }
 
@@ -89,11 +89,11 @@ public class DimensionManager {
         Path dest = structDir.resolve("plot48x48.nbt");
 
         try (InputStream in = DimensionManager.class.getResourceAsStream("/plot48x48.nbt")) {
-            if (in == null) { PrivateDimensionMod.LOGGER.error("plot48x48.nbt リソースなし！"); return; }
+            if (in == null) { PrivateDimensionMod.LOGGER.error("plot48x48.nbt resource missing!"); return; }
             byte[] bytes = in.readAllBytes();
             if (!Files.exists(dest) || !md5Matches(dest, bytes)) {
                 Files.write(dest, bytes);
-                PrivateDimensionMod.LOGGER.info("plot48x48.nbt を展開しました。");
+                PrivateDimensionMod.LOGGER.info("Extracted plot48x48.nbt.");
             }
         }
     }

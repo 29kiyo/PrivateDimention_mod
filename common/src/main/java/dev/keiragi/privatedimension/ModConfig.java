@@ -33,7 +33,7 @@ public class ModConfig {
             if (loaded != null) copyFrom(loaded);
             Lang.init(configPath.getParent().resolve("lang"));
         } catch (Exception e) {
-            PrivateDimensionMod.LOGGER.warn("設定読み込み失敗: {}", e.getMessage());
+            PrivateDimensionMod.LOGGER.warn("Failed to load config: {}", e.getMessage());
         }
     }
 
@@ -45,7 +45,7 @@ public class ModConfig {
                 new GsonBuilder().setPrettyPrinting().create().toJson(this, w);
             }
         } catch (Exception e) {
-            PrivateDimensionMod.LOGGER.warn("設定保存失敗: {}", e.getMessage());
+            PrivateDimensionMod.LOGGER.warn("Failed to save config: {}", e.getMessage());
         }
     }
 

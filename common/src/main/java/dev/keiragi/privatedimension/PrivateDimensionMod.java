@@ -26,7 +26,7 @@ public class PrivateDimensionMod {
         dimensionManager  = new DimensionManager(this);
         plotManager       = new PlotManager(this);
         teleportHandler   = new TeleportHandler(this);
-        LOGGER.info("PrivateDimension Mod が有効化されました！");
+        LOGGER.info("PrivateDimension Mod enabled!");
     }
 
     public DimensionManager getDimensionManager()   { return dimensionManager; }

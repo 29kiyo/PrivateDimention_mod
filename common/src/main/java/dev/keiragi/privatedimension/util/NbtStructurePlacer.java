@@ -26,7 +26,7 @@ public class NbtStructurePlacer {
     public static boolean place(ServerLevel level, BlockPos origin, Path nbtPath) {
         try {
             if (!Files.exists(nbtPath)) {
-                PrivateDimensionMod.LOGGER.error("NBTファイルが存在しません: {}", nbtPath);
+                PrivateDimensionMod.LOGGER.error("NBT file does not exist: {}", nbtPath);
                 return false;
             }
 
@@ -70,7 +70,7 @@ public class NbtStructurePlacer {
                         palette.add(state);
                     }
                 } catch (Exception e) {
-                    PrivateDimensionMod.LOGGER.warn("ブロック解析失敗: {} -> {}", name, e.getMessage());
+                    PrivateDimensionMod.LOGGER.warn("Failed to parse block: {} -> {}", name, e.getMessage());
                     palette.add(Blocks.AIR.defaultBlockState());
                 }
             }
@@ -93,11 +93,11 @@ public class NbtStructurePlacer {
                 placed++;
             }
 
-            PrivateDimensionMod.LOGGER.info("NbtStructurePlacer: {}ブロック配置完了 at {}", placed, origin);
+            PrivateDimensionMod.LOGGER.info("NbtStructurePlacer: placed {} blocks at {}", placed, origin);
             return placed > 0;
 
         } catch (Exception e) {
-            PrivateDimensionMod.LOGGER.error("NbtStructurePlacer失敗: {}", e.getMessage(), e);
+            PrivateDimensionMod.LOGGER.error("NbtStructurePlacer failed: {}", e.getMessage(), e);
             return false;
         }
     }

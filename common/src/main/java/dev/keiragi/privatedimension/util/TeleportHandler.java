@@ -50,7 +50,7 @@ public class TeleportHandler {
                 gotoPrivate(player, collectBringEntities(player));
         } catch (Exception e) {
             release(player.getUUID());
-            PrivateDimensionMod.LOGGER.error("handleUse 例外: {}", e.getMessage(), e);
+            PrivateDimensionMod.LOGGER.error("handleUse exception: {}", e.getMessage(), e);
         }
     }
 
@@ -108,7 +108,7 @@ public class TeleportHandler {
                 }
             }
         }
-        PrivateDimensionMod.LOGGER.warn("プロット{}に安全なスポーン地点が見つかりませんでした。デフォルト座標を使用します。", plotId);
+        PrivateDimensionMod.LOGGER.warn("No safe spawn point found for plot {}. Using default coordinates.", plotId);
         return fallback;
     }
 
@@ -189,7 +189,7 @@ public class TeleportHandler {
                 e.teleportTo(pos.x, pos.y, pos.z);
             } else {
                 if (!tryTeleportCrossDimension(e, dest, pos)) {
-                    PrivateDimensionMod.LOGGER.warn("クロスディメンション転送失敗: {}", e.getType());
+                    PrivateDimensionMod.LOGGER.warn("Cross-dimension transfer failed: {}", e.getType());
                 }
             }
         }
@@ -217,7 +217,7 @@ public class TeleportHandler {
             }
             if (ttClass == null) {
                 PrivateDimensionMod.LOGGER.warn(
-                    "TeleportTransition/DimensionTransition のいずれも見つかりませんでした。クロスディメンション転送は無効になります。");
+                    "Neither TeleportTransition nor DimensionTransition was found. Cross-dimension transfer is disabled.");
                 return;
             }
 
@@ -252,7 +252,7 @@ public class TeleportHandler {
             PrivateDimensionMod.LOGGER.info("TeleportTransition API: class={}, ctor={}params, method={}",
                 foundClassName, transitionCtorParamCount, teleportCrossDimMethod != null ? teleportCrossDimMethod.getName() : "null");
         } catch (Exception e) {
-            PrivateDimensionMod.LOGGER.warn("TeleportTransition API初期化失敗: {}", e.getMessage());
+            PrivateDimensionMod.LOGGER.warn("TeleportTransition API initialization failed: {}", e.getMessage());
         }
     }
 
@@ -277,14 +277,14 @@ public class TeleportHandler {
                         dest, pos, Vec3.ZERO, entity.getYRot(), entity.getXRot(),
                         false, false, Set.of(), doNothingCallback);
                 default -> {
-                    PrivateDimensionMod.LOGGER.warn("未知のTeleportTransition引数数: {}", transitionCtorParamCount);
+                    PrivateDimensionMod.LOGGER.warn("Unknown TeleportTransition constructor parameter count: {}", transitionCtorParamCount);
                     return false;
                 }
             }
             teleportCrossDimMethod.invoke(entity, transition);
             return true;
         } catch (Exception e) {
-            PrivateDimensionMod.LOGGER.warn("teleportCrossDimension失敗: {}", e.getMessage());
+            PrivateDimensionMod.LOGGER.warn("teleportCrossDimension failed: {}", e.getMessage());
             return false;
         }
     }

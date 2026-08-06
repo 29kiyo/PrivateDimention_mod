@@ -49,9 +49,9 @@ public class Lang {
                     if (map != null) LANGUAGES.put(code, map);
                 }
             }
-            PrivateDimensionMod.LOGGER.info("言語ファイルを読み込みました: {} (フォルダ: {})", LANGUAGES.keySet(), langDir.toAbsolutePath());
+            PrivateDimensionMod.LOGGER.info("Loaded language files: {} (folder: {})", LANGUAGES.keySet(), langDir.toAbsolutePath());
         } catch (Exception e) {
-            PrivateDimensionMod.LOGGER.warn("言語システム初期化失敗: {}", e.getMessage());
+            PrivateDimensionMod.LOGGER.warn("Language system initialization failed: {}", e.getMessage());
         }
     }
 
@@ -69,7 +69,7 @@ public class Lang {
         try (var r = Files.newBufferedReader(f, StandardCharsets.UTF_8)) {
             return new Gson().fromJson(r, new TypeToken<Map<String, String>>() {}.getType());
         } catch (Exception e) {
-            PrivateDimensionMod.LOGGER.warn("言語ファイル読み込み失敗: {} ({})", f, e.getMessage());
+            PrivateDimensionMod.LOGGER.warn("Failed to load language file: {} ({})", f, e.getMessage());
             return null;
         }
     }
