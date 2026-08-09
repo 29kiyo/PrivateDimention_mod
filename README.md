@@ -57,7 +57,6 @@ This mod is a reimplementation of [Private Dimension by Chuzume](https://github.
 ## Requirements
 
 - **Fabric Loader** or **NeoForge** (see supported versions)
-- **Java** 21+ (Java 25+ for 26.x versions)
 
 ## Installation
 
