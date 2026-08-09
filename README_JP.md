@@ -57,7 +57,6 @@ A derivative work of "Private_Dimension" by Chuzume.<br>
 ## 必要環境
 
 - **Fabric Loader** または **NeoForge**（対応バージョン参照）
-- **Java** 21+（26.x系は Java 25+）
 
 ## インストール
 
